@@ -454,3 +454,27 @@ MVP では最低限、以下の責務分割を推奨する。
 TailwindUSS の MVP は、**Unity UI Toolkit に対して、UXML の `class` 属性から Tailwind ライクなユーティリティを静的抽出し、1 つの USS を生成する Editor 拡張**として定義する。
 
 この仕様により、最小実装で価値検証を行いつつ、将来的な自動化、設定強化、対応範囲拡大へ自然に発展できる。
+
+---
+
+## 実装済みMVP構成
+
+この仕様に対応する初期実装では、Unity Package Manager で導入できるパッケージ構成を採用している。
+
+- `package.json`
+- `Editor/TailwindUSS.Editor.asmdef`
+- `Editor/ConfigLoader.cs`
+- `Editor/UxmlScanner.cs`
+- `Editor/ClassTokenParser.cs`
+- `Editor/UtilityResolver.cs`
+- `Editor/UssEmitter.cs`
+- `Editor/GenerationService.cs`
+- `Editor/ValidationService.cs`
+- `Editor/TailwindUssMenu.cs`
+
+### 実装上の補足
+
+- 設定ファイル `tailwinduss.config.json` が存在しない場合は、仕様のデフォルト値を使って生成・検証できる
+- `autoAttachGeneratedUss` を `true` にすると、走査対象 UXML に生成 USS への `Style` 参照を追加する
+- 重複トークン、未対応トークン、不正値トークンは警告として Unity Console に表示する
+- UXML の構文エラー、設定 JSON の読込失敗、出力失敗はエラーとして扱う
