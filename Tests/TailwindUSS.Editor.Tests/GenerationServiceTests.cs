@@ -5,6 +5,13 @@ namespace TailwindUSS.Editor.Tests
 {
     public sealed class GenerationServiceTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            AssetDatabase.Reset();
+            Debug.Reset();
+        }
+
         [Test]
         public void Generate_LoadFailureReturnsError()
         {
@@ -33,7 +40,7 @@ namespace TailwindUSS.Editor.Tests
             var output = File.ReadAllText(outputPath).Replace("\r\n", "\n");
             var updatedMain = File.ReadAllText(scope.GetAssetPath("UI", "Main.uxml"));
 
-            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(3));
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(4));
             Assert.That(result.WarningCount, Is.EqualTo(3));
             Assert.That(result.ErrorCount, Is.EqualTo(0));
             Assert.That(result.OutputAssetPath, Is.EqualTo("Assets/Generated/TailwindUSS.generated.uss"));

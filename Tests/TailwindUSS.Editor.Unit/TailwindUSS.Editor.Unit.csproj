@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <AssemblyName>TailwindUSS.Editor.Unit</AssemblyName>
+    <RootNamespace>TailwindUSS.Editor</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../../Editor/*.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GlobalAliases.cs" />
+    <Compile Include="UnityStubs.cs" />
+  </ItemGroup>
+</Project>
