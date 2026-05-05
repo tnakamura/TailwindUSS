@@ -42,6 +42,30 @@ namespace TailwindUSS.Editor
             { "yellow-500", "#EAB308" }
         };
 
+        private static readonly KeyValuePair<string, string[]>[] SpacingDefinitions =
+        {
+            new KeyValuePair<string, string[]>("px-", new[] { "padding-left", "padding-right" }),
+            new KeyValuePair<string, string[]>("py-", new[] { "padding-top", "padding-bottom" }),
+            new KeyValuePair<string, string[]>("pt-", new[] { "padding-top" }),
+            new KeyValuePair<string, string[]>("pr-", new[] { "padding-right" }),
+            new KeyValuePair<string, string[]>("pb-", new[] { "padding-bottom" }),
+            new KeyValuePair<string, string[]>("pl-", new[] { "padding-left" }),
+            new KeyValuePair<string, string[]>("p-", new[] { "padding-top", "padding-right", "padding-bottom", "padding-left" }),
+            new KeyValuePair<string, string[]>("mx-", new[] { "margin-left", "margin-right" }),
+            new KeyValuePair<string, string[]>("my-", new[] { "margin-top", "margin-bottom" }),
+            new KeyValuePair<string, string[]>("m-", new[] { "margin-top", "margin-right", "margin-bottom", "margin-left" })
+        };
+
+        private static readonly KeyValuePair<string, string>[] SizeDefinitions =
+        {
+            new KeyValuePair<string, string>("min-w-", "min-width"),
+            new KeyValuePair<string, string>("min-h-", "min-height"),
+            new KeyValuePair<string, string>("max-w-", "max-width"),
+            new KeyValuePair<string, string>("max-h-", "max-height"),
+            new KeyValuePair<string, string>("w-", "width"),
+            new KeyValuePair<string, string>("h-", "height")
+        };
+
         public ResolveStatus TryResolve(string token, out ResolvedUtility utility, out string errorMessage)
         {
             utility = null;
@@ -178,21 +202,7 @@ namespace TailwindUSS.Editor
             utility = null;
             errorMessage = null;
 
-            var definitions = new Dictionary<string, string[]>(StringComparer.Ordinal)
-            {
-                { "px-", new[] { "padding-left", "padding-right" } },
-                { "py-", new[] { "padding-top", "padding-bottom" } },
-                { "pt-", new[] { "padding-top" } },
-                { "pr-", new[] { "padding-right" } },
-                { "pb-", new[] { "padding-bottom" } },
-                { "pl-", new[] { "padding-left" } },
-                { "p-", new[] { "padding-top", "padding-right", "padding-bottom", "padding-left" } },
-                { "mx-", new[] { "margin-left", "margin-right" } },
-                { "my-", new[] { "margin-top", "margin-bottom" } },
-                { "m-", new[] { "margin-top", "margin-right", "margin-bottom", "margin-left" } }
-            };
-
-            foreach (var pair in definitions)
+            foreach (var pair in SpacingDefinitions)
             {
                 if (!token.StartsWith(pair.Key, StringComparison.Ordinal))
                 {
@@ -219,17 +229,7 @@ namespace TailwindUSS.Editor
             utility = null;
             errorMessage = null;
 
-            var definitions = new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                { "min-w-", "min-width" },
-                { "min-h-", "min-height" },
-                { "max-w-", "max-width" },
-                { "max-h-", "max-height" },
-                { "w-", "width" },
-                { "h-", "height" }
-            };
-
-            foreach (var pair in definitions)
+            foreach (var pair in SizeDefinitions)
             {
                 if (!token.StartsWith(pair.Key, StringComparison.Ordinal))
                 {

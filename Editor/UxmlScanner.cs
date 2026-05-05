@@ -97,13 +97,7 @@ namespace TailwindUSS.Editor
                     continue;
                 }
 
-                var pattern = "^" + Regex.Escape(NormalizePath(inputGlob))
-                    .Replace(@"\*\*", "<<<GLOBSTAR>>>")
-                    .Replace(@"\*", @"[^/]*")
-                    .Replace(@"\?", @"[^/]")
-                    .Replace("<<<GLOBSTAR>>>", @".*") + "$";
-
-                regexes.Add(new Regex(pattern, RegexOptions.Compiled | RegexOptions.CultureInvariant));
+                regexes.Add(new Regex(ConvertGlobToRegex(NormalizePath(inputGlob)), RegexOptions.Compiled | RegexOptions.CultureInvariant));
             }
 
             if (regexes.Count == 0)
@@ -123,6 +117,63 @@ namespace TailwindUSS.Editor
         private static string NormalizePath(string path)
         {
             return path.Replace('\\', '/');
+        }
+
+        private static string ConvertGlobToRegex(string glob)
+        {
+            var pattern = new RegexBuilder();
+            pattern.Append("^");
+
+            for (var index = 0; index < glob.Length; index++)
+            {
+                var character = glob[index];
+                if (character == '*')
+                {
+                    var isGlobStar = index + 1 < glob.Length && glob[index + 1] == '*';
+                    if (isGlobStar)
+                    {
+                        var consumesSlash = index + 2 < glob.Length && glob[index + 2] == '/';
+                        pattern.Append(consumesSlash ? "(?:.*/)?" : ".*");
+                        index += consumesSlash ? 2 : 1;
+                        continue;
+                    }
+
+                    pattern.Append("[^/]*");
+                    continue;
+                }
+
+                if (character == '?')
+                {
+                    pattern.Append("[^/]");
+                    continue;
+                }
+
+                if (character == '/')
+                {
+                    pattern.Append("/");
+                    continue;
+                }
+
+                pattern.Append(Regex.Escape(character.ToString()));
+            }
+
+            pattern.Append("$");
+            return pattern.ToString();
+        }
+
+        private sealed class RegexBuilder
+        {
+            private readonly System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+
+            public void Append(string value)
+            {
+                stringBuilder.Append(value);
+            }
+
+            public override string ToString()
+            {
+                return stringBuilder.ToString();
+            }
         }
     }
 }

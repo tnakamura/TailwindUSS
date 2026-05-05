@@ -132,9 +132,22 @@ namespace TailwindUSS.Editor
 
         internal static void LogDiagnostic(TailwindUssDiagnostic diagnostic)
         {
-            var message = string.IsNullOrEmpty(diagnostic.RelativeFilePath)
+            var location = string.Empty;
+            if (!string.IsNullOrEmpty(diagnostic.RelativeFilePath))
+            {
+                location = diagnostic.LineNumber > 0
+                    ? string.Format("{0}:{1}", diagnostic.RelativeFilePath, diagnostic.LineNumber)
+                    : diagnostic.RelativeFilePath;
+
+                if (!string.IsNullOrEmpty(diagnostic.ElementName))
+                {
+                    location = string.Format("{0}, {1}", location, diagnostic.ElementName);
+                }
+            }
+
+            var message = string.IsNullOrEmpty(location)
                 ? diagnostic.Message
-                : string.Format("{0} ({1}:{2}, {3})", diagnostic.Message, diagnostic.RelativeFilePath, diagnostic.LineNumber, diagnostic.ElementName);
+                : string.Format("{0} ({1})", diagnostic.Message, location);
 
             Object context = null;
             if (!string.IsNullOrEmpty(diagnostic.RelativeFilePath) && diagnostic.RelativeFilePath.StartsWith("Assets/", StringComparison.Ordinal))
@@ -163,6 +176,11 @@ namespace TailwindUSS.Editor
 
         private static string NormalizeAssetPath(string projectRoot, string absolutePath)
         {
+            if (!absolutePath.StartsWith(projectRoot, StringComparison.Ordinal))
+            {
+                return absolutePath.Replace('\\', '/');
+            }
+
             var relativePath = absolutePath.Substring(projectRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             return relativePath.Replace('\\', '/');
         }
