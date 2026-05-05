@@ -14,6 +14,22 @@ TailwindUSS is a Unity Editor extension that scans UI Toolkit UXML `class` attri
 
 Add this repository as a Unity Package Manager dependency.
 
+## Automated tests
+
+Run the unit tests from the repository root:
+
+```bash
+dotnet test /home/runner/work/TailwindUSS/TailwindUSS/Tests/TailwindUSS.Editor.Tests/TailwindUSS.Editor.Tests.csproj
+```
+
+Collect coverage in Cobertura format:
+
+```bash
+dotnet test /home/runner/work/TailwindUSS/TailwindUSS/Tests/TailwindUSS.Editor.Tests/TailwindUSS.Editor.Tests.csproj --settings /home/runner/work/TailwindUSS/TailwindUSS/Tests/coverlet.runsettings --collect:"XPlat Code Coverage"
+```
+
+Coverage reports are written under `Tests/TailwindUSS.Editor.Tests/TestResults/`.
+
 ## Configuration
 
 Create `tailwinduss.config.json` at the Unity project root.
