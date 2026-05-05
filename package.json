@@ -1,0 +1,17 @@
+{
+  "name": "com.tnakamura.tailwinduss",
+  "displayName": "TailwindUSS",
+  "version": "0.1.0",
+  "unity": "2022.3",
+  "description": "Unity Editor extension that generates USS from Tailwind-like utility classes in UXML.",
+  "keywords": [
+    "unity",
+    "uitoolkit",
+    "uss",
+    "uxml",
+    "tailwind"
+  ],
+  "author": {
+    "name": "tnakamura"
+  }
+}
