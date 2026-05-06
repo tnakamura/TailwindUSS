@@ -42,9 +42,9 @@
 
 ### 変更対象
 
-- `/home/runner/work/TailwindUSS/TailwindUSS/Editor/UtilityResolver.cs`
-- `/home/runner/work/TailwindUSS/TailwindUSS/Editor/TailwindUssModels.cs`
-- `/home/runner/work/TailwindUSS/TailwindUSS/Tests/TailwindUSS.Editor.Tests/UtilityResolverTests.cs`
+- `Editor/UtilityResolver.cs`
+- `Editor/TailwindUssModels.cs`
+- `Tests/TailwindUSS.Editor.Tests/UtilityResolverTests.cs`
 
 ### 実施内容
 
@@ -221,13 +221,13 @@ variant や特殊 selector を伴わない、**単純な property マッピン�
 
 ### 3-2. 変更対象
 
-- `/home/runner/work/TailwindUSS/TailwindUSS/Editor/ClassTokenParser.cs`
-- `/home/runner/work/TailwindUSS/TailwindUSS/Editor/TailwindUssModels.cs`
-- `/home/runner/work/TailwindUSS/TailwindUSS/Editor/UtilityResolver.cs`
-- `/home/runner/work/TailwindUSS/TailwindUSS/Editor/UssEmitter.cs`
-- `/home/runner/work/TailwindUSS/TailwindUSS/Tests/TailwindUSS.Editor.Tests/ClassTokenParserTests.cs`
-- `/home/runner/work/TailwindUSS/TailwindUSS/Tests/TailwindUSS.Editor.Tests/UssEmitterTests.cs`
-- `/home/runner/work/TailwindUSS/TailwindUSS/Tests/TailwindUSS.Editor.Tests/GenerationServiceTests.cs`
+- `Editor/ClassTokenParser.cs`
+- `Editor/TailwindUssModels.cs`
+- `Editor/UtilityResolver.cs`
+- `Editor/UssEmitter.cs`
+- `Tests/TailwindUSS.Editor.Tests/ClassTokenParserTests.cs`
+- `Tests/TailwindUSS.Editor.Tests/UssEmitterTests.cs`
+- `Tests/TailwindUSS.Editor.Tests/GenerationServiceTests.cs`
 
 ### 3-3. データモデル変更
 
@@ -302,9 +302,9 @@ variant や特殊 selector を伴わない、**単純な property マッピン�
 
 ### 変更対象
 
-- `/home/runner/work/TailwindUSS/TailwindUSS/Editor/TailwindUssConfig.cs`
-- `/home/runner/work/TailwindUSS/TailwindUSS/Editor/ConfigLoader.cs`
-- `/home/runner/work/TailwindUSS/TailwindUSS/README.md`
+- `Editor/TailwindUssConfig.cs`
+- `Editor/ConfigLoader.cs`
+- `README.md`
 - config 関連テスト
 
 ### 実装方法
@@ -364,8 +364,8 @@ variant と config を触ったフェーズでは、関連テストだけで済�
 
 新しい utility family を実装したら、必ず次を更新する。
 
-1. `/home/runner/work/TailwindUSS/TailwindUSS/README.md`
-2. `/home/runner/work/TailwindUSS/TailwindUSS/docs/tailwind-uss-feature-matrix-ja.md`
+1. `README.md`
+2. `docs/tailwind-uss-feature-matrix-ja.md`
 3. 必要なら `/home/runner/work/TailwindUSS/TailwindUSS/docs/mvp-spec-ja.md`
 
 ## 推奨実装順の最終版

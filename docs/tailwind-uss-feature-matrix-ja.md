@@ -167,6 +167,6 @@
 
 ## 根拠として見た実装箇所
 
-- `/home/runner/work/TailwindUSS/TailwindUSS/Editor/UtilityResolver.cs`
-- `/home/runner/work/TailwindUSS/TailwindUSS/Tests/TailwindUSS.Editor.Tests/UtilityResolverTests.cs`
-- `/home/runner/work/TailwindUSS/TailwindUSS/README.md`
+- `Editor/UtilityResolver.cs`
+- `Tests/TailwindUSS.Editor.Tests/UtilityResolverTests.cs`
+- `README.md`
