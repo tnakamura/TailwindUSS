@@ -4,7 +4,7 @@
 
 この文書は、`tailwind-uss-feature-matrix-ja.md` で **USS では実現可能だが TailwindUSS では未実装** と判定した機能を、**AI がそのまま実装作業に着手できる粒度**まで分解した実装計画である。
 
-対象 Unity バージョンは 対象 Unity バージョンは、TailwindUSS パッケージ直下の Unity Package Manager 用 package manifest (`package.json`) に合わせて **Unity 2022.3** とする。
+対象 Unity バージョンは、TailwindUSS パッケージ直下の Unity Package Manager 用 package manifest (`package.json`) に合わせて **Unity 2022.3** とする。
 
 ## 完了条件
 

@@ -55,7 +55,7 @@ If the file does not exist, TailwindUSS uses the same defaults in memory. You ca
 - `Tools/TailwindUSS/Validate`
 - `Tools/TailwindUSS/Create Default Config`
 
-## Currently implemented utility subset
+## Currently Implemented Utility Subset
 
 For the full Unity USS coverage matrix and the implementation roadmap for unimplemented utilities, see `docs/tailwind-uss-feature-matrix-ja.md` and `docs/tailwind-uss-implementation-plan-ja.md`.
 
