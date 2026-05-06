@@ -77,7 +77,6 @@ namespace TailwindUSS.Editor
         public string OriginalToken { get; private set; }
         public IList<string> VariantChain { get; private set; }
         public string BaseToken { get; private set; }
-        public string Token => OriginalToken;
     }
 
     internal sealed class StyleDeclaration
