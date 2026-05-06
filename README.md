@@ -67,16 +67,44 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 - `flex-col`
 - `grow`
 - `shrink`
+- `overflow-hidden`
+- `overflow-visible`
+- `overflow-scroll`
+- `relative`
+- `absolute`
+- `top-*`
+- `right-*`
+- `bottom-*`
+- `left-*`
+- `inset-*`
+- `inset-x-*`
+- `inset-y-*`
+- `z-0`
+- `z-10`
+- `z-20`
+- `z-30`
+- `z-40`
+- `z-50`
+- `z-auto`
+- `opacity-*`
 
 ### Alignment
 
 - `items-start`
 - `items-center`
 - `items-end`
+- `items-stretch`
 - `justify-start`
 - `justify-center`
 - `justify-end`
 - `justify-between`
+- `justify-around`
+- `justify-evenly`
+- `self-auto`
+- `self-start`
+- `self-end`
+- `self-center`
+- `self-stretch`
 
 ### Spacing
 
@@ -90,6 +118,13 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 - `m-*`
 - `mx-*`
 - `my-*`
+- `mt-*`
+- `mr-*`
+- `mb-*`
+- `ml-*`
+- `gap-*`
+- `gap-x-*`
+- `gap-y-*`
 
 ### Size
 
@@ -99,6 +134,8 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 - `min-h-*`
 - `max-w-*`
 - `max-h-*`
+- `basis-*`
+- `order-*`
 
 ### Color
 
@@ -112,8 +149,48 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 - `text-sm`
 - `text-base`
 - `text-lg`
+- `text-xl`
+- `text-2xl`
+- `text-3xl`
+- `text-4xl`
+- `text-5xl`
+- `text-6xl`
+- `text-7xl`
+- `text-8xl`
+- `text-9xl`
 - `font-normal`
 - `font-bold`
+- `text-left`
+- `text-center`
+- `text-right`
+- `text-justify`
+- `italic`
+- `not-italic`
+- `whitespace-normal`
+- `whitespace-nowrap`
+- `uppercase`
+- `lowercase`
+- `capitalize`
+- `normal-case`
+- `tracking-tighter`
+- `tracking-tight`
+- `tracking-normal`
+- `tracking-wide`
+- `tracking-wider`
+- `tracking-widest`
+- `leading-3`
+- `leading-4`
+- `leading-5`
+- `leading-6`
+- `leading-7`
+- `leading-8`
+- `leading-9`
+- `leading-10`
+- `truncate`
+- `text-ellipsis`
+- `text-clip`
+- `break-normal`
+- `break-all`
 
 ### Border
 
@@ -169,6 +246,15 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 | sm | 14px |
 | base | 16px |
 | lg | 18px |
+| xl | 20px |
+| 2xl | 24px |
+| 3xl | 30px |
+| 4xl | 36px |
+| 5xl | 48px |
+| 6xl | 60px |
+| 7xl | 72px |
+| 8xl | 96px |
+| 9xl | 128px |
 
 ## Example
 

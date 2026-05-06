@@ -17,18 +17,18 @@
 
 ## 現在の実装範囲
 
-現行実装は `Editor/UtilityResolver.cs` の固定マッピングと prefix 解決に限定される。
+現行実装は `Editor/UtilityResolver.cs` の registry ベース resolver と family ごとの prefix 解決で構成される。
 
 ### ✅ 実装済みトークン
 
 | カテゴリ | Tailwind ユーティリティ | USS 変換 |
 | --- | --- | --- |
-| レイアウト | `flex`, `hidden`, `flex-row`, `flex-col`, `grow`, `shrink` | `display`, `flex-direction`, `flex-grow`, `flex-shrink` |
-| 配置 | `items-start`, `items-center`, `items-end`, `justify-start`, `justify-center`, `justify-end`, `justify-between` | `align-items`, `justify-content` |
-| 余白 | `p-*`, `px-*`, `py-*`, `pt-*`, `pr-*`, `pb-*`, `pl-*`, `m-*`, `mx-*`, `my-*` | `padding-*`, `margin-*` |
-| サイズ | `w-*`, `h-*`, `min-w-*`, `min-h-*`, `max-w-*`, `max-h-*` | `width`, `height`, `min-*`, `max-*` |
+| レイアウト | `flex`, `hidden`, `flex-row`, `flex-col`, `grow`, `shrink`, `overflow-*`, `relative`, `absolute`, `top-*`, `right-*`, `bottom-*`, `left-*`, `inset-*`, `inset-x-*`, `inset-y-*`, `z-*`, `opacity-*` | `display`, `flex-direction`, `flex-grow`, `flex-shrink`, `overflow`, `position`, `top/right/bottom/left`, `z-index`, `opacity` |
+| 配置 | `items-start`, `items-center`, `items-end`, `items-stretch`, `justify-start`, `justify-center`, `justify-end`, `justify-between`, `justify-around`, `justify-evenly`, `self-*` | `align-items`, `justify-content`, `align-self` |
+| 余白 | `p-*`, `px-*`, `py-*`, `pt-*`, `pr-*`, `pb-*`, `pl-*`, `m-*`, `mx-*`, `my-*`, `mt-*`, `mr-*`, `mb-*`, `ml-*`, `gap-*`, `gap-x-*`, `gap-y-*` | `padding-*`, `margin-*`, `gap`, `column-gap`, `row-gap` |
+| サイズ | `w-*`, `h-*`, `min-w-*`, `min-h-*`, `max-w-*`, `max-h-*`, `basis-*`, `order-*` | `width`, `height`, `min-*`, `max-*`, `flex-basis`, `order` |
 | 色 | `bg-*`, `text-*`, `border-*` | `background-color`, `color`, `border-*-color` |
-| タイポグラフィ | `text-xs`, `text-sm`, `text-base`, `text-lg`, `font-normal`, `font-bold` | `font-size`, `-unity-font-style` |
+| タイポグラフィ | `text-xs`〜`text-9xl`, `font-normal`, `font-bold`, `italic`, `not-italic`, `text-left`, `text-center`, `text-right`, `text-justify`, `whitespace-*`, `uppercase`, `lowercase`, `capitalize`, `normal-case`, `tracking-*`, `leading-*`, `truncate`, `text-ellipsis`, `text-clip`, `break-normal`, `break-all` | `font-size`, `-unity-font-style`, `-unity-text-align`, `white-space`, `text-transform`, `letter-spacing`, `line-height`, `text-overflow`, `word-break`, `overflow` |
 | ボーダー | `border`, `border-0`, `border-2` | `border-*-width` |
 | 角丸 | `rounded-none`, `rounded-sm`, `rounded`, `rounded-md`, `rounded-lg`, `rounded-full` | `border-*-radius` |
 
@@ -36,7 +36,10 @@
 
 - spacing / size: `0, 1, 2, 3, 4, 5, 6, 8, 10, 12`
 - colors: `white`, `black`, `gray-100`, `gray-300`, `gray-500`, `gray-700`, `gray-900`, `blue-500`, `red-500`, `green-500`, `yellow-500`
-- font sizes: `xs`, `sm`, `base`, `lg`
+- font sizes: `xs`, `sm`, `base`, `lg`, `xl`, `2xl`, `3xl`, `4xl`, `5xl`, `6xl`, `7xl`, `8xl`, `9xl`
+- opacity: `0`, `5`, `10`, `20`, `25`, `30`, `40`, `50`, `60`, `70`, `75`, `80`, `90`, `95`, `100`
+- z-index: `0`, `10`, `20`, `30`, `40`, `50`, `auto`
+- order: `0`〜`12`
 
 ## Tailwind CSS 機能の対応可能一覧
 
@@ -46,10 +49,10 @@
 | --- | --- | --- | --- |
 | `flex`, `hidden` | ✅ | ✅ | 実装済み |
 | `block`, `inline`, `inline-block`, `contents`, `list-item` | ❌ | ❌ | UI Toolkit は CSS Display 全互換ではない |
-| `overflow-hidden`, `overflow-visible`, `overflow-scroll` | ✅ | 🟡 | `overflow` に直接対応できる |
-| `relative`, `absolute` | ✅ | 🟡 | `position` に対応 |
-| `top-*`, `right-*`, `bottom-*`, `left-*`, `inset-*`, `inset-x-*`, `inset-y-*` | ✅ | 🟡 | `position: absolute` 前提で有効 |
-| `z-*` | ✅ | 🟡 | `z-index` に対応 |
+| `overflow-hidden`, `overflow-visible`, `overflow-scroll` | ✅ | ✅ | `overflow` に直接対応 |
+| `relative`, `absolute` | ✅ | ✅ | `position` に対応 |
+| `top-*`, `right-*`, `bottom-*`, `left-*`, `inset-*`, `inset-x-*`, `inset-y-*` | ✅ | ✅ | spacing scale で位置指定に対応 |
+| `z-*` | ✅ | ✅ | `z-index` に対応 |
 | `visible`, `invisible` | ⚪ | ❌ | `visibility` より `display` / `opacity` 運用が現実的 |
 
 ### 2. Flexbox
@@ -57,13 +60,13 @@
 | Tailwind 機能 | USS での実現性 | TailwindUSS | 補足 |
 | --- | --- | --- | --- |
 | `flex-row`, `flex-col`, `grow`, `shrink` | ✅ | ✅ | 実装済み |
-| `flex-wrap`, `flex-nowrap`, `flex-wrap-reverse` | ✅ | 🟡 | `flex-wrap` へ対応可能 |
-| `justify-around`, `justify-evenly` | ✅ | 🟡 | USS の `justify-content` で表現可能 |
-| `items-stretch` | ✅ | 🟡 | `align-items: stretch` |
-| `self-*` | ✅ | 🟡 | `align-self` へ変換 |
-| `basis-*` | ✅ | 🟡 | `flex-basis` へ変換 |
-| `order-*` | ✅ | 🟡 | `order` へ変換 |
-| `gap-*`, `gap-x-*`, `gap-y-*` | ✅ | 🟡 | Unity 2022.2+ の `gap` / `row-gap` / `column-gap` を使える |
+| `flex-wrap`, `flex-nowrap`, `flex-wrap-reverse` | ✅ | ✅ | `flex-wrap` に対応 |
+| `justify-around`, `justify-evenly` | ✅ | ✅ | USS の `justify-content` で表現 |
+| `items-stretch` | ✅ | ✅ | `align-items: stretch` |
+| `self-*` | ✅ | ✅ | `align-self` へ変換 |
+| `basis-*` | ✅ | ✅ | `flex-basis` へ変換 |
+| `order-*` | ✅ | ✅ | 初期実装は数値 scale (`0`〜`12`) に対応 |
+| `gap-*`, `gap-x-*`, `gap-y-*` | ✅ | ✅ | `gap` / `row-gap` / `column-gap` を使う |
 | `space-x-*`, `space-y-*` | ❌ | ❌ | 子要素 combinator が必要で USS では実装しづらい |
 
 ### 3. 余白・サイズ
@@ -71,7 +74,7 @@
 | Tailwind 機能 | USS での実現性 | TailwindUSS | 補足 |
 | --- | --- | --- | --- |
 | `p-*`, `px-*`, `py-*`, `pt-*`, `pr-*`, `pb-*`, `pl-*`, `m-*`, `mx-*`, `my-*` | ✅ | ✅ | 実装済み |
-| `mt-*`, `mr-*`, `mb-*`, `ml-*` | ✅ | 🟡 | 既存 resolver の拡張だけで実装可能 |
+| `mt-*`, `mr-*`, `mb-*`, `ml-*` | ✅ | ✅ | side 個別 margin に対応 |
 | `w-*`, `h-*`, `min-w-*`, `min-h-*`, `max-w-*`, `max-h-*` | ✅ | ✅ | 実装済み |
 | `size-*` | ✅ | 🟡 | `width` と `height` の同時設定で表現可能 |
 | `w-auto`, `h-auto`, `min-w-0`, `max-w-none` などの special values | ✅ | 🟡 | 固定 scale 以外の特別値を追加すればよい |
@@ -83,16 +86,16 @@
 | Tailwind 機能 | USS での実現性 | TailwindUSS | 補足 |
 | --- | --- | --- | --- |
 | `text-xs`, `text-sm`, `text-base`, `text-lg`, `text-*` color, `font-normal`, `font-bold` | ✅ | ✅ | 実装済み |
-| 追加の `text-xl` 以上の font-size scale | ✅ | 🟡 | `font-size` 拡張で対応可能 |
+| 追加の `text-xl` 以上の font-size scale | ✅ | ✅ | `text-xl`〜`text-9xl` を実装済み |
 | `font-thin` ～ `font-black` | ⚪ | 🟡 | フォントアセット依存だが `font-weight` 系で表現できる |
-| `italic`, `not-italic` | ✅ | 🟡 | `font-style` / `-unity-font-style` へ変換 |
-| `text-left`, `text-center`, `text-right`, `text-justify` | ✅ | 🟡 | `text-align` に対応 |
-| `tracking-*` | ✅ | 🟡 | `letter-spacing` に対応 |
-| `leading-*` | ✅ | 🟡 | `line-height` に対応 |
-| `whitespace-normal`, `whitespace-nowrap` | ✅ | 🟡 | `white-space` に対応 |
-| `truncate`, `text-ellipsis`, `text-clip` | ✅ | 🟡 | `text-overflow` と `overflow` の組み合わせで表現可能 |
-| `uppercase`, `lowercase`, `capitalize`, `normal-case` | ✅ | 🟡 | `text-transform` に対応 |
-| `break-normal`, `break-all` | ✅ | 🟡 | `word-break` に対応 |
+| `italic`, `not-italic` | ✅ | ✅ | `-unity-font-style` に変換 |
+| `text-left`, `text-center`, `text-right`, `text-justify` | ✅ | ✅ | `-unity-text-align` に変換 |
+| `tracking-*` | ✅ | ✅ | 初期実装は Tailwind 既定の named scale に対応 |
+| `leading-*` | ✅ | ✅ | 初期実装は `leading-3`〜`leading-10` に対応 |
+| `whitespace-normal`, `whitespace-nowrap` | ✅ | ✅ | `white-space` に対応 |
+| `truncate`, `text-ellipsis`, `text-clip` | ✅ | ✅ | `text-overflow` と `overflow` の組み合わせを実装済み |
+| `uppercase`, `lowercase`, `capitalize`, `normal-case` | ✅ | ✅ | `text-transform` に対応 |
+| `break-normal`, `break-all` | ✅ | ✅ | `word-break` に対応 |
 | `font-sans`, `font-serif`, `font-mono` | ⚪ | 🟡 | Unity font asset の設定マップを用意すれば可能 |
 | `underline`, `line-through`, `decoration-*` | ⚪ | ❌ | USS の text decoration 対応が Tailwind 同等ではない |
 
@@ -118,7 +121,7 @@
 | `border-t-*`, `border-r-*`, `border-b-*`, `border-l-*` | ✅ | 🟡 | side ごとの幅・色へ展開すればよい |
 | `rounded-t-*`, `rounded-r-*`, `rounded-b-*`, `rounded-l-*`, corner 個別 | ✅ | 🟡 | corner ごとの radius を生成できる |
 | `border-solid` | ⚪ | 🟡 | USS は実質 `solid` のみ |
-| `opacity-*` | ✅ | 🟡 | `opacity` に直接対応 |
+| `opacity-*` | ✅ | ✅ | Tailwind 既定 opacity scale に対応 |
 | `outline-*`, `ring-*`, `ring-offset-*` | ❌ | ❌ | USS に Tailwind 相当の outline / ring 機構がない |
 | `shadow-*`, `drop-shadow-*` | ❌ | ❌ | USS に box-shadow / filter がない |
 
