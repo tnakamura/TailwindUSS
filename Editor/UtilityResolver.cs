@@ -180,6 +180,16 @@ namespace TailwindUSS.Editor
             { "full", "9999px" }
         };
 
+        private static readonly IDictionary<string, string> VariantSuffixes = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "hover", ":hover" },
+            { "active", ":active" },
+            { "focus", ":focus" },
+            { "disabled", ":disabled" },
+            { "checked", ":checked" },
+            { "selected", ":selected" }
+        };
+
         private static readonly IDictionary<string, Func<string, ResolvedUtility>> FixedUtilities =
             new Dictionary<string, Func<string, ResolvedUtility>>(StringComparer.Ordinal)
             {
@@ -398,6 +408,33 @@ namespace TailwindUSS.Editor
             }
 
             return ResolveStatus.Unsupported;
+        }
+
+        public ResolveStatus TryResolve(UxmlTokenOccurrence occurrence, out ResolvedUtility utility, out string errorMessage)
+        {
+            var status = TryResolve(occurrence.BaseToken, out utility, out errorMessage);
+            if (status != ResolveStatus.Supported)
+            {
+                return status;
+            }
+
+            var selectorSuffix = utility.SelectorSuffix;
+            foreach (var variant in occurrence.VariantChain)
+            {
+                string suffix;
+                if (!VariantSuffixes.TryGetValue(variant, out suffix))
+                {
+                    utility = null;
+                    errorMessage = string.Format("Unsupported variant '{0}'.", variant);
+                    return ResolveStatus.UnsupportedVariant;
+                }
+
+                selectorSuffix += suffix;
+            }
+
+            utility = new ResolvedUtility(occurrence.OriginalToken, utility.Declarations, selectorSuffix);
+            errorMessage = null;
+            return ResolveStatus.Supported;
         }
 
         private static bool TryResolveFontSize(string token, out ResolvedUtility utility, out string errorMessage)

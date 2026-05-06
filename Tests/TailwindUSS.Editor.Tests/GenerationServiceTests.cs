@@ -141,6 +141,26 @@ namespace TailwindUSS.Editor.Tests
         }
 
         [Test]
+        public void Generate_WritesVariantSelectorsAndReportsUnsupportedVariants()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
+            scope.WriteAssetFile("UI/Interactive.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:Button class=\"hover:bg-blue-500 focus:text-white hover:focus:bg-blue-500 group-hover:bg-blue-500\" /></ui:UXML>");
+
+            var result = new GenerationService().Generate();
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(3));
+            Assert.That(result.WarningCount, Is.EqualTo(1));
+            Assert.That(result.ErrorCount, Is.EqualTo(0));
+            Assert.That(output, Does.Contain(".focus\\:text-white:focus {\n    color: #FFFFFF;\n}"));
+            Assert.That(output, Does.Contain(".hover\\:bg-blue-500:hover {\n    background-color: #3B82F6;\n}"));
+            Assert.That(output, Does.Contain(".hover\\:focus\\:bg-blue-500:hover:focus {\n    background-color: #3B82F6;\n}"));
+            Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Unsupported variant in utility token 'group-hover:bg-blue-500': Unsupported variant 'group-hover'.")), Is.True);
+        }
+
+        [Test]
         public void LogDiagnostic_LoadsAssetContextForAssetPaths()
         {
             var diagnostic = new TailwindUssDiagnostic(

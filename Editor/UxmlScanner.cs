@@ -53,7 +53,7 @@ namespace TailwindUSS.Editor
 
                         foreach (var token in tokens)
                         {
-                            result.Occurrences.Add(new UxmlTokenOccurrence(relativeFilePath, lineNumber, element.Name.LocalName, token));
+                            result.Occurrences.Add(token);
                         }
                     }
                 }

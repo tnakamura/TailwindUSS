@@ -132,8 +132,8 @@
 | --- | --- | --- | --- |
 | `scale-*`, `rotate-*`, `translate-x-*`, `translate-y-*`, `origin-*` | ✅ | 🟡 | `scale`, `rotate`, `translate`, `transform-origin` に対応 |
 | `transition`, `transition-*`, `duration-*`, `delay-*`, `ease-*` | ✅ | 🟡 | USS transition プロパティで表現可能 |
-| `hover:`, `active:`, `focus:`, `disabled:`, `checked:`, `selected:` | ✅ | 🟡 | USS 疑似クラスに直接対応 |
-| 複合 variant (`hover:focus:` など) | ✅ | 🟡 | selector suffix の連結で実装可能 |
+| `hover:`, `active:`, `focus:`, `disabled:`, `checked:`, `selected:` | ✅ | ✅ | USS 疑似クラスへ変換して selector を生成 |
+| 複合 variant (`hover:focus:` など) | ✅ | ✅ | selector suffix を左から順に連結して生成 |
 | `group-hover:`, `peer-*`, `first:`, `last:`, `odd:`, `even:` | ❌ | ❌ | combinator / structural pseudo class が弱く Tailwind 同等は難しい |
 | `animate-*` | ❌ | ❌ | USS transition はあるが Tailwind keyframes 相当はない |
 
