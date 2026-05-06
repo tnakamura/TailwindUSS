@@ -140,8 +140,29 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 ### Color
 
 - `bg-*`
+- `bg-transparent`
+- `bg-current`
 - `text-*`
 - `border-*`
+- `border-t-*`
+- `border-r-*`
+- `border-b-*`
+- `border-l-*`
+
+### Background
+
+- `bg-cover`
+- `bg-contain`
+- `bg-center`
+- `bg-top`
+- `bg-bottom`
+- `bg-left`
+- `bg-right`
+- `bg-repeat`
+- `bg-no-repeat`
+- `bg-repeat-x`
+- `bg-repeat-y`
+- `bg-none`
 
 ### Typography
 
@@ -197,6 +218,12 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 - `border`
 - `border-0`
 - `border-2`
+- `border-4`
+- `border-8`
+- `border-t`
+- `border-r`
+- `border-b`
+- `border-l`
 
 ### Radius
 
@@ -206,6 +233,14 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 - `rounded-md`
 - `rounded-lg`
 - `rounded-full`
+- `rounded-t*`
+- `rounded-r*`
+- `rounded-b*`
+- `rounded-l*`
+- `rounded-tl*`
+- `rounded-tr*`
+- `rounded-br*`
+- `rounded-bl*`
 
 ## Token scales
 
@@ -228,15 +263,21 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 
 - `white`
 - `black`
-- `gray-100`
-- `gray-300`
-- `gray-500`
-- `gray-700`
-- `gray-900`
+- `gray-*`
+- `slate-*`
+- `zinc-*`
+- `neutral-*`
+- `stone-*`
 - `blue-500`
 - `red-500`
 - `green-500`
 - `yellow-500`
+- `emerald-*`
+- `sky-*`
+- `indigo-*`
+- `pink-*`
+
+Supported palette steps for `gray`, `slate`, `zinc`, `neutral`, `stone`, `emerald`, `sky`, `indigo`, and `pink` are `100`, `300`, `500`, `700`, and `900`.
 
 ### Font sizes
 

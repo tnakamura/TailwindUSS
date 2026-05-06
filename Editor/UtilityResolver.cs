@@ -47,10 +47,50 @@ namespace TailwindUSS.Editor
             { "gray-500", "#6B7280" },
             { "gray-700", "#374151" },
             { "gray-900", "#111827" },
+            { "slate-100", "#F1F5F9" },
+            { "slate-300", "#CBD5E1" },
+            { "slate-500", "#64748B" },
+            { "slate-700", "#334155" },
+            { "slate-900", "#0F172A" },
+            { "zinc-100", "#F4F4F5" },
+            { "zinc-300", "#D4D4D8" },
+            { "zinc-500", "#71717A" },
+            { "zinc-700", "#3F3F46" },
+            { "zinc-900", "#18181B" },
+            { "neutral-100", "#F5F5F5" },
+            { "neutral-300", "#D4D4D4" },
+            { "neutral-500", "#737373" },
+            { "neutral-700", "#404040" },
+            { "neutral-900", "#171717" },
+            { "stone-100", "#F5F5F4" },
+            { "stone-300", "#D6D3D1" },
+            { "stone-500", "#78716C" },
+            { "stone-700", "#44403C" },
+            { "stone-900", "#1C1917" },
             { "blue-500", "#3B82F6" },
             { "red-500", "#EF4444" },
             { "green-500", "#22C55E" },
-            { "yellow-500", "#EAB308" }
+            { "yellow-500", "#EAB308" },
+            { "emerald-100", "#D1FAE5" },
+            { "emerald-300", "#6EE7B7" },
+            { "emerald-500", "#10B981" },
+            { "emerald-700", "#047857" },
+            { "emerald-900", "#064E3B" },
+            { "sky-100", "#E0F2FE" },
+            { "sky-300", "#7DD3FC" },
+            { "sky-500", "#0EA5E9" },
+            { "sky-700", "#0369A1" },
+            { "sky-900", "#0C4A6E" },
+            { "indigo-100", "#E0E7FF" },
+            { "indigo-300", "#A5B4FC" },
+            { "indigo-500", "#6366F1" },
+            { "indigo-700", "#4338CA" },
+            { "indigo-900", "#312E81" },
+            { "pink-100", "#FCE7F3" },
+            { "pink-300", "#F9A8D4" },
+            { "pink-500", "#EC4899" },
+            { "pink-700", "#BE185D" },
+            { "pink-900", "#831843" }
         };
 
         private static readonly IDictionary<string, string> ZIndexScale = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -122,6 +162,24 @@ namespace TailwindUSS.Editor
             { "10", "40px" }
         };
 
+        private static readonly IDictionary<string, string> BorderWidthScale = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "0", "0px" },
+            { "2", "2px" },
+            { "4", "4px" },
+            { "8", "8px" }
+        };
+
+        private static readonly IDictionary<string, string> RadiusScale = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "none", "0px" },
+            { "sm", "2px" },
+            { string.Empty, "4px" },
+            { "md", "6px" },
+            { "lg", "8px" },
+            { "full", "9999px" }
+        };
+
         private static readonly IDictionary<string, Func<string, ResolvedUtility>> FixedUtilities =
             new Dictionary<string, Func<string, ResolvedUtility>>(StringComparer.Ordinal)
             {
@@ -178,12 +236,28 @@ namespace TailwindUSS.Editor
                 { "border", token => CreateBox(token, BorderWidthProperties, "1px") },
                 { "border-0", token => CreateBox(token, BorderWidthProperties, "0px") },
                 { "border-2", token => CreateBox(token, BorderWidthProperties, "2px") },
+                { "border-4", token => CreateBox(token, BorderWidthProperties, "4px") },
+                { "border-8", token => CreateBox(token, BorderWidthProperties, "8px") },
                 { "rounded-none", token => CreateBox(token, RadiusProperties, "0px") },
                 { "rounded-sm", token => CreateBox(token, RadiusProperties, "2px") },
                 { "rounded", token => CreateBox(token, RadiusProperties, "4px") },
                 { "rounded-md", token => CreateBox(token, RadiusProperties, "6px") },
                 { "rounded-lg", token => CreateBox(token, RadiusProperties, "8px") },
-                { "rounded-full", token => CreateBox(token, RadiusProperties, "9999px") }
+                { "rounded-full", token => CreateBox(token, RadiusProperties, "9999px") },
+                { "bg-transparent", token => Create(token, new StyleDeclaration("background-color", "transparent")) },
+                { "bg-current", token => Create(token, new StyleDeclaration("background-color", "currentColor")) },
+                { "bg-cover", token => Create(token, new StyleDeclaration("background-size", "cover")) },
+                { "bg-contain", token => Create(token, new StyleDeclaration("background-size", "contain")) },
+                { "bg-center", token => Create(token, new StyleDeclaration("background-position", "center center")) },
+                { "bg-top", token => Create(token, new StyleDeclaration("background-position", "center top")) },
+                { "bg-bottom", token => Create(token, new StyleDeclaration("background-position", "center bottom")) },
+                { "bg-left", token => Create(token, new StyleDeclaration("background-position", "left center")) },
+                { "bg-right", token => Create(token, new StyleDeclaration("background-position", "right center")) },
+                { "bg-repeat", token => Create(token, new StyleDeclaration("background-repeat", "repeat")) },
+                { "bg-no-repeat", token => Create(token, new StyleDeclaration("background-repeat", "no-repeat")) },
+                { "bg-repeat-x", token => Create(token, new StyleDeclaration("background-repeat", "repeat-x")) },
+                { "bg-repeat-y", token => Create(token, new StyleDeclaration("background-repeat", "repeat-y")) },
+                { "bg-none", token => Create(token, new StyleDeclaration("background-image", "none")) }
             };
 
         private static readonly UtilityHandler[] Handlers =
@@ -200,6 +274,9 @@ namespace TailwindUSS.Editor
             TryResolveGap,
             TryResolveTracking,
             TryResolveLeading,
+            TryResolveBorder,
+            TryResolveRounded,
+            TryResolveBackground,
             TryResolveColor
         };
 
@@ -256,6 +333,46 @@ namespace TailwindUSS.Editor
             "border-top-right-radius",
             "border-bottom-right-radius",
             "border-bottom-left-radius"
+        };
+
+        private static readonly KeyValuePair<string, string>[] BorderSideWidthDefinitions =
+        {
+            new KeyValuePair<string, string>("border-t", "border-top-width"),
+            new KeyValuePair<string, string>("border-r", "border-right-width"),
+            new KeyValuePair<string, string>("border-b", "border-bottom-width"),
+            new KeyValuePair<string, string>("border-l", "border-left-width")
+        };
+
+        private static readonly KeyValuePair<string, string>[] BorderSideColorDefinitions =
+        {
+            new KeyValuePair<string, string>("border-t", "border-top-color"),
+            new KeyValuePair<string, string>("border-r", "border-right-color"),
+            new KeyValuePair<string, string>("border-b", "border-bottom-color"),
+            new KeyValuePair<string, string>("border-l", "border-left-color")
+        };
+
+        private static readonly KeyValuePair<string, string[]>[] RoundedDefinitions =
+        {
+            new KeyValuePair<string, string[]>("rounded-t-", new[] { "border-top-left-radius", "border-top-right-radius" }),
+            new KeyValuePair<string, string[]>("rounded-r-", new[] { "border-top-right-radius", "border-bottom-right-radius" }),
+            new KeyValuePair<string, string[]>("rounded-b-", new[] { "border-bottom-right-radius", "border-bottom-left-radius" }),
+            new KeyValuePair<string, string[]>("rounded-l-", new[] { "border-top-left-radius", "border-bottom-left-radius" }),
+            new KeyValuePair<string, string[]>("rounded-tl-", new[] { "border-top-left-radius" }),
+            new KeyValuePair<string, string[]>("rounded-tr-", new[] { "border-top-right-radius" }),
+            new KeyValuePair<string, string[]>("rounded-br-", new[] { "border-bottom-right-radius" }),
+            new KeyValuePair<string, string[]>("rounded-bl-", new[] { "border-bottom-left-radius" })
+        };
+
+        private static readonly KeyValuePair<string, string[]>[] RoundedExactDefinitions =
+        {
+            new KeyValuePair<string, string[]>("rounded-t", new[] { "border-top-left-radius", "border-top-right-radius" }),
+            new KeyValuePair<string, string[]>("rounded-r", new[] { "border-top-right-radius", "border-bottom-right-radius" }),
+            new KeyValuePair<string, string[]>("rounded-b", new[] { "border-bottom-right-radius", "border-bottom-left-radius" }),
+            new KeyValuePair<string, string[]>("rounded-l", new[] { "border-top-left-radius", "border-bottom-left-radius" }),
+            new KeyValuePair<string, string[]>("rounded-tl", new[] { "border-top-left-radius" }),
+            new KeyValuePair<string, string[]>("rounded-tr", new[] { "border-top-right-radius" }),
+            new KeyValuePair<string, string[]>("rounded-br", new[] { "border-bottom-right-radius" }),
+            new KeyValuePair<string, string[]>("rounded-bl", new[] { "border-bottom-left-radius" })
         };
 
         public ResolveStatus TryResolve(string token, out ResolvedUtility utility, out string errorMessage)
@@ -399,30 +516,156 @@ namespace TailwindUSS.Editor
             return TryResolveMappedSingleProperty(token, "leading-", "line-height", LeadingScale, "Unsupported leading value.", out utility, out errorMessage);
         }
 
-        private static bool TryResolveColor(string token, out ResolvedUtility utility, out string errorMessage)
+        private static bool TryResolveBorder(string token, out ResolvedUtility utility, out string errorMessage)
         {
             utility = null;
             errorMessage = null;
 
-            if (token.StartsWith("bg-", StringComparison.Ordinal))
+            foreach (var side in BorderSideWidthDefinitions)
             {
-                return TryResolvePaletteToken(token, "bg-", new[] { "background-color" }, out utility, out errorMessage);
+                if (token == side.Key)
+                {
+                    utility = Create(token, new StyleDeclaration(side.Value, "1px"));
+                    return true;
+                }
+
+                var prefix = side.Key + "-";
+                if (!token.StartsWith(prefix, StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                var key = token.Substring(prefix.Length);
+                string value;
+                if (BorderWidthScale.TryGetValue(key, out value))
+                {
+                    utility = Create(token, new StyleDeclaration(side.Value, value));
+                    return true;
+                }
+
+                foreach (var colorSide in BorderSideColorDefinitions)
+                {
+                    if (colorSide.Key != side.Key)
+                    {
+                        continue;
+                    }
+
+                    if (Colors.TryGetValue(key, out value))
+                    {
+                        utility = Create(token, new StyleDeclaration(colorSide.Value, value));
+                        return true;
+                    }
+                }
+
+                errorMessage = IsNumericToken(key) ? "Unsupported border width value." : "Unsupported color token.";
+                return true;
             }
 
-            if (token.StartsWith("text-", StringComparison.Ordinal))
+            if (!token.StartsWith("border-", StringComparison.Ordinal))
             {
-                return TryResolvePaletteToken(token, "text-", new[] { "color" }, out utility, out errorMessage);
+                return false;
             }
 
-            if (token.StartsWith("border-", StringComparison.Ordinal))
+            var globalKey = token.Substring("border-".Length);
+            string globalValue;
+            if (BorderWidthScale.TryGetValue(globalKey, out globalValue))
             {
-                return TryResolvePaletteToken(token, "border-", new[]
+                utility = CreateBox(token, BorderWidthProperties, globalValue);
+                return true;
+            }
+
+            if (Colors.TryGetValue(globalKey, out globalValue))
+            {
+                utility = CreateBox(token, new[]
                 {
                     "border-top-color",
                     "border-right-color",
                     "border-bottom-color",
                     "border-left-color"
-                }, out utility, out errorMessage);
+                }, globalValue);
+                return true;
+            }
+
+            errorMessage = IsNumericToken(globalKey) ? "Unsupported border width value." : "Unsupported color token.";
+            return true;
+        }
+
+        private static bool TryResolveRounded(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            utility = null;
+            errorMessage = null;
+
+            foreach (var pair in RoundedExactDefinitions)
+            {
+                if (token != pair.Key)
+                {
+                    continue;
+                }
+
+                utility = CreateBox(token, pair.Value, RadiusScale[string.Empty]);
+                return true;
+            }
+
+            foreach (var pair in RoundedDefinitions)
+            {
+                if (!token.StartsWith(pair.Key, StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                var key = token.Substring(pair.Key.Length);
+                string value;
+                if (!RadiusScale.TryGetValue(key, out value))
+                {
+                    errorMessage = "Unsupported radius value.";
+                    return true;
+                }
+
+                utility = CreateBox(token, pair.Value, value);
+                return true;
+            }
+
+            if (!token.StartsWith("rounded-", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            errorMessage = "Unsupported radius value.";
+            return true;
+        }
+
+        private static bool TryResolveBackground(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            utility = null;
+            errorMessage = null;
+
+            if (!token.StartsWith("bg-", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            var key = token.Substring("bg-".Length);
+            string value;
+            if (Colors.TryGetValue(key, out value))
+            {
+                utility = Create(token, new StyleDeclaration("background-color", value));
+                return true;
+            }
+
+            errorMessage = LooksLikeColorToken(key) || key == "transparent" || key == "current"
+                ? "Unsupported color token."
+                : "Unsupported background utility value.";
+            return true;
+        }
+
+        private static bool TryResolveColor(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            utility = null;
+            errorMessage = null;
+
+            if (token.StartsWith("text-", StringComparison.Ordinal))
+            {
+                return TryResolvePaletteToken(token, "text-", new[] { "color" }, out utility, out errorMessage);
             }
 
             return false;
@@ -539,6 +782,29 @@ namespace TailwindUSS.Editor
             }
 
             return new ResolvedUtility(token, declarations);
+        }
+
+        private static bool IsNumericToken(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return false;
+            }
+
+            foreach (var character in token)
+            {
+                if (!char.IsDigit(character))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool LooksLikeColorToken(string token)
+        {
+            return token.Contains("-") || token == "white" || token == "black";
         }
     }
 }
