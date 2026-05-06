@@ -39,5 +39,22 @@ namespace TailwindUSS.Editor.Tests
 
             Assert.That(output.Replace("\r\n", "\n"), Does.Contain(".example:hover {\n    display: flex;\n}"));
         }
+
+        [Test]
+        public void Emit_EscapesVariantClassNamesBeforeAppendingSelectorSuffix()
+        {
+            var emitter = new UssEmitter();
+            var utilities = new[]
+            {
+                new ResolvedUtility("hover:bg-blue-500", new[]
+                {
+                    new StyleDeclaration("background-color", "#3B82F6")
+                }, ":hover")
+            };
+
+            var output = emitter.Emit(utilities);
+
+            Assert.That(output.Replace("\r\n", "\n"), Does.Contain(".hover\\:bg-blue-500:hover {\n    background-color: #3B82F6;\n}"));
+        }
     }
 }

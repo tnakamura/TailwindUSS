@@ -242,6 +242,16 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 - `rounded-br*`
 - `rounded-bl*`
 
+### Variants
+
+- `hover:`
+- `active:`
+- `focus:`
+- `disabled:`
+- `checked:`
+- `selected:`
+- compound variants such as `hover:focus:`
+
 ## Token scales
 
 ### Spacing and size scale

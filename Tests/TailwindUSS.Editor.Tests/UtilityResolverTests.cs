@@ -169,6 +169,48 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(utility.SelectorSuffix, Is.EqualTo(string.Empty));
         }
 
+        [Test]
+        public void TryResolve_AppliesVariantSelectorSuffixesToOriginalToken()
+        {
+            var resolver = new UtilityResolver();
+            var occurrence = new UxmlTokenOccurrence(
+                "Assets/UI/Main.uxml",
+                9,
+                "Button",
+                "hover:focus:bg-blue-500",
+                new[] { "hover", "focus" },
+                "bg-blue-500");
+
+            var status = resolver.TryResolve(occurrence, out var utility, out var errorMessage);
+
+            Assert.That(status, Is.EqualTo(ResolveStatus.Supported));
+            Assert.That(errorMessage, Is.Null);
+            Assert.That(utility, Is.Not.Null);
+            Assert.That(utility.Token, Is.EqualTo("hover:focus:bg-blue-500"));
+            Assert.That(utility.SelectorSuffix, Is.EqualTo(":hover:focus"));
+            Assert.That(utility.Declarations.Select(declaration => declaration.PropertyName), Is.EqualTo(new[] { "background-color" }));
+            Assert.That(utility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(new[] { "#3B82F6" }));
+        }
+
+        [Test]
+        public void TryResolve_ReturnsUnsupportedVariantForUnknownVariant()
+        {
+            var resolver = new UtilityResolver();
+            var occurrence = new UxmlTokenOccurrence(
+                "Assets/UI/Main.uxml",
+                9,
+                "Button",
+                "group-hover:bg-blue-500",
+                new[] { "group-hover" },
+                "bg-blue-500");
+
+            var status = resolver.TryResolve(occurrence, out var utility, out var errorMessage);
+
+            Assert.That(status, Is.EqualTo(ResolveStatus.UnsupportedVariant));
+            Assert.That(utility, Is.Null);
+            Assert.That(errorMessage, Is.EqualTo("Unsupported variant 'group-hover'."));
+        }
+
         [TestCase("p-7", "Unsupported spacing scale value.")]
         [TestCase("w-7", "Unsupported size scale value.")]
         [TestCase("top-7", "Unsupported inset scale value.")]

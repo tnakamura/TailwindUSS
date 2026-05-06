@@ -47,35 +47,45 @@ namespace TailwindUSS.Editor
             {
                 ResolvedUtility utility;
                 string resolveError;
-                var status = resolver.TryResolve(occurrence.Token, out utility, out resolveError);
+                var status = resolver.TryResolve(occurrence, out utility, out resolveError);
                 switch (status)
                 {
                     case ResolveStatus.Supported:
-                        if (!utilities.ContainsKey(occurrence.Token))
+                        if (!utilities.ContainsKey(occurrence.OriginalToken))
                         {
-                            utilities.Add(occurrence.Token, utility);
+                            utilities.Add(occurrence.OriginalToken, utility);
                         }
 
+                        break;
+                    case ResolveStatus.UnsupportedVariant:
+                        scanResult.Diagnostics.Add(new TailwindUssDiagnostic(
+                            DiagnosticSeverity.Warning,
+                            TokenIssueKind.UnsupportedVariant,
+                            string.Format("Unsupported variant in utility token '{0}': {1}", occurrence.OriginalToken, resolveError),
+                            occurrence.RelativeFilePath,
+                            occurrence.LineNumber,
+                            occurrence.ElementName,
+                            occurrence.OriginalToken));
                         break;
                     case ResolveStatus.InvalidValue:
                         scanResult.Diagnostics.Add(new TailwindUssDiagnostic(
                             DiagnosticSeverity.Warning,
                             TokenIssueKind.InvalidValue,
-                            string.Format("Invalid utility token '{0}': {1}", occurrence.Token, resolveError),
+                            string.Format("Invalid utility token '{0}': {1}", occurrence.OriginalToken, resolveError),
                             occurrence.RelativeFilePath,
                             occurrence.LineNumber,
                             occurrence.ElementName,
-                            occurrence.Token));
+                            occurrence.OriginalToken));
                         break;
                     default:
                         scanResult.Diagnostics.Add(new TailwindUssDiagnostic(
                             DiagnosticSeverity.Warning,
                             TokenIssueKind.Unsupported,
-                            string.Format("Unsupported utility token '{0}'.", occurrence.Token),
+                            string.Format("Unsupported utility token '{0}'.", occurrence.OriginalToken),
                             occurrence.RelativeFilePath,
                             occurrence.LineNumber,
                             occurrence.ElementName,
-                            occurrence.Token));
+                            occurrence.OriginalToken));
                         break;
                 }
             }

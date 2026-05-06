@@ -16,7 +16,7 @@ namespace TailwindUSS.Editor.Tests
             var result = scanner.Scan(scope.RootPath, new[] { "Assets/UI/**/*.uxml" });
 
             Assert.That(result.MatchedFiles, Is.EqualTo(new[] { "Assets/UI/Main.uxml" }));
-            Assert.That(result.Occurrences.Select(occurrence => occurrence.Token), Is.EqualTo(new[] { "flex", "px-4", "text-white" }));
+            Assert.That(result.Occurrences.Select(occurrence => occurrence.OriginalToken), Is.EqualTo(new[] { "flex", "px-4", "text-white" }));
             Assert.That(result.Diagnostics, Has.Count.EqualTo(1));
             Assert.That(result.Diagnostics[0].IssueKind, Is.EqualTo(TokenIssueKind.Duplicate));
             Assert.That(result.Diagnostics[0].LineNumber, Is.GreaterThan(0));
@@ -33,7 +33,7 @@ namespace TailwindUSS.Editor.Tests
             var result = scanner.Scan(scope.RootPath, new[] { string.Empty, "  " });
 
             Assert.That(result.MatchedFiles, Is.EqualTo(new[] { "Assets/UI/Main.uxml" }));
-            Assert.That(result.Occurrences.Select(occurrence => occurrence.Token), Is.EqualTo(new[] { "flex" }));
+            Assert.That(result.Occurrences.Select(occurrence => occurrence.OriginalToken), Is.EqualTo(new[] { "flex" }));
         }
 
         [Test]

@@ -19,7 +19,7 @@ namespace TailwindUSS.Editor
             for (var i = 0; i < sorted.Count; i++)
             {
                 var utility = sorted[i];
-                builder.Append('.').Append(utility.Token).Append(utility.SelectorSuffix).AppendLine(" {");
+                builder.Append('.').Append(EscapeClassName(utility.Token)).Append(utility.SelectorSuffix).AppendLine(" {");
 
                 foreach (var declaration in utility.Declarations)
                 {
@@ -34,6 +34,24 @@ namespace TailwindUSS.Editor
                 if (i < sorted.Count - 1)
                 {
                     builder.AppendLine();
+                }
+            }
+
+            return builder.ToString();
+        }
+
+        private static string EscapeClassName(string className)
+        {
+            var builder = new StringBuilder(className.Length);
+            foreach (var character in className)
+            {
+                if (char.IsLetterOrDigit(character) || character == '-' || character == '_')
+                {
+                    builder.Append(character);
+                }
+                else
+                {
+                    builder.Append('\\').Append(character);
                 }
             }
 

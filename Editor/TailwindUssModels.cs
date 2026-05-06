@@ -11,6 +11,7 @@ namespace TailwindUSS.Editor
     internal enum TokenIssueKind
     {
         Unsupported,
+        UnsupportedVariant,
         InvalidValue,
         Duplicate
     }
@@ -19,6 +20,7 @@ namespace TailwindUSS.Editor
     {
         Supported,
         Unsupported,
+        UnsupportedVariant,
         InvalidValue
     }
 
@@ -53,18 +55,29 @@ namespace TailwindUSS.Editor
 
     internal sealed class UxmlTokenOccurrence
     {
-        public UxmlTokenOccurrence(string relativeFilePath, int lineNumber, string elementName, string token)
+        public UxmlTokenOccurrence(
+            string relativeFilePath,
+            int lineNumber,
+            string elementName,
+            string originalToken,
+            IList<string> variantChain,
+            string baseToken)
         {
             RelativeFilePath = relativeFilePath;
             LineNumber = lineNumber;
             ElementName = elementName;
-            Token = token;
+            OriginalToken = originalToken;
+            VariantChain = variantChain;
+            BaseToken = baseToken;
         }
 
         public string RelativeFilePath { get; private set; }
         public int LineNumber { get; private set; }
         public string ElementName { get; private set; }
-        public string Token { get; private set; }
+        public string OriginalToken { get; private set; }
+        public IList<string> VariantChain { get; private set; }
+        public string BaseToken { get; private set; }
+        public string Token => OriginalToken;
     }
 
     internal sealed class StyleDeclaration

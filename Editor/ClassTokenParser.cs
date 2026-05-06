@@ -5,9 +5,9 @@ namespace TailwindUSS.Editor
 {
     internal sealed class ClassTokenParser
     {
-        public IList<string> Parse(string classValue, string relativeFilePath, int lineNumber, string elementName, IList<TailwindUssDiagnostic> diagnostics)
+        public IList<UxmlTokenOccurrence> Parse(string classValue, string relativeFilePath, int lineNumber, string elementName, IList<TailwindUssDiagnostic> diagnostics)
         {
-            var tokens = new List<string>();
+            var tokens = new List<UxmlTokenOccurrence>();
             var seen = new HashSet<string>(StringComparer.Ordinal);
             var parts = classValue.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
 
@@ -26,7 +26,20 @@ namespace TailwindUSS.Editor
                     continue;
                 }
 
-                tokens.Add(part);
+                var segments = part.Split(':');
+                var variantChain = new List<string>();
+                for (var i = 0; i < segments.Length - 1; i++)
+                {
+                    variantChain.Add(segments[i]);
+                }
+
+                tokens.Add(new UxmlTokenOccurrence(
+                    relativeFilePath,
+                    lineNumber,
+                    elementName,
+                    part,
+                    variantChain,
+                    segments[segments.Length - 1]));
             }
 
             return tokens;
