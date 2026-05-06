@@ -30,6 +30,11 @@ dotnet test Tests/TailwindUSS.Editor.Tests/TailwindUSS.Editor.Tests.csproj --set
 
 Coverage reports are written under `Tests/TailwindUSS.Editor.Tests/TestResults/`.
 
+## Documentation
+
+- `docs/tailwind-uss-feature-matrix-ja.md`: Tailwind CSS と Unity USS の対応可能範囲、および実装済み/未実装の一覧
+- `docs/tailwind-uss-implementation-plan-ja.md`: 未実装機能を実装するための詳細プラン
+
 ## Configuration
 
 Create `tailwinduss.config.json` at the Unity project root.
@@ -50,7 +55,9 @@ If the file does not exist, TailwindUSS uses the same defaults in memory. You ca
 - `Tools/TailwindUSS/Validate`
 - `Tools/TailwindUSS/Create Default Config`
 
-## Supported utility subset
+## Currently Implemented Utility Subset
+
+For the full Unity USS coverage matrix and the implementation roadmap for unimplemented utilities, see `docs/tailwind-uss-feature-matrix-ja.md` and `docs/tailwind-uss-implementation-plan-ja.md`.
 
 ### Layout
 
