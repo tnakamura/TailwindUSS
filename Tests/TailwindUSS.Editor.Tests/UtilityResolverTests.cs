@@ -76,7 +76,6 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(errorMessage, Is.Null);
             Assert.That(utility, Is.Not.Null);
             Assert.That(utility.Token, Is.EqualTo(token));
-            Assert.That(utility.SelectorSuffix, Is.EqualTo(string.Empty));
             Assert.That(utility.Declarations.Select(declaration => declaration.PropertyName), Is.EqualTo(new[] { propertyName }));
             Assert.That(utility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(new[] { value }));
         }
@@ -139,6 +138,19 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(utility, Is.Not.Null);
             Assert.That(utility.Declarations.Select(declaration => declaration.PropertyName), Is.EqualTo(properties));
             Assert.That(utility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(values));
+        }
+
+        [Test]
+        public void TryResolve_DefaultsSelectorSuffixToEmptyString()
+        {
+            var resolver = new UtilityResolver();
+
+            var status = resolver.TryResolve("flex", out var utility, out var errorMessage);
+
+            Assert.That(status, Is.EqualTo(ResolveStatus.Supported));
+            Assert.That(errorMessage, Is.Null);
+            Assert.That(utility, Is.Not.Null);
+            Assert.That(utility.SelectorSuffix, Is.EqualTo(string.Empty));
         }
 
         [TestCase("p-7", "Unsupported spacing scale value.")]

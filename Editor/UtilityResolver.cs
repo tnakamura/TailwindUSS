@@ -358,7 +358,7 @@ namespace TailwindUSS.Editor
                     continue;
                 }
 
-                return TryResolveMappedSingleProperty(token, pair.Key, pair.Value, SpacingScale, "Unsupported size scale value.", out utility, out errorMessage);
+                return TryResolveMappedSinglePropertyCore(token.Substring(pair.Key.Length), token, pair.Value, SpacingScale, "Unsupported size scale value.", out utility, out errorMessage);
             }
 
             return false;
@@ -494,7 +494,21 @@ namespace TailwindUSS.Editor
                 return false;
             }
 
-            var key = token.Substring(prefix.Length);
+            return TryResolveMappedSinglePropertyCore(token.Substring(prefix.Length), token, propertyName, valueMap, invalidMessage, out utility, out errorMessage);
+        }
+
+        private static bool TryResolveMappedSinglePropertyCore(
+            string key,
+            string token,
+            string propertyName,
+            IDictionary<string, string> valueMap,
+            string invalidMessage,
+            out ResolvedUtility utility,
+            out string errorMessage)
+        {
+            utility = null;
+            errorMessage = null;
+
             string value;
             if (!valueMap.TryGetValue(key, out value))
             {
