@@ -81,14 +81,16 @@ namespace TailwindUSS.Editor
 
     internal sealed class ResolvedUtility
     {
-        public ResolvedUtility(string token, IList<StyleDeclaration> declarations)
+        public ResolvedUtility(string token, IList<StyleDeclaration> declarations, string selectorSuffix = "")
         {
             Token = token;
             Declarations = declarations;
+            SelectorSuffix = selectorSuffix;
         }
 
         public string Token { get; private set; }
         public IList<StyleDeclaration> Declarations { get; private set; }
+        public string SelectorSuffix { get; private set; }
     }
 
     internal sealed class UxmlScanResult

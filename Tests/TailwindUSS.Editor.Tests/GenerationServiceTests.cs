@@ -69,6 +69,54 @@ namespace TailwindUSS.Editor.Tests
         }
 
         [Test]
+        public void Generate_WritesPhaseOneLayoutUtilities()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
+            scope.WriteAssetFile("UI/Layout.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"absolute top-0 right-0 opacity-50 overflow-hidden\" /></ui:UXML>");
+
+            var result = new GenerationService().Generate();
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(5));
+            Assert.That(result.WarningCount, Is.EqualTo(0));
+            Assert.That(output, Does.Contain(".absolute {\n    position: absolute;\n}"));
+            Assert.That(output, Does.Contain(".top-0 {\n    top: 0px;\n}"));
+            Assert.That(output, Does.Contain(".right-0 {\n    right: 0px;\n}"));
+            Assert.That(output, Does.Contain(".opacity-50 {\n    opacity: 0.5;\n}"));
+            Assert.That(output, Does.Contain(".overflow-hidden {\n    overflow: hidden;\n}"));
+        }
+
+        [Test]
+        public void Generate_WritesPhaseOneFlexAndTypographyUtilities()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
+            scope.WriteAssetFile("UI/Text.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"flex-wrap gap-x-4 gap-y-2 mt-3 self-center basis-4 order-2\" /><ui:Label class=\"truncate tracking-wide leading-6 text-xl uppercase break-all\" /></ui:UXML>");
+
+            var result = new GenerationService().Generate();
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(13));
+            Assert.That(result.WarningCount, Is.EqualTo(0));
+            Assert.That(output, Does.Contain(".basis-4 {\n    flex-basis: 16px;\n}"));
+            Assert.That(output, Does.Contain(".break-all {\n    word-break: break-all;\n}"));
+            Assert.That(output, Does.Contain(".flex-wrap {\n    flex-wrap: wrap;\n}"));
+            Assert.That(output, Does.Contain(".gap-x-4 {\n    column-gap: 16px;\n}"));
+            Assert.That(output, Does.Contain(".gap-y-2 {\n    row-gap: 8px;\n}"));
+            Assert.That(output, Does.Contain(".leading-6 {\n    line-height: 24px;\n}"));
+            Assert.That(output, Does.Contain(".mt-3 {\n    margin-top: 12px;\n}"));
+            Assert.That(output, Does.Contain(".order-2 {\n    order: 2;\n}"));
+            Assert.That(output, Does.Contain(".self-center {\n    align-self: center;\n}"));
+            Assert.That(output, Does.Contain(".tracking-wide {\n    letter-spacing: 0.025em;\n}"));
+            Assert.That(output, Does.Contain(".text-xl {\n    font-size: 20px;\n}"));
+            Assert.That(output, Does.Contain(".truncate {\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n}"));
+            Assert.That(output, Does.Contain(".uppercase {\n    text-transform: uppercase;\n}"));
+        }
+
+        [Test]
         public void LogDiagnostic_LoadsAssetContextForAssetPaths()
         {
             var diagnostic = new TailwindUssDiagnostic(

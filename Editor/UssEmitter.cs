@@ -19,7 +19,7 @@ namespace TailwindUSS.Editor
             for (var i = 0; i < sorted.Count; i++)
             {
                 var utility = sorted[i];
-                builder.Append('.').Append(utility.Token).AppendLine(" {");
+                builder.Append('.').Append(utility.Token).Append(utility.SelectorSuffix).AppendLine(" {");
 
                 foreach (var declaration in utility.Declarations)
                 {
