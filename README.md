@@ -57,6 +57,8 @@ If the file does not exist, TailwindUSS uses the same defaults in memory. You ca
 
 ## Currently implemented utility subset
 
+For the full Unity USS coverage matrix and the implementation roadmap for unimplemented utilities, see `docs/tailwind-uss-feature-matrix-ja.md` and `docs/tailwind-uss-implementation-plan-ja.md`.
+
 ### Layout
 
 - `flex`
