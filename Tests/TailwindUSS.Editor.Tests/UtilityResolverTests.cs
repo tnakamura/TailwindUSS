@@ -66,6 +66,17 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("flex-wrap", "flex-wrap", "wrap")]
         [TestCase("flex-nowrap", "flex-wrap", "nowrap")]
         [TestCase("flex-wrap-reverse", "flex-wrap", "wrap-reverse")]
+        [TestCase("border-t", "border-top-width", "1px")]
+        [TestCase("border-r-4", "border-right-width", "4px")]
+        [TestCase("border-b-pink-500", "border-bottom-color", "#EC4899")]
+        [TestCase("rounded-tl", "border-top-left-radius", "4px")]
+        [TestCase("rounded-br-lg", "border-bottom-right-radius", "8px")]
+        [TestCase("bg-transparent", "background-color", "transparent")]
+        [TestCase("bg-current", "background-color", "currentColor")]
+        [TestCase("bg-cover", "background-size", "cover")]
+        [TestCase("bg-center", "background-position", "center center")]
+        [TestCase("bg-repeat-y", "background-repeat", "repeat-y")]
+        [TestCase("bg-none", "background-image", "none")]
         public void TryResolve_ResolvesSingleDeclarationUtilities(string token, string propertyName, string value)
         {
             var resolver = new UtilityResolver();
@@ -107,12 +118,17 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("border", new[] { "border-top-width", "border-right-width", "border-bottom-width", "border-left-width" }, "1px")]
         [TestCase("border-0", new[] { "border-top-width", "border-right-width", "border-bottom-width", "border-left-width" }, "0px")]
         [TestCase("border-2", new[] { "border-top-width", "border-right-width", "border-bottom-width", "border-left-width" }, "2px")]
+        [TestCase("border-4", new[] { "border-top-width", "border-right-width", "border-bottom-width", "border-left-width" }, "4px")]
+        [TestCase("border-8", new[] { "border-top-width", "border-right-width", "border-bottom-width", "border-left-width" }, "8px")]
         [TestCase("rounded-none", new[] { "border-top-left-radius", "border-top-right-radius", "border-bottom-right-radius", "border-bottom-left-radius" }, "0px")]
         [TestCase("rounded-sm", new[] { "border-top-left-radius", "border-top-right-radius", "border-bottom-right-radius", "border-bottom-left-radius" }, "2px")]
         [TestCase("rounded", new[] { "border-top-left-radius", "border-top-right-radius", "border-bottom-right-radius", "border-bottom-left-radius" }, "4px")]
         [TestCase("rounded-md", new[] { "border-top-left-radius", "border-top-right-radius", "border-bottom-right-radius", "border-bottom-left-radius" }, "6px")]
         [TestCase("rounded-lg", new[] { "border-top-left-radius", "border-top-right-radius", "border-bottom-right-radius", "border-bottom-left-radius" }, "8px")]
         [TestCase("rounded-full", new[] { "border-top-left-radius", "border-top-right-radius", "border-bottom-right-radius", "border-bottom-left-radius" }, "9999px")]
+        [TestCase("border-slate-500", new[] { "border-top-color", "border-right-color", "border-bottom-color", "border-left-color" }, "#64748B")]
+        [TestCase("rounded-t-lg", new[] { "border-top-left-radius", "border-top-right-radius" }, "8px")]
+        [TestCase("rounded-r-md", new[] { "border-top-right-radius", "border-bottom-right-radius" }, "6px")]
         public void TryResolve_ResolvesMultiDeclarationUtilities(string token, string[] properties, string value)
         {
             var resolver = new UtilityResolver();
@@ -164,8 +180,14 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("tracking-super", "Unsupported tracking value.")]
         [TestCase("leading-11", "Unsupported leading value.")]
         [TestCase("bg-purple-500", "Unsupported color token.")]
+        [TestCase("bg-coverr", "Unsupported background utility value.")]
         [TestCase("text-purple-500", "Unsupported color token.")]
         [TestCase("border-purple-500", "Unsupported color token.")]
+        [TestCase("border-3", "Unsupported border width value.")]
+        [TestCase("border-t-3", "Unsupported border width value.")]
+        [TestCase("border-t-purple-500", "Unsupported color token.")]
+        [TestCase("rounded-xl", "Unsupported radius value.")]
+        [TestCase("rounded-t-xl", "Unsupported radius value.")]
         public void TryResolve_ReturnsInvalidValueForKnownPrefixesWithUnknownValues(string token, string expectedMessage)
         {
             var resolver = new UtilityResolver();

@@ -117,6 +117,30 @@ namespace TailwindUSS.Editor.Tests
         }
 
         [Test]
+        public void Generate_WritesPhaseTwoBorderAndBackgroundUtilities()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
+            scope.WriteAssetFile("UI/Decorated.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"border-4 border-t-sky-500 rounded-t-lg rounded-bl-full bg-slate-500 bg-cover bg-center bg-no-repeat bg-none\" /></ui:UXML>");
+
+            var result = new GenerationService().Generate();
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(9));
+            Assert.That(result.WarningCount, Is.EqualTo(0));
+            Assert.That(output, Does.Contain(".bg-center {\n    background-position: center center;\n}"));
+            Assert.That(output, Does.Contain(".bg-cover {\n    background-size: cover;\n}"));
+            Assert.That(output, Does.Contain(".bg-no-repeat {\n    background-repeat: no-repeat;\n}"));
+            Assert.That(output, Does.Contain(".bg-none {\n    background-image: none;\n}"));
+            Assert.That(output, Does.Contain(".bg-slate-500 {\n    background-color: #64748B;\n}"));
+            Assert.That(output, Does.Contain(".border-4 {\n    border-top-width: 4px;\n    border-right-width: 4px;\n    border-bottom-width: 4px;\n    border-left-width: 4px;\n}"));
+            Assert.That(output, Does.Contain(".border-t-sky-500 {\n    border-top-color: #0EA5E9;\n}"));
+            Assert.That(output, Does.Contain(".rounded-bl-full {\n    border-bottom-left-radius: 9999px;\n}"));
+            Assert.That(output, Does.Contain(".rounded-t-lg {\n    border-top-left-radius: 8px;\n    border-top-right-radius: 8px;\n}"));
+        }
+
+        [Test]
         public void LogDiagnostic_LoadsAssetContextForAssetPaths()
         {
             var diagnostic = new TailwindUssDiagnostic(

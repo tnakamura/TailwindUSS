@@ -27,15 +27,16 @@
 | 配置 | `items-start`, `items-center`, `items-end`, `items-stretch`, `justify-start`, `justify-center`, `justify-end`, `justify-between`, `justify-around`, `justify-evenly`, `self-*` | `align-items`, `justify-content`, `align-self` |
 | 余白 | `p-*`, `px-*`, `py-*`, `pt-*`, `pr-*`, `pb-*`, `pl-*`, `m-*`, `mx-*`, `my-*`, `mt-*`, `mr-*`, `mb-*`, `ml-*`, `gap-*`, `gap-x-*`, `gap-y-*` | `padding-*`, `margin-*`, `gap`, `column-gap`, `row-gap` |
 | サイズ | `w-*`, `h-*`, `min-w-*`, `min-h-*`, `max-w-*`, `max-h-*`, `basis-*`, `order-*` | `width`, `height`, `min-*`, `max-*`, `flex-basis`, `order` |
-| 色 | `bg-*`, `text-*`, `border-*` | `background-color`, `color`, `border-*-color` |
+| 色 | `bg-*`, `bg-transparent`, `bg-current`, `text-*`, `border-*`, `border-t-*`, `border-r-*`, `border-b-*`, `border-l-*` | `background-color`, `color`, `border-*-color` |
+| 背景 | `bg-cover`, `bg-contain`, `bg-center`, `bg-top`, `bg-bottom`, `bg-left`, `bg-right`, `bg-repeat`, `bg-no-repeat`, `bg-repeat-x`, `bg-repeat-y`, `bg-none` | `background-size`, `background-position`, `background-repeat`, `background-image` |
 | タイポグラフィ | `text-xs`〜`text-9xl`, `font-normal`, `font-bold`, `italic`, `not-italic`, `text-left`, `text-center`, `text-right`, `text-justify`, `whitespace-*`, `uppercase`, `lowercase`, `capitalize`, `normal-case`, `tracking-*`, `leading-*`, `truncate`, `text-ellipsis`, `text-clip`, `break-normal`, `break-all` | `font-size`, `-unity-font-style`, `-unity-text-align`, `white-space`, `text-transform`, `letter-spacing`, `line-height`, `text-overflow`, `word-break`, `overflow` |
-| ボーダー | `border`, `border-0`, `border-2` | `border-*-width` |
-| 角丸 | `rounded-none`, `rounded-sm`, `rounded`, `rounded-md`, `rounded-lg`, `rounded-full` | `border-*-radius` |
+| ボーダー | `border`, `border-0`, `border-2`, `border-4`, `border-8`, `border-t`, `border-r`, `border-b`, `border-l` | `border-*-width` |
+| 角丸 | `rounded-none`, `rounded-sm`, `rounded`, `rounded-md`, `rounded-lg`, `rounded-full`, `rounded-t*`, `rounded-r*`, `rounded-b*`, `rounded-l*`, `rounded-tl*`, `rounded-tr*`, `rounded-br*`, `rounded-bl*` | `border-*-radius` |
 
 ### 実装済みスケール
 
 - spacing / size: `0, 1, 2, 3, 4, 5, 6, 8, 10, 12`
-- colors: `white`, `black`, `gray-100`, `gray-300`, `gray-500`, `gray-700`, `gray-900`, `blue-500`, `red-500`, `green-500`, `yellow-500`
+- colors: `white`, `black`, `gray/slate/zinc/neutral/stone/emerald/sky/indigo/pink` の `100/300/500/700/900`, `blue-500`, `red-500`, `green-500`, `yellow-500`
 - font sizes: `xs`, `sm`, `base`, `lg`, `xl`, `2xl`, `3xl`, `4xl`, `5xl`, `6xl`, `7xl`, `8xl`, `9xl`
 - opacity: `0`, `5`, `10`, `20`, `25`, `30`, `40`, `50`, `60`, `70`, `75`, `80`, `90`, `95`, `100`
 - z-index: `0`, `10`, `20`, `30`, `40`, `50`, `auto`
@@ -104,11 +105,11 @@
 | Tailwind 機能 | USS での実現性 | TailwindUSS | 補足 |
 | --- | --- | --- | --- |
 | `bg-*` (color) | ✅ | ✅ | 実装済み |
-| 追加色パレット (`slate-*`, `zinc-*`, `emerald-*` など) | ✅ | 🟡 | カラースケールを増やせばよい |
-| `bg-transparent`, `bg-current` | ✅ | 🟡 | 色値ルール追加で実装可能 |
-| `bg-none`, `bg-cover`, `bg-contain` | ✅ | 🟡 | `background-image` / `background-size` に対応 |
-| `bg-center`, `bg-top`, `bg-bottom`, `bg-left`, `bg-right` | ✅ | 🟡 | `background-position` に対応 |
-| `bg-repeat`, `bg-no-repeat`, `bg-repeat-x`, `bg-repeat-y` | ✅ | 🟡 | `background-repeat` に対応 |
+| 追加色パレット (`slate-*`, `zinc-*`, `emerald-*` など) | ✅ | ✅ | `gray/slate/zinc/neutral/stone/emerald/sky/indigo/pink` の `100/300/500/700/900` を実装済み |
+| `bg-transparent`, `bg-current` | ✅ | ✅ | 背景色 special value を実装済み |
+| `bg-none`, `bg-cover`, `bg-contain` | ✅ | ✅ | `background-image` / `background-size` に対応 |
+| `bg-center`, `bg-top`, `bg-bottom`, `bg-left`, `bg-right` | ✅ | ✅ | `background-position` に対応 |
+| `bg-repeat`, `bg-no-repeat`, `bg-repeat-x`, `bg-repeat-y` | ✅ | ✅ | `background-repeat` に対応 |
 | `bg-[asset]` 的な背景画像指定 | ⚪ | 🟡 | Unity asset path を引く独自規約が必要 |
 | gradient 系 (`bg-gradient-to-*`, `from-*`, `via-*`, `to-*`) | ❌ | ❌ | USS の標準機能だけでは Tailwind gradient を再現できない |
 
@@ -117,9 +118,9 @@
 | Tailwind 機能 | USS での実現性 | TailwindUSS | 補足 |
 | --- | --- | --- | --- |
 | `border`, `border-0`, `border-2`, `border-*` color, `rounded*` | ✅ | ✅ | 実装済み |
-| `border-4`, `border-8` など追加幅 | ✅ | 🟡 | scale 拡張で対応可能 |
-| `border-t-*`, `border-r-*`, `border-b-*`, `border-l-*` | ✅ | 🟡 | side ごとの幅・色へ展開すればよい |
-| `rounded-t-*`, `rounded-r-*`, `rounded-b-*`, `rounded-l-*`, corner 個別 | ✅ | 🟡 | corner ごとの radius を生成できる |
+| `border-4`, `border-8` など追加幅 | ✅ | ✅ | `border-4`, `border-8` を実装済み |
+| `border-t-*`, `border-r-*`, `border-b-*`, `border-l-*` | ✅ | ✅ | side ごとの幅・色へ展開する resolver を実装済み |
+| `rounded-t-*`, `rounded-r-*`, `rounded-b-*`, `rounded-l-*`, corner 個別 | ✅ | ✅ | side / corner ごとの radius 生成を実装済み |
 | `border-solid` | ⚪ | 🟡 | USS は実質 `solid` のみ |
 | `opacity-*` | ✅ | ✅ | Tailwind 既定 opacity scale に対応 |
 | `outline-*`, `ring-*`, `ring-offset-*` | ❌ | ❌ | USS に Tailwind 相当の outline / ring 機構がない |
