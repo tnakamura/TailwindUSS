@@ -6,7 +6,6 @@ namespace TailwindUSS.Editor
     internal sealed class ValidationService
     {
         private readonly UxmlScanner scanner = new UxmlScanner();
-        private readonly UtilityResolver resolver = new UtilityResolver();
 
         public CommandResult Validate()
         {
@@ -35,6 +34,7 @@ namespace TailwindUSS.Editor
             }
 
             var scanResult = scanner.Scan(ConfigLoader.GetProjectRoot(), config.inputGlobs);
+            var resolver = new UtilityResolver(config.theme);
             var supportedCount = 0;
 
             foreach (var occurrence in scanResult.Occurrences)

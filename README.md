@@ -43,11 +43,32 @@ Create `tailwinduss.config.json` at the Unity project root.
 {
   "inputGlobs": ["Assets/**/*.uxml"],
   "outputUssPath": "Assets/Generated/TailwindUSS.generated.uss",
-  "autoAttachGeneratedUss": false
+  "autoAttachGeneratedUss": false,
+  "theme": {
+    "colors": {
+      "brand": "#112233"
+    },
+    "spacing": {
+      "16": "64px"
+    },
+    "fontSizes": {
+      "display": "42px"
+    },
+    "fonts": {
+      "sans": "Fonts/Inter-Regular"
+    },
+    "backgroundImages": {
+      "hero": "Images/Hero"
+    }
+  }
 }
 ```
 
 If the file does not exist, TailwindUSS uses the same defaults in memory. You can also create the file from `Tools/TailwindUSS/Create Default Config`.
+
+- `theme.colors`, `theme.spacing`, and `theme.fontSizes` extend or override the built-in scales.
+- `theme.fonts` maps `font-*` aliases to USS asset references. Plain strings are emitted as `resource("...")`; `resource(...)` and `url(...)` values are passed through.
+- `theme.backgroundImages` maps `bg-*` aliases to `background-image` values using the same asset reference rules.
 
 ## Editor menu
 
@@ -151,6 +172,7 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 
 ### Background
 
+- `bg-*` (configured background image aliases)
 - `bg-cover`
 - `bg-contain`
 - `bg-center`
@@ -181,6 +203,7 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 - `text-9xl`
 - `font-normal`
 - `font-bold`
+- `font-*` (configured font aliases)
 - `text-left`
 - `text-center`
 - `text-right`
@@ -282,6 +305,8 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 - `cursor-not-allowed`
 
 ## Token scales
+
+`theme.colors`, `theme.spacing`, and `theme.fontSizes` in `tailwinduss.config.json` can extend or override the built-in values below.
 
 ### Spacing and size scale
 

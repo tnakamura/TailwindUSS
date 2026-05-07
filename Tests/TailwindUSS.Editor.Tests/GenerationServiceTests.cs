@@ -186,6 +186,43 @@ namespace TailwindUSS.Editor.Tests
         }
 
         [Test]
+        public void Generate_UsesConfiguredThemeOverridesAndAssetAliases()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, """
+            {
+              "inputGlobs": ["Assets/UI/**/*.uxml"],
+              "outputUssPath": "Assets/Generated/TailwindUSS.generated.uss",
+              "autoAttachGeneratedUss": false,
+              "theme": {
+                "colors": { "brand": "#112233" },
+                "spacing": { "16": "64px" },
+                "fontSizes": { "display": "42px" },
+                "fonts": { "sans": "Fonts/Inter-Regular" },
+                "backgroundImages": { "hero": "Images/Hero" }
+              }
+            }
+            """);
+            scope.WriteAssetFile("UI/Themed.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:Button class=\"bg-brand text-brand border-brand p-16 text-display font-sans bg-hero translate-x-16\" /></ui:UXML>");
+
+            var result = new GenerationService().Generate();
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(8));
+            Assert.That(result.WarningCount, Is.EqualTo(0));
+            Assert.That(result.ErrorCount, Is.EqualTo(0));
+            Assert.That(output, Does.Contain(".bg-brand {\n    background-color: #112233;\n}"));
+            Assert.That(output, Does.Contain(".bg-hero {\n    background-image: resource(\"Images/Hero\");\n}"));
+            Assert.That(output, Does.Contain(".border-brand {\n    border-top-color: #112233;\n    border-right-color: #112233;\n    border-bottom-color: #112233;\n    border-left-color: #112233;\n}"));
+            Assert.That(output, Does.Contain(".font-sans {\n    -unity-font: resource(\"Fonts/Inter-Regular\");\n}"));
+            Assert.That(output, Does.Contain(".p-16 {\n    padding-top: 64px;\n    padding-right: 64px;\n    padding-bottom: 64px;\n    padding-left: 64px;\n}"));
+            Assert.That(output, Does.Contain(".text-brand {\n    color: #112233;\n}"));
+            Assert.That(output, Does.Contain(".text-display {\n    font-size: 42px;\n}"));
+            Assert.That(output, Does.Contain(".translate-x-16 {\n    translate: 64px 0;\n}"));
+        }
+
+        [Test]
         public void LogDiagnostic_LoadsAssetContextForAssetPaths()
         {
             var diagnostic = new TailwindUssDiagnostic(

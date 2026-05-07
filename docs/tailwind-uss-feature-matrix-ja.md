@@ -28,8 +28,8 @@
 | 余白 | `p-*`, `px-*`, `py-*`, `pt-*`, `pr-*`, `pb-*`, `pl-*`, `m-*`, `mx-*`, `my-*`, `mt-*`, `mr-*`, `mb-*`, `ml-*`, `gap-*`, `gap-x-*`, `gap-y-*` | `padding-*`, `margin-*`, `gap`, `column-gap`, `row-gap` |
 | サイズ | `w-*`, `h-*`, `min-w-*`, `min-h-*`, `max-w-*`, `max-h-*`, `basis-*`, `order-*` | `width`, `height`, `min-*`, `max-*`, `flex-basis`, `order` |
 | 色 | `bg-*`, `bg-transparent`, `bg-current`, `text-*`, `border-*`, `border-t-*`, `border-r-*`, `border-b-*`, `border-l-*` | `background-color`, `color`, `border-*-color` |
-| 背景 | `bg-cover`, `bg-contain`, `bg-center`, `bg-top`, `bg-bottom`, `bg-left`, `bg-right`, `bg-repeat`, `bg-no-repeat`, `bg-repeat-x`, `bg-repeat-y`, `bg-none` | `background-size`, `background-position`, `background-repeat`, `background-image` |
-| タイポグラフィ | `text-xs`〜`text-9xl`, `font-normal`, `font-bold`, `italic`, `not-italic`, `text-left`, `text-center`, `text-right`, `text-justify`, `whitespace-*`, `uppercase`, `lowercase`, `capitalize`, `normal-case`, `tracking-*`, `leading-*`, `truncate`, `text-ellipsis`, `text-clip`, `break-normal`, `break-all` | `font-size`, `-unity-font-style`, `-unity-text-align`, `white-space`, `text-transform`, `letter-spacing`, `line-height`, `text-overflow`, `word-break`, `overflow` |
+| 背景 | `bg-cover`, `bg-contain`, `bg-center`, `bg-top`, `bg-bottom`, `bg-left`, `bg-right`, `bg-repeat`, `bg-no-repeat`, `bg-repeat-x`, `bg-repeat-y`, `bg-none`, `bg-*` (設定済み background image alias) | `background-size`, `background-position`, `background-repeat`, `background-image` |
+| タイポグラフィ | `text-xs`〜`text-9xl`, `font-normal`, `font-bold`, `font-*` (設定済み font alias), `italic`, `not-italic`, `text-left`, `text-center`, `text-right`, `text-justify`, `whitespace-*`, `uppercase`, `lowercase`, `capitalize`, `normal-case`, `tracking-*`, `leading-*`, `truncate`, `text-ellipsis`, `text-clip`, `break-normal`, `break-all` | `font-size`, `-unity-font`, `-unity-font-style`, `-unity-text-align`, `white-space`, `text-transform`, `letter-spacing`, `line-height`, `text-overflow`, `word-break`, `overflow` |
 | ボーダー | `border`, `border-0`, `border-2`, `border-4`, `border-8`, `border-t`, `border-r`, `border-b`, `border-l` | `border-*-width` |
 | 角丸 | `rounded-none`, `rounded-sm`, `rounded`, `rounded-md`, `rounded-lg`, `rounded-full`, `rounded-t*`, `rounded-r*`, `rounded-b*`, `rounded-l*`, `rounded-tl*`, `rounded-tr*`, `rounded-br*`, `rounded-bl*` | `border-*-radius` |
 | 変形 | `scale-*`, `rotate-*`, `translate-x-*`, `translate-y-*`, `origin-*` | `scale`, `rotate`, `translate`, `transform-origin` |
@@ -41,6 +41,8 @@
 - spacing / size: `0, 1, 2, 3, 4, 5, 6, 8, 10, 12`
 - colors: `white`, `black`, `gray/slate/zinc/neutral/stone/emerald/sky/indigo/pink` の `100/300/500/700/900`, `blue-500`, `red-500`, `green-500`, `yellow-500`
 - font sizes: `xs`, `sm`, `base`, `lg`, `xl`, `2xl`, `3xl`, `4xl`, `5xl`, `6xl`, `7xl`, `8xl`, `9xl`
+- `tailwinduss.config.json` の `theme.colors` / `theme.spacing` / `theme.fontSizes` で上記 scale を拡張・上書き可能
+- `theme.fonts` と `theme.backgroundImages` で asset alias を追加可能
 - opacity: `0`, `5`, `10`, `20`, `25`, `30`, `40`, `50`, `60`, `70`, `75`, `80`, `90`, `95`, `100`
 - z-index: `0`, `10`, `20`, `30`, `40`, `50`, `auto`
 - order: `0`〜`12`
@@ -104,7 +106,7 @@
 | `truncate`, `text-ellipsis`, `text-clip` | ✅ | ✅ | `text-overflow` と `overflow` の組み合わせを実装済み |
 | `uppercase`, `lowercase`, `capitalize`, `normal-case` | ✅ | ✅ | `text-transform` に対応 |
 | `break-normal`, `break-all` | ✅ | ✅ | `word-break` に対応 |
-| `font-sans`, `font-serif`, `font-mono` | ⚪ | 🟡 | Unity font asset の設定マップを用意すれば可能 |
+| `font-*` configured aliases | ✅ | ✅ | `theme.fonts` で alias を定義すると `-unity-font` を生成 |
 | `underline`, `line-through`, `decoration-*` | ⚪ | ❌ | USS の text decoration 対応が Tailwind 同等ではない |
 
 ### 5. 背景
@@ -117,7 +119,7 @@
 | `bg-none`, `bg-cover`, `bg-contain` | ✅ | ✅ | `background-image` / `background-size` に対応 |
 | `bg-center`, `bg-top`, `bg-bottom`, `bg-left`, `bg-right` | ✅ | ✅ | `background-position` に対応 |
 | `bg-repeat`, `bg-no-repeat`, `bg-repeat-x`, `bg-repeat-y` | ✅ | ✅ | `background-repeat` に対応 |
-| `bg-[asset]` 的な背景画像指定 | ⚪ | 🟡 | Unity asset path を引く独自規約が必要 |
+| `bg-*` configured background image aliases | ✅ | ✅ | `theme.backgroundImages` で alias を定義すると `background-image` を生成 |
 | gradient 系 (`bg-gradient-to-*`, `from-*`, `via-*`, `to-*`) | ❌ | ❌ | USS の標準機能だけでは Tailwind gradient を再現できない |
 
 ### 6. ボーダー・角丸・効果
@@ -158,8 +160,8 @@
 未実装だが USS で素直に実現できるものは、次の順で着手するとよい。
 
 1. **高優先**: `size-*`, `w-auto`, `h-auto`, `min-w-0`, `max-w-none` など size special values
-2. **中優先**: `font-thin` ～ `font-black`, `font-sans` / `font-serif` / `font-mono`, `border-solid`
-3. **高難度だが可能**: background image utilities, configurable font families, configurable theme scales
+2. **中優先**: `font-thin` ～ `font-black`, `border-solid`
+3. **高難度だが可能**: arbitrary な background image utilities
 
 ## 実装しない前提でよいもの
 
