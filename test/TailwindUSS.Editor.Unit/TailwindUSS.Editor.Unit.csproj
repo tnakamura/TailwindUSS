@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="../../Editor/*.cs" />
+    <Compile Include="../../src/TailwindUSS/Editor/*.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GlobalAliases.cs" />
     <Compile Include="UnityStubs.cs" />

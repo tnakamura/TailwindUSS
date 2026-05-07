@@ -14,7 +14,7 @@
 /[Bb]uilds/
 [Bb]in/
 /[Ll]ogs/
-/Tests/**/TestResults/
+/test/**/TestResults/
 /[Uu]ser[Ss]ettings/
 *.log
 
@@ -47,7 +47,7 @@
 ExportedObj/
 .consulo/
 *.csproj
-!Tests/**/*.csproj
+!test/**/*.csproj
 *.unityproj
 *.sln
 *.slnx
