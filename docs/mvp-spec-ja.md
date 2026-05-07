@@ -461,16 +461,16 @@ TailwindUSS の MVP は、**Unity UI Toolkit に対して、UXML の `class` 属
 
 この仕様に対応する初期実装では、Unity Package Manager で導入できるパッケージ構成を採用している。
 
-- `package.json`
-- `Editor/TailwindUSS.Editor.asmdef`
-- `Editor/ConfigLoader.cs`
-- `Editor/UxmlScanner.cs`
-- `Editor/ClassTokenParser.cs`
-- `Editor/UtilityResolver.cs`
-- `Editor/UssEmitter.cs`
-- `Editor/GenerationService.cs`
-- `Editor/ValidationService.cs`
-- `Editor/TailwindUssMenu.cs`
+- `src/TailwindUSS/package.json`
+- `src/TailwindUSS/Editor/TailwindUSS.Editor.asmdef`
+- `src/TailwindUSS/Editor/ConfigLoader.cs`
+- `src/TailwindUSS/Editor/UxmlScanner.cs`
+- `src/TailwindUSS/Editor/ClassTokenParser.cs`
+- `src/TailwindUSS/Editor/UtilityResolver.cs`
+- `src/TailwindUSS/Editor/UssEmitter.cs`
+- `src/TailwindUSS/Editor/GenerationService.cs`
+- `src/TailwindUSS/Editor/ValidationService.cs`
+- `src/TailwindUSS/Editor/TailwindUssMenu.cs`
 
 ### 実装上の補足
 

@@ -19,16 +19,16 @@ Add this repository as a Unity Package Manager dependency.
 Run the unit tests from the repository root:
 
 ```bash
-dotnet test Tests/TailwindUSS.Editor.Tests/TailwindUSS.Editor.Tests.csproj
+dotnet test test/TailwindUSS.Editor.Tests/TailwindUSS.Editor.Tests.csproj
 ```
 
 Collect coverage in Cobertura format:
 
 ```bash
-dotnet test Tests/TailwindUSS.Editor.Tests/TailwindUSS.Editor.Tests.csproj --settings Tests/coverlet.runsettings --collect:"XPlat Code Coverage"
+dotnet test test/TailwindUSS.Editor.Tests/TailwindUSS.Editor.Tests.csproj --settings test/coverlet.runsettings --collect:"XPlat Code Coverage"
 ```
 
-Coverage reports are written under `Tests/TailwindUSS.Editor.Tests/TestResults/`.
+Coverage reports are written under `test/TailwindUSS.Editor.Tests/TestResults/`.
 
 ## Documentation
 
@@ -429,9 +429,9 @@ Generated USS:
 
 ## Package structure
 
-- `package.json`: Unity package manifest
-- `Editor/TailwindUSS.Editor.asmdef`: editor assembly
-- `Editor/*.cs`: config loading, scanning, resolving, emitting, and menu commands
+- `src/TailwindUSS/package.json`: Unity package manifest
+- `src/TailwindUSS/Editor/TailwindUSS.Editor.asmdef`: editor assembly
+- `src/TailwindUSS/Editor/*.cs`: config loading, scanning, resolving, emitting, and menu commands
 
 ## Notes
 

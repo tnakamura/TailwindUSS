@@ -4,9 +4,9 @@
 
 この文書は、**Tailwind CSS の機能のうち Unity 2022.3 UI Toolkit / USS で実現可能なもの**を整理し、**TailwindUSS で実装済みか、未実装か**を明示するための一覧である。
 
-- 判定対象は TailwindUSS パッケージ直下の Unity Package Manager 用 package manifest (`package.json`) が示す **Unity 2022.3** を前提にする。
+- 判定対象は TailwindUSS パッケージ直下の Unity Package Manager 用 package manifest (`src/TailwindUSS/package.json`) が示す **Unity 2022.3** を前提にする。
 - 「実現可能」は **USS のプロパティ・疑似クラス・トランジションで表現できる**ことを意味する。
-- 「実装済み」は **現行コード (`Editor/UtilityResolver.cs`) で解決でき、README にも載っている**状態を指す。
+- 「実装済み」は **現行コード (`src/TailwindUSS/Editor/UtilityResolver.cs`) で解決でき、README にも載っている**状態を指す。
 
 ### ステータス凡例
 
@@ -17,7 +17,7 @@
 
 ## 現在の実装範囲
 
-現行実装は `Editor/UtilityResolver.cs` の registry ベース resolver と family ごとの prefix 解決で構成される。
+現行実装は `src/TailwindUSS/Editor/UtilityResolver.cs` の registry ベース resolver と family ごとの prefix 解決で構成される。
 
 ### ✅ 実装済みトークン
 
@@ -180,6 +180,6 @@
 
 ## 根拠として見た実装箇所
 
-- `Editor/UtilityResolver.cs`
-- `Tests/TailwindUSS.Editor.Tests/UtilityResolverTests.cs`
+- `src/TailwindUSS/Editor/UtilityResolver.cs`
+- `test/TailwindUSS.Editor.Tests/UtilityResolverTests.cs`
 - `README.md`
