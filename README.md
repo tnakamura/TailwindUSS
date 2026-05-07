@@ -252,6 +252,35 @@ For the full Unity USS coverage matrix and the implementation roadmap for unimpl
 - `selected:`
 - compound variants such as `hover:focus:`
 
+### Transform
+
+- `scale-*`
+- `rotate-*`
+- `translate-x-*`
+- `translate-y-*`
+- `origin-*`
+
+### Transition
+
+- `transition`
+- `transition-colors`
+- `transition-opacity`
+- `transition-transform`
+- `duration-*`
+- `delay-*`
+- `ease-linear`
+- `ease-in`
+- `ease-out`
+- `ease-in-out`
+
+### Interaction
+
+- `cursor-default`
+- `cursor-pointer`
+- `cursor-text`
+- `cursor-move`
+- `cursor-not-allowed`
+
 ## Token scales
 
 ### Spacing and size scale
@@ -306,6 +335,17 @@ Supported palette steps for `gray`, `slate`, `zinc`, `neutral`, `stone`, `emeral
 | 7xl | 72px |
 | 8xl | 96px |
 | 9xl | 128px |
+
+### Transform scales
+
+- `scale-*`: `0`, `50`, `75`, `90`, `95`, `100`, `105`, `110`, `125`, `150`
+- `rotate-*`: `0`, `1`, `2`, `3`, `6`, `12`, `45`, `90`, `180`
+- `translate-x-*`, `translate-y-*`: spacing scale + `1/2`, `full`
+- `origin-*`: `center`, `top`, `top-right`, `right`, `bottom-right`, `bottom`, `bottom-left`, `left`, `top-left`
+
+### Transition scales
+
+- `duration-*`, `delay-*`: `75`, `100`, `150`, `200`, `300`, `500`, `700`, `1000`
 
 ## Example
 

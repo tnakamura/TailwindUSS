@@ -180,6 +180,99 @@ namespace TailwindUSS.Editor
             { "full", "9999px" }
         };
 
+        private static readonly IDictionary<string, string> ScaleScale = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "0", "0" },
+            { "50", "0.5" },
+            { "75", "0.75" },
+            { "90", "0.9" },
+            { "95", "0.95" },
+            { "100", "1" },
+            { "105", "1.05" },
+            { "110", "1.1" },
+            { "125", "1.25" },
+            { "150", "1.5" }
+        };
+
+        private static readonly IDictionary<string, string> RotateScale = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "0", "0deg" },
+            { "1", "1deg" },
+            { "2", "2deg" },
+            { "3", "3deg" },
+            { "6", "6deg" },
+            { "12", "12deg" },
+            { "45", "45deg" },
+            { "90", "90deg" },
+            { "180", "180deg" }
+        };
+
+        private static readonly IDictionary<string, string> TranslateScale = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "0", "0px" },
+            { "1", "4px" },
+            { "2", "8px" },
+            { "3", "12px" },
+            { "4", "16px" },
+            { "5", "20px" },
+            { "6", "24px" },
+            { "8", "32px" },
+            { "10", "40px" },
+            { "12", "48px" },
+            { "1/2", "50%" },
+            { "full", "100%" }
+        };
+
+        private static readonly IDictionary<string, string> TransformOriginValues = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "center", "50% 50%" },
+            { "top", "50% 0%" },
+            { "top-right", "100% 0%" },
+            { "right", "100% 50%" },
+            { "bottom-right", "100% 100%" },
+            { "bottom", "50% 100%" },
+            { "bottom-left", "0% 100%" },
+            { "left", "0% 50%" },
+            { "top-left", "0% 0%" }
+        };
+
+        private static readonly IDictionary<string, string> TransitionProperties = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { string.Empty, "all" },
+            { "colors", "background-color, border-top-color, border-right-color, border-bottom-color, border-left-color, color" },
+            { "opacity", "opacity" },
+            { "transform", "translate, rotate, scale" }
+        };
+
+        private static readonly IDictionary<string, string> TransitionDurationScale = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "75", "75ms" },
+            { "100", "100ms" },
+            { "150", "150ms" },
+            { "200", "200ms" },
+            { "300", "300ms" },
+            { "500", "500ms" },
+            { "700", "700ms" },
+            { "1000", "1000ms" }
+        };
+
+        private static readonly IDictionary<string, string> EasingValues = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "linear", "linear" },
+            { "in", "ease-in" },
+            { "out", "ease-out" },
+            { "in-out", "ease-in-out" }
+        };
+
+        private static readonly IDictionary<string, string> CursorValues = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "default", "default" },
+            { "pointer", "pointer" },
+            { "text", "text" },
+            { "move", "move" },
+            { "not-allowed", "not-allowed" }
+        };
+
         private static readonly IDictionary<string, string> VariantSuffixes = new Dictionary<string, string>(StringComparer.Ordinal)
         {
             { "hover", ":hover" },
@@ -284,6 +377,13 @@ namespace TailwindUSS.Editor
             TryResolveGap,
             TryResolveTracking,
             TryResolveLeading,
+            TryResolveTransform,
+            TryResolveTransformOrigin,
+            TryResolveTransitionProperty,
+            TryResolveTransitionDuration,
+            TryResolveTransitionDelay,
+            TryResolveTransitionTiming,
+            TryResolveCursor,
             TryResolveBorder,
             TryResolveRounded,
             TryResolveBackground,
@@ -553,6 +653,86 @@ namespace TailwindUSS.Editor
             return TryResolveMappedSingleProperty(token, "leading-", "line-height", LeadingScale, "Unsupported leading value.", out utility, out errorMessage);
         }
 
+        private static bool TryResolveTransform(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            if (TryResolveMappedSingleProperty(token, "scale-", "scale", ScaleScale, "Unsupported scale value.", out utility, out errorMessage))
+            {
+                return true;
+            }
+
+            if (TryResolveMappedSingleProperty(token, "rotate-", "rotate", RotateScale, "Unsupported rotate value.", out utility, out errorMessage))
+            {
+                return true;
+            }
+
+            if (token.StartsWith("translate-x-", StringComparison.Ordinal))
+            {
+                return TryResolveTranslate(token, "translate-x-", true, out utility, out errorMessage);
+            }
+
+            if (token.StartsWith("translate-y-", StringComparison.Ordinal))
+            {
+                return TryResolveTranslate(token, "translate-y-", false, out utility, out errorMessage);
+            }
+
+            utility = null;
+            errorMessage = null;
+            return false;
+        }
+
+        private static bool TryResolveTransformOrigin(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            return TryResolveMappedSingleProperty(token, "origin-", "transform-origin", TransformOriginValues, "Unsupported transform origin value.", out utility, out errorMessage);
+        }
+
+        private static bool TryResolveTransitionProperty(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            errorMessage = null;
+            utility = null;
+
+            if (token == "transition")
+            {
+                utility = Create(token, new StyleDeclaration("transition-property", TransitionProperties[string.Empty]));
+                return true;
+            }
+
+            if (!token.StartsWith("transition-", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            var key = token.Substring("transition-".Length);
+            string value;
+            if (!TransitionProperties.TryGetValue(key, out value))
+            {
+                errorMessage = "Unsupported transition property value.";
+                return true;
+            }
+
+            utility = Create(token, new StyleDeclaration("transition-property", value));
+            return true;
+        }
+
+        private static bool TryResolveTransitionDuration(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            return TryResolveMappedSingleProperty(token, "duration-", "transition-duration", TransitionDurationScale, "Unsupported transition duration value.", out utility, out errorMessage);
+        }
+
+        private static bool TryResolveTransitionDelay(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            return TryResolveMappedSingleProperty(token, "delay-", "transition-delay", TransitionDurationScale, "Unsupported transition delay value.", out utility, out errorMessage);
+        }
+
+        private static bool TryResolveTransitionTiming(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            return TryResolveMappedSingleProperty(token, "ease-", "transition-timing-function", EasingValues, "Unsupported easing value.", out utility, out errorMessage);
+        }
+
+        private static bool TryResolveCursor(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            return TryResolveMappedSingleProperty(token, "cursor-", "cursor", CursorValues, "Unsupported cursor value.", out utility, out errorMessage);
+        }
+
         private static bool TryResolveBorder(string token, out ResolvedUtility utility, out string errorMessage)
         {
             utility = null;
@@ -797,6 +977,28 @@ namespace TailwindUSS.Editor
             }
 
             utility = Create(token, new StyleDeclaration(propertyName, value));
+            return true;
+        }
+
+        private static bool TryResolveTranslate(
+            string token,
+            string prefix,
+            bool isX,
+            out ResolvedUtility utility,
+            out string errorMessage)
+        {
+            utility = null;
+            errorMessage = null;
+
+            var key = token.Substring(prefix.Length);
+            string value;
+            if (!TranslateScale.TryGetValue(key, out value))
+            {
+                errorMessage = "Unsupported translate value.";
+                return true;
+            }
+
+            utility = Create(token, new StyleDeclaration("translate", isX ? string.Format("{0} 0", value) : string.Format("0 {0}", value)));
             return true;
         }
 

@@ -32,6 +32,9 @@
 | タイポグラフィ | `text-xs`〜`text-9xl`, `font-normal`, `font-bold`, `italic`, `not-italic`, `text-left`, `text-center`, `text-right`, `text-justify`, `whitespace-*`, `uppercase`, `lowercase`, `capitalize`, `normal-case`, `tracking-*`, `leading-*`, `truncate`, `text-ellipsis`, `text-clip`, `break-normal`, `break-all` | `font-size`, `-unity-font-style`, `-unity-text-align`, `white-space`, `text-transform`, `letter-spacing`, `line-height`, `text-overflow`, `word-break`, `overflow` |
 | ボーダー | `border`, `border-0`, `border-2`, `border-4`, `border-8`, `border-t`, `border-r`, `border-b`, `border-l` | `border-*-width` |
 | 角丸 | `rounded-none`, `rounded-sm`, `rounded`, `rounded-md`, `rounded-lg`, `rounded-full`, `rounded-t*`, `rounded-r*`, `rounded-b*`, `rounded-l*`, `rounded-tl*`, `rounded-tr*`, `rounded-br*`, `rounded-bl*` | `border-*-radius` |
+| 変形 | `scale-*`, `rotate-*`, `translate-x-*`, `translate-y-*`, `origin-*` | `scale`, `rotate`, `translate`, `transform-origin` |
+| トランジション | `transition`, `transition-colors`, `transition-opacity`, `transition-transform`, `duration-*`, `delay-*`, `ease-linear`, `ease-in`, `ease-out`, `ease-in-out` | `transition-property`, `transition-duration`, `transition-delay`, `transition-timing-function` |
+| インタラクション | `cursor-default`, `cursor-pointer`, `cursor-text`, `cursor-move`, `cursor-not-allowed` | `cursor` |
 
 ### 実装済みスケール
 
@@ -41,6 +44,10 @@
 - opacity: `0`, `5`, `10`, `20`, `25`, `30`, `40`, `50`, `60`, `70`, `75`, `80`, `90`, `95`, `100`
 - z-index: `0`, `10`, `20`, `30`, `40`, `50`, `auto`
 - order: `0`〜`12`
+- scale: `0`, `50`, `75`, `90`, `95`, `100`, `105`, `110`, `125`, `150`
+- rotate: `0`, `1`, `2`, `3`, `6`, `12`, `45`, `90`, `180`
+- translate: spacing scale + `1/2`, `full`
+- transition duration / delay: `75`, `100`, `150`, `200`, `300`, `500`, `700`, `1000`
 
 ## Tailwind CSS 機能の対応可能一覧
 
@@ -130,8 +137,8 @@
 
 | Tailwind 機能 | USS での実現性 | TailwindUSS | 補足 |
 | --- | --- | --- | --- |
-| `scale-*`, `rotate-*`, `translate-x-*`, `translate-y-*`, `origin-*` | ✅ | 🟡 | `scale`, `rotate`, `translate`, `transform-origin` に対応 |
-| `transition`, `transition-*`, `duration-*`, `delay-*`, `ease-*` | ✅ | 🟡 | USS transition プロパティで表現可能 |
+| `scale-*`, `rotate-*`, `translate-x-*`, `translate-y-*`, `origin-*` | ✅ | ✅ | `scale`, `rotate`, `translate`, `transform-origin` を生成 |
+| `transition`, `transition-*`, `duration-*`, `delay-*`, `ease-*` | ✅ | ✅ | `transition-property`, `transition-duration`, `transition-delay`, `transition-timing-function` を生成 |
 | `hover:`, `active:`, `focus:`, `disabled:`, `checked:`, `selected:` | ✅ | ✅ | USS 疑似クラスへ変換して selector を生成 |
 | 複合 variant (`hover:focus:` など) | ✅ | ✅ | selector suffix を左から順に連結して生成 |
 | `group-hover:`, `peer-*`, `first:`, `last:`, `odd:`, `even:` | ❌ | ❌ | combinator / structural pseudo class が弱く Tailwind 同等は難しい |
@@ -141,7 +148,7 @@
 
 | Tailwind 機能 | USS での実現性 | TailwindUSS | 補足 |
 | --- | --- | --- | --- |
-| `cursor-pointer`, `cursor-default`, `cursor-text` など | ✅ | 🟡 | `cursor` に対応 |
+| `cursor-pointer`, `cursor-default`, `cursor-text` など | ✅ | ✅ | `cursor-default`, `cursor-pointer`, `cursor-text`, `cursor-move`, `cursor-not-allowed` を実装済み |
 | `select-none`, `select-text` | ❌ | ❌ | `user-select` が USS にない |
 | `pointer-events-none`, `pointer-events-auto` | ❌ | ❌ | USS ではなく C# の `pickingMode` 管理が必要 |
 | `accent-*`, `appearance-*`, `resize`, `scroll-*`, `touch-*`, `will-change` | ❌ | ❌ | Unity USS の責務外、または未対応 |
@@ -150,9 +157,9 @@
 
 未実装だが USS で素直に実現できるものは、次の順で着手するとよい。
 
-1. **高優先**: `mt/mr/mb/ml`, `overflow-*`, `relative/absolute`, `top/right/bottom/left`, `z-*`, `items-stretch`, `justify-around/evenly`, `gap-*`, `opacity-*`, `text-align`, `italic`, `whitespace-*`
-2. **中優先**: `basis-*`, `order-*`, `self-*`, `leading-*`, `tracking-*`, `text-overflow`, `text-transform`, `cursor-*`, per-side border / radius
-3. **高難度だが可能**: state variants, transforms, transitions, background image utilities, configurable font families
+1. **高優先**: `size-*`, `w-auto`, `h-auto`, `min-w-0`, `max-w-none` など size special values
+2. **中優先**: `font-thin` ～ `font-black`, `font-sans` / `font-serif` / `font-mono`, `border-solid`
+3. **高難度だが可能**: background image utilities, configurable font families, configurable theme scales
 
 ## 実装しない前提でよいもの
 

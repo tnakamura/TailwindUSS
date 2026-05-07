@@ -161,6 +161,31 @@ namespace TailwindUSS.Editor.Tests
         }
 
         [Test]
+        public void Generate_WritesPhaseFourTransformTransitionAndCursorUtilities()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
+            scope.WriteAssetFile("UI/Animated.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:Button class=\"hover:scale-105 rotate-45 translate-x-4 origin-top-left transition duration-150 delay-75 ease-out cursor-pointer\" /></ui:UXML>");
+
+            var result = new GenerationService().Generate();
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(9));
+            Assert.That(result.WarningCount, Is.EqualTo(0));
+            Assert.That(result.ErrorCount, Is.EqualTo(0));
+            Assert.That(output, Does.Contain(".cursor-pointer {\n    cursor: pointer;\n}"));
+            Assert.That(output, Does.Contain(".delay-75 {\n    transition-delay: 75ms;\n}"));
+            Assert.That(output, Does.Contain(".duration-150 {\n    transition-duration: 150ms;\n}"));
+            Assert.That(output, Does.Contain(".ease-out {\n    transition-timing-function: ease-out;\n}"));
+            Assert.That(output, Does.Contain(".hover\\:scale-105:hover {\n    scale: 1.05;\n}"));
+            Assert.That(output, Does.Contain(".origin-top-left {\n    transform-origin: 0% 0%;\n}"));
+            Assert.That(output, Does.Contain(".rotate-45 {\n    rotate: 45deg;\n}"));
+            Assert.That(output, Does.Contain(".transition {\n    transition-property: all;\n}"));
+            Assert.That(output, Does.Contain(".translate-x-4 {\n    translate: 16px 0;\n}"));
+        }
+
+        [Test]
         public void LogDiagnostic_LoadsAssetContextForAssetPaths()
         {
             var diagnostic = new TailwindUssDiagnostic(
