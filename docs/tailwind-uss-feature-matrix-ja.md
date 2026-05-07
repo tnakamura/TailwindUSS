@@ -23,14 +23,14 @@
 
 | カテゴリ | Tailwind ユーティリティ | USS 変換 |
 | --- | --- | --- |
-| レイアウト | `flex`, `hidden`, `flex-row`, `flex-col`, `grow`, `shrink`, `overflow-*`, `relative`, `absolute`, `top-*`, `right-*`, `bottom-*`, `left-*`, `inset-*`, `inset-x-*`, `inset-y-*`, `z-*`, `opacity-*` | `display`, `flex-direction`, `flex-grow`, `flex-shrink`, `overflow`, `position`, `top/right/bottom/left`, `z-index`, `opacity` |
+| レイアウト | `flex`, `hidden`, `visible`, `invisible`, `flex-row`, `flex-col`, `grow`, `shrink`, `overflow-*`, `relative`, `absolute`, `top-*`, `right-*`, `bottom-*`, `left-*`, `inset-*`, `inset-x-*`, `inset-y-*`, `z-*`, `opacity-*` | `display`, `visibility`, `flex-direction`, `flex-grow`, `flex-shrink`, `overflow`, `position`, `top/right/bottom/left`, `z-index`, `opacity` |
 | 配置 | `items-start`, `items-center`, `items-end`, `items-stretch`, `justify-start`, `justify-center`, `justify-end`, `justify-between`, `justify-around`, `justify-evenly`, `self-*` | `align-items`, `justify-content`, `align-self` |
 | 余白 | `p-*`, `px-*`, `py-*`, `pt-*`, `pr-*`, `pb-*`, `pl-*`, `m-*`, `mx-*`, `my-*`, `mt-*`, `mr-*`, `mb-*`, `ml-*`, `gap-*`, `gap-x-*`, `gap-y-*` | `padding-*`, `margin-*`, `gap`, `column-gap`, `row-gap` |
-| サイズ | `w-*`, `h-*`, `min-w-*`, `min-h-*`, `max-w-*`, `max-h-*`, `basis-*`, `order-*` | `width`, `height`, `min-*`, `max-*`, `flex-basis`, `order` |
+| サイズ | `w-*`, `h-*`, `min-w-*`, `min-h-*`, `max-w-*`, `max-h-*`, `size-*`, `basis-*`, `order-*` | `width`, `height`, `min-*`, `max-*`, `flex-basis`, `order` |
 | 色 | `bg-*`, `bg-transparent`, `bg-current`, `text-*`, `border-*`, `border-t-*`, `border-r-*`, `border-b-*`, `border-l-*` | `background-color`, `color`, `border-*-color` |
 | 背景 | `bg-cover`, `bg-contain`, `bg-center`, `bg-top`, `bg-bottom`, `bg-left`, `bg-right`, `bg-repeat`, `bg-no-repeat`, `bg-repeat-x`, `bg-repeat-y`, `bg-none`, `bg-*` (設定済み background image alias) | `background-size`, `background-position`, `background-repeat`, `background-image` |
-| タイポグラフィ | `text-xs`〜`text-9xl`, `font-normal`, `font-bold`, `font-*` (設定済み font alias), `italic`, `not-italic`, `text-left`, `text-center`, `text-right`, `text-justify`, `whitespace-*`, `uppercase`, `lowercase`, `capitalize`, `normal-case`, `tracking-*`, `leading-*`, `truncate`, `text-ellipsis`, `text-clip`, `break-normal`, `break-all` | `font-size`, `-unity-font`, `-unity-font-style`, `-unity-text-align`, `white-space`, `text-transform`, `letter-spacing`, `line-height`, `text-overflow`, `word-break`, `overflow` |
-| ボーダー | `border`, `border-0`, `border-2`, `border-4`, `border-8`, `border-t`, `border-r`, `border-b`, `border-l` | `border-*-width` |
+| タイポグラフィ | `text-xs`〜`text-9xl`, `font-thin`〜`font-black`, `font-*` (設定済み font alias), `italic`, `not-italic`, `text-left`, `text-center`, `text-right`, `text-justify`, `whitespace-*`, `uppercase`, `lowercase`, `capitalize`, `normal-case`, `tracking-*`, `leading-*`, `truncate`, `text-ellipsis`, `text-clip`, `break-normal`, `break-all`, `underline`, `line-through`, `no-underline` | `font-size`, `font-weight`, `-unity-font`, `-unity-font-style`, `-unity-text-align`, `white-space`, `text-transform`, `letter-spacing`, `line-height`, `text-overflow`, `word-break`, `overflow`, `text-decoration` |
+| ボーダー | `border`, `border-0`, `border-2`, `border-4`, `border-8`, `border-solid`, `border-t`, `border-r`, `border-b`, `border-l` | `border-*-width` |
 | 角丸 | `rounded-none`, `rounded-sm`, `rounded`, `rounded-md`, `rounded-lg`, `rounded-full`, `rounded-t*`, `rounded-r*`, `rounded-b*`, `rounded-l*`, `rounded-tl*`, `rounded-tr*`, `rounded-br*`, `rounded-bl*` | `border-*-radius` |
 | 変形 | `scale-*`, `rotate-*`, `translate-x-*`, `translate-y-*`, `origin-*` | `scale`, `rotate`, `translate`, `transform-origin` |
 | トランジション | `transition`, `transition-colors`, `transition-opacity`, `transition-transform`, `duration-*`, `delay-*`, `ease-linear`, `ease-in`, `ease-out`, `ease-in-out` | `transition-property`, `transition-duration`, `transition-delay`, `transition-timing-function` |
@@ -43,12 +43,15 @@
 - font sizes: `xs`, `sm`, `base`, `lg`, `xl`, `2xl`, `3xl`, `4xl`, `5xl`, `6xl`, `7xl`, `8xl`, `9xl`
 - `tailwinduss.config.json` の `theme.colors` / `theme.spacing` / `theme.fontSizes` で上記 scale を拡張・上書き可能
 - `theme.fonts` と `theme.backgroundImages` で asset alias を追加可能
+- size / basis special values: `auto`, `1/2`, `full`; `max-w-*` / `max-h-*` は `none` にも対応
 - opacity: `0`, `5`, `10`, `20`, `25`, `30`, `40`, `50`, `60`, `70`, `75`, `80`, `90`, `95`, `100`
 - z-index: `0`, `10`, `20`, `30`, `40`, `50`, `auto`
 - order: `0`〜`12`
 - scale: `0`, `50`, `75`, `90`, `95`, `100`, `105`, `110`, `125`, `150`
 - rotate: `0`, `1`, `2`, `3`, `6`, `12`, `45`, `90`, `180`
 - translate: spacing scale + `1/2`, `full`
+- font weight: `thin`, `extralight`, `light`, `normal`, `medium` -> `normal`; `semibold`, `bold`, `extrabold`, `black` -> `bold`
+- text decoration: `underline`, `line-through`, `no-underline`
 - transition duration / delay: `75`, `100`, `150`, `200`, `300`, `500`, `700`, `1000`
 
 ## Tailwind CSS 機能の対応可能一覧
@@ -63,7 +66,7 @@
 | `relative`, `absolute` | ✅ | ✅ | `position` に対応 |
 | `top-*`, `right-*`, `bottom-*`, `left-*`, `inset-*`, `inset-x-*`, `inset-y-*` | ✅ | ✅ | spacing scale で位置指定に対応 |
 | `z-*` | ✅ | ✅ | `z-index` に対応 |
-| `visible`, `invisible` | ⚪ | ❌ | `visibility` より `display` / `opacity` 運用が現実的 |
+| `visible`, `invisible` | ⚪ | ✅ | `visibility` に変換。レイアウトは保持される |
 
 ### 2. Flexbox
 
@@ -86,9 +89,9 @@
 | `p-*`, `px-*`, `py-*`, `pt-*`, `pr-*`, `pb-*`, `pl-*`, `m-*`, `mx-*`, `my-*` | ✅ | ✅ | 実装済み |
 | `mt-*`, `mr-*`, `mb-*`, `ml-*` | ✅ | ✅ | side 個別 margin に対応 |
 | `w-*`, `h-*`, `min-w-*`, `min-h-*`, `max-w-*`, `max-h-*` | ✅ | ✅ | 実装済み |
-| `size-*` | ✅ | 🟡 | `width` と `height` の同時設定で表現可能 |
-| `w-auto`, `h-auto`, `min-w-0`, `max-w-none` などの special values | ✅ | 🟡 | 固定 scale 以外の特別値を追加すればよい |
-| `%` 系 (`w-1/2`, `h-full`) | ⚪ | 🟡 | `%` と `100%` は実現可能。Tailwind の分数全体は別途変換規則が必要 |
+| `size-*` | ✅ | ✅ | `width` と `height` の同時設定で実装済み |
+| `w-auto`, `h-auto`, `max-w-none`, `max-h-none`, `basis-auto` などの special values | ✅ | ✅ | `auto` / `none` を family ごとに追加実装済み |
+| `%` 系 (`w-1/2`, `h-full`, `basis-full`) | ⚪ | ✅ | `1/2` と `full` を size / basis family に追加。Tailwind の分数全体までは未対応 |
 | `container` | ❌ | ❌ | Web の viewport / breakpoint 前提で USS と相性が悪い |
 
 ### 4. タイポグラフィ
@@ -97,7 +100,7 @@
 | --- | --- | --- | --- |
 | `text-xs`, `text-sm`, `text-base`, `text-lg`, `text-*` color, `font-normal`, `font-bold` | ✅ | ✅ | 実装済み |
 | 追加の `text-xl` 以上の font-size scale | ✅ | ✅ | `text-xl`〜`text-9xl` を実装済み |
-| `font-thin` ～ `font-black` | ⚪ | 🟡 | フォントアセット依存だが `font-weight` 系で表現できる |
+| `font-thin` ～ `font-black` | ⚪ | ✅ | USS では `normal` / `bold` に集約して近似実装 |
 | `italic`, `not-italic` | ✅ | ✅ | `-unity-font-style` に変換 |
 | `text-left`, `text-center`, `text-right`, `text-justify` | ✅ | ✅ | `-unity-text-align` に変換 |
 | `tracking-*` | ✅ | ✅ | 初期実装は Tailwind 既定の named scale に対応 |
@@ -107,7 +110,8 @@
 | `uppercase`, `lowercase`, `capitalize`, `normal-case` | ✅ | ✅ | `text-transform` に対応 |
 | `break-normal`, `break-all` | ✅ | ✅ | `word-break` に対応 |
 | `font-*` configured aliases | ✅ | ✅ | `theme.fonts` で alias を定義すると `-unity-font` を生成 |
-| `underline`, `line-through`, `decoration-*` | ⚪ | ❌ | USS の text decoration 対応が Tailwind 同等ではない |
+| `underline`, `line-through`, `no-underline` | ⚪ | ✅ | `text-decoration` の基本値に対応 |
+| `decoration-*` | ❌ | ❌ | Unity 2022.3 では Tailwind 同等の decoration color / style / thickness は持てない |
 
 ### 5. 背景
 
@@ -130,7 +134,7 @@
 | `border-4`, `border-8` など追加幅 | ✅ | ✅ | `border-4`, `border-8` を実装済み |
 | `border-t-*`, `border-r-*`, `border-b-*`, `border-l-*` | ✅ | ✅ | side ごとの幅・色へ展開する resolver を実装済み |
 | `rounded-t-*`, `rounded-r-*`, `rounded-b-*`, `rounded-l-*`, corner 個別 | ✅ | ✅ | side / corner ごとの radius 生成を実装済み |
-| `border-solid` | ⚪ | 🟡 | USS は実質 `solid` のみ |
+| `border-solid` | ⚪ | ✅ | USS は実質 `solid` のみのため no-op utility として扱う |
 | `opacity-*` | ✅ | ✅ | Tailwind 既定 opacity scale に対応 |
 | `outline-*`, `ring-*`, `ring-offset-*` | ❌ | ❌ | USS に Tailwind 相当の outline / ring 機構がない |
 | `shadow-*`, `drop-shadow-*` | ❌ | ❌ | USS に box-shadow / filter がない |
@@ -157,11 +161,9 @@
 
 ## 優先度付きロードマップ
 
-未実装だが USS で素直に実現できるものは、次の順で着手するとよい。
+feature matrix 上で『USS で実現可能 / 未実装』としていた utility は実装完了。
 
-1. **高優先**: `size-*`, `w-auto`, `h-auto`, `min-w-0`, `max-w-none` など size special values
-2. **中優先**: `font-thin` ～ `font-black`, `border-solid`
-3. **高難度だが可能**: arbitrary な background image utilities
+今後の拡張候補として残るのは、matrix の対象外としていた arbitrary な background image utilities など、追加仕様を伴うものに限られる。
 
 ## 実装しない前提でよいもの
 

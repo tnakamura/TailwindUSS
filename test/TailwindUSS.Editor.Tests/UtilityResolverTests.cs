@@ -21,10 +21,15 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("justify-between", "justify-content", "space-between")]
         [TestCase("justify-around", "justify-content", "space-around")]
         [TestCase("justify-evenly", "justify-content", "space-evenly")]
-        [TestCase("font-normal", "-unity-font-style", "normal")]
-        [TestCase("font-bold", "-unity-font-style", "bold")]
+        [TestCase("font-thin", "font-weight", "normal")]
+        [TestCase("font-normal", "font-weight", "normal")]
+        [TestCase("font-semibold", "font-weight", "bold")]
+        [TestCase("font-bold", "font-weight", "bold")]
         [TestCase("italic", "-unity-font-style", "italic")]
         [TestCase("not-italic", "-unity-font-style", "normal")]
+        [TestCase("underline", "text-decoration", "underline")]
+        [TestCase("line-through", "text-decoration", "line-through")]
+        [TestCase("no-underline", "text-decoration", "none")]
         [TestCase("text-sm", "font-size", "14px")]
         [TestCase("text-xl", "font-size", "20px")]
         [TestCase("text-3xl", "font-size", "30px")]
@@ -53,13 +58,21 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("delay-75", "transition-delay", "75ms")]
         [TestCase("ease-out", "transition-timing-function", "ease-out")]
         [TestCase("cursor-pointer", "cursor", "pointer")]
+        [TestCase("visible", "visibility", "visible")]
+        [TestCase("invisible", "visibility", "hidden")]
         [TestCase("w-10", "width", "40px")]
+        [TestCase("w-auto", "width", "auto")]
+        [TestCase("w-1/2", "width", "50%")]
         [TestCase("h-12", "height", "48px")]
+        [TestCase("h-full", "height", "100%")]
         [TestCase("min-w-1", "min-width", "4px")]
         [TestCase("min-h-2", "min-height", "8px")]
         [TestCase("max-w-3", "max-width", "12px")]
+        [TestCase("max-w-none", "max-width", "none")]
         [TestCase("max-h-4", "max-height", "16px")]
         [TestCase("basis-4", "flex-basis", "16px")]
+        [TestCase("basis-auto", "flex-basis", "auto")]
+        [TestCase("basis-full", "flex-basis", "100%")]
         [TestCase("order-4", "order", "4")]
         [TestCase("gap-4", "gap", "16px")]
         [TestCase("gap-x-2", "column-gap", "8px")]
@@ -143,6 +156,8 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("border-slate-500", new[] { "border-top-color", "border-right-color", "border-bottom-color", "border-left-color" }, "#64748B")]
         [TestCase("rounded-t-lg", new[] { "border-top-left-radius", "border-top-right-radius" }, "8px")]
         [TestCase("rounded-r-md", new[] { "border-top-right-radius", "border-bottom-right-radius" }, "6px")]
+        [TestCase("size-4", new[] { "width", "height" }, "16px")]
+        [TestCase("size-full", new[] { "width", "height" }, "100%")]
         public void TryResolve_ResolvesMultiDeclarationUtilities(string token, string[] properties, string value)
         {
             var resolver = new UtilityResolver();
@@ -168,6 +183,20 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(utility, Is.Not.Null);
             Assert.That(utility.Declarations.Select(declaration => declaration.PropertyName), Is.EqualTo(properties));
             Assert.That(utility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(values));
+        }
+
+        [Test]
+        public void TryResolve_ResolvesBorderSolidAsNoOpUtility()
+        {
+            var resolver = new UtilityResolver();
+
+            var status = resolver.TryResolve("border-solid", out var utility, out var errorMessage);
+
+            Assert.That(status, Is.EqualTo(ResolveStatus.Supported));
+            Assert.That(errorMessage, Is.Null);
+            Assert.That(utility, Is.Not.Null);
+            Assert.That(utility.Token, Is.EqualTo("border-solid"));
+            Assert.That(utility.Declarations, Is.Empty);
         }
 
         [Test]
@@ -266,10 +295,14 @@ namespace TailwindUSS.Editor.Tests
 
         [TestCase("p-7", "Unsupported spacing scale value.")]
         [TestCase("w-7", "Unsupported size scale value.")]
+        [TestCase("w-none", "Unsupported size scale value.")]
+        [TestCase("size-7", "Unsupported size scale value.")]
+        [TestCase("max-w-auto", "Unsupported size scale value.")]
         [TestCase("top-7", "Unsupported inset scale value.")]
         [TestCase("z-15", "Unsupported z-index value.")]
         [TestCase("opacity-73", "Unsupported opacity value.")]
         [TestCase("basis-7", "Unsupported size scale value.")]
+        [TestCase("basis-none", "Unsupported size scale value.")]
         [TestCase("order-13", "Unsupported order value.")]
         [TestCase("gap-7", "Unsupported spacing scale value.")]
         [TestCase("tracking-super", "Unsupported tracking value.")]
