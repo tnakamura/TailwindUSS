@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace TailwindUSS.Editor.Tests
@@ -206,6 +207,45 @@ namespace TailwindUSS.Editor.Tests
         }
 
         [Test]
+        public void TryResolve_UsesConfiguredThemeAliasesAndOverrides()
+        {
+            var resolver = new UtilityResolver(new TailwindUssTheme
+            {
+                colors = new Dictionary<string, string> { { "brand", "#112233" }, { "blue-500", "#123456" } },
+                spacing = new Dictionary<string, string> { { "16", "64px" } },
+                fontSizes = new Dictionary<string, string> { { "display", "42px" } },
+                fonts = new Dictionary<string, string> { { "sans", "Fonts/Inter-Regular" } },
+                backgroundImages = new Dictionary<string, string> { { "hero", "Images/Hero" } }
+            });
+
+            Assert.That(resolver.TryResolve("bg-blue-500", out var overriddenBackground, out var backgroundError), Is.EqualTo(ResolveStatus.Supported));
+            Assert.That(backgroundError, Is.Null);
+            Assert.That(overriddenBackground.Declarations.Select(declaration => declaration.Value), Is.EqualTo(new[] { "#123456" }));
+
+            Assert.That(resolver.TryResolve("p-16", out var spacingUtility, out var spacingError), Is.EqualTo(ResolveStatus.Supported));
+            Assert.That(spacingError, Is.Null);
+            Assert.That(spacingUtility.Declarations.Select(declaration => declaration.Value), Is.All.EqualTo("64px"));
+
+            Assert.That(resolver.TryResolve("text-display", out var fontSizeUtility, out var fontSizeError), Is.EqualTo(ResolveStatus.Supported));
+            Assert.That(fontSizeError, Is.Null);
+            Assert.That(fontSizeUtility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(new[] { "42px" }));
+
+            Assert.That(resolver.TryResolve("font-sans", out var fontUtility, out var fontError), Is.EqualTo(ResolveStatus.Supported));
+            Assert.That(fontError, Is.Null);
+            Assert.That(fontUtility.Declarations.Select(declaration => declaration.PropertyName), Is.EqualTo(new[] { "-unity-font" }));
+            Assert.That(fontUtility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(new[] { "resource(\"Fonts/Inter-Regular\")" }));
+
+            Assert.That(resolver.TryResolve("bg-hero", out var imageUtility, out var imageError), Is.EqualTo(ResolveStatus.Supported));
+            Assert.That(imageError, Is.Null);
+            Assert.That(imageUtility.Declarations.Select(declaration => declaration.PropertyName), Is.EqualTo(new[] { "background-image" }));
+            Assert.That(imageUtility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(new[] { "resource(\"Images/Hero\")" }));
+
+            Assert.That(resolver.TryResolve("translate-x-16", out var translateUtility, out var translateError), Is.EqualTo(ResolveStatus.Supported));
+            Assert.That(translateError, Is.Null);
+            Assert.That(translateUtility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(new[] { "64px 0" }));
+        }
+
+        [Test]
         public void TryResolve_ReturnsUnsupportedVariantForUnknownVariant()
         {
             var resolver = new UtilityResolver();
@@ -243,6 +283,7 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("delay-125", "Unsupported transition delay value.")]
         [TestCase("ease-bounce", "Unsupported easing value.")]
         [TestCase("cursor-hand", "Unsupported cursor value.")]
+        [TestCase("font-sans", "Unsupported font alias.")]
         [TestCase("bg-purple-500", "Unsupported color token.")]
         [TestCase("bg-coverr", "Unsupported background utility value.")]
         [TestCase("text-purple-500", "Unsupported color token.")]

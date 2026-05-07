@@ -6,92 +6,12 @@ namespace TailwindUSS.Editor
     internal sealed class UtilityResolver
     {
         private delegate bool UtilityHandler(string token, out ResolvedUtility utility, out string errorMessage);
-
-        private static readonly IDictionary<string, string> SpacingScale = new Dictionary<string, string>(StringComparer.Ordinal)
-        {
-            { "0", "0px" },
-            { "1", "4px" },
-            { "2", "8px" },
-            { "3", "12px" },
-            { "4", "16px" },
-            { "5", "20px" },
-            { "6", "24px" },
-            { "8", "32px" },
-            { "10", "40px" },
-            { "12", "48px" }
-        };
-
-        private static readonly IDictionary<string, string> FontSizes = new Dictionary<string, string>(StringComparer.Ordinal)
-        {
-            { "xs", "12px" },
-            { "sm", "14px" },
-            { "base", "16px" },
-            { "lg", "18px" },
-            { "xl", "20px" },
-            { "2xl", "24px" },
-            { "3xl", "30px" },
-            { "4xl", "36px" },
-            { "5xl", "48px" },
-            { "6xl", "60px" },
-            { "7xl", "72px" },
-            { "8xl", "96px" },
-            { "9xl", "128px" }
-        };
-
-        private static readonly IDictionary<string, string> Colors = new Dictionary<string, string>(StringComparer.Ordinal)
-        {
-            { "white", "#FFFFFF" },
-            { "black", "#000000" },
-            { "gray-100", "#F3F4F6" },
-            { "gray-300", "#D1D5DB" },
-            { "gray-500", "#6B7280" },
-            { "gray-700", "#374151" },
-            { "gray-900", "#111827" },
-            { "slate-100", "#F1F5F9" },
-            { "slate-300", "#CBD5E1" },
-            { "slate-500", "#64748B" },
-            { "slate-700", "#334155" },
-            { "slate-900", "#0F172A" },
-            { "zinc-100", "#F4F4F5" },
-            { "zinc-300", "#D4D4D8" },
-            { "zinc-500", "#71717A" },
-            { "zinc-700", "#3F3F46" },
-            { "zinc-900", "#18181B" },
-            { "neutral-100", "#F5F5F5" },
-            { "neutral-300", "#D4D4D4" },
-            { "neutral-500", "#737373" },
-            { "neutral-700", "#404040" },
-            { "neutral-900", "#171717" },
-            { "stone-100", "#F5F5F4" },
-            { "stone-300", "#D6D3D1" },
-            { "stone-500", "#78716C" },
-            { "stone-700", "#44403C" },
-            { "stone-900", "#1C1917" },
-            { "blue-500", "#3B82F6" },
-            { "red-500", "#EF4444" },
-            { "green-500", "#22C55E" },
-            { "yellow-500", "#EAB308" },
-            { "emerald-100", "#D1FAE5" },
-            { "emerald-300", "#6EE7B7" },
-            { "emerald-500", "#10B981" },
-            { "emerald-700", "#047857" },
-            { "emerald-900", "#064E3B" },
-            { "sky-100", "#E0F2FE" },
-            { "sky-300", "#7DD3FC" },
-            { "sky-500", "#0EA5E9" },
-            { "sky-700", "#0369A1" },
-            { "sky-900", "#0C4A6E" },
-            { "indigo-100", "#E0E7FF" },
-            { "indigo-300", "#A5B4FC" },
-            { "indigo-500", "#6366F1" },
-            { "indigo-700", "#4338CA" },
-            { "indigo-900", "#312E81" },
-            { "pink-100", "#FCE7F3" },
-            { "pink-300", "#F9A8D4" },
-            { "pink-500", "#EC4899" },
-            { "pink-700", "#BE185D" },
-            { "pink-900", "#831843" }
-        };
+        private readonly IDictionary<string, string> spacingScale;
+        private readonly IDictionary<string, string> fontSizes;
+        private readonly IDictionary<string, string> colors;
+        private readonly IDictionary<string, string> fonts;
+        private readonly IDictionary<string, string> backgroundImages;
+        private readonly IDictionary<string, string> translateScale;
 
         private static readonly IDictionary<string, string> ZIndexScale = new Dictionary<string, string>(StringComparer.Ordinal)
         {
@@ -363,33 +283,6 @@ namespace TailwindUSS.Editor
                 { "bg-none", token => Create(token, new StyleDeclaration("background-image", "none")) }
             };
 
-        private static readonly UtilityHandler[] Handlers =
-        {
-            TryResolveFontSize,
-            TryResolveSpacing,
-            TryResolveInset,
-            TryResolveOverflow,
-            TryResolveZIndex,
-            TryResolveOpacity,
-            TryResolveSize,
-            TryResolveBasis,
-            TryResolveOrder,
-            TryResolveGap,
-            TryResolveTracking,
-            TryResolveLeading,
-            TryResolveTransform,
-            TryResolveTransformOrigin,
-            TryResolveTransitionProperty,
-            TryResolveTransitionDuration,
-            TryResolveTransitionDelay,
-            TryResolveTransitionTiming,
-            TryResolveCursor,
-            TryResolveBorder,
-            TryResolveRounded,
-            TryResolveBackground,
-            TryResolveColor
-        };
-
         private static readonly KeyValuePair<string, string[]>[] SpacingDefinitions =
         {
             new KeyValuePair<string, string[]>("px-", new[] { "padding-left", "padding-right" }),
@@ -485,6 +378,17 @@ namespace TailwindUSS.Editor
             new KeyValuePair<string, string[]>("rounded-bl", new[] { "border-bottom-left-radius" })
         };
 
+        public UtilityResolver(TailwindUssTheme theme = null)
+        {
+            var mergedTheme = TailwindUssTheme.CreateMerged(theme);
+            spacingScale = mergedTheme.spacing;
+            fontSizes = mergedTheme.fontSizes;
+            colors = mergedTheme.colors;
+            fonts = mergedTheme.fonts;
+            backgroundImages = mergedTheme.backgroundImages;
+            translateScale = CreateTranslateScale(spacingScale);
+        }
+
         public ResolveStatus TryResolve(string token, out ResolvedUtility utility, out string errorMessage)
         {
             utility = null;
@@ -497,13 +401,31 @@ namespace TailwindUSS.Editor
                 return ResolveStatus.Supported;
             }
 
-            foreach (var handler in Handlers)
+            if (TryResolveFontSize(token, out utility, out errorMessage)
+                || TryResolveFontFamily(token, out utility, out errorMessage)
+                || TryResolveSpacing(token, out utility, out errorMessage)
+                || TryResolveInset(token, out utility, out errorMessage)
+                || TryResolveOverflow(token, out utility, out errorMessage)
+                || TryResolveZIndex(token, out utility, out errorMessage)
+                || TryResolveOpacity(token, out utility, out errorMessage)
+                || TryResolveSize(token, out utility, out errorMessage)
+                || TryResolveBasis(token, out utility, out errorMessage)
+                || TryResolveOrder(token, out utility, out errorMessage)
+                || TryResolveGap(token, out utility, out errorMessage)
+                || TryResolveTracking(token, out utility, out errorMessage)
+                || TryResolveLeading(token, out utility, out errorMessage)
+                || TryResolveTransform(token, out utility, out errorMessage)
+                || TryResolveTransformOrigin(token, out utility, out errorMessage)
+                || TryResolveTransitionProperty(token, out utility, out errorMessage)
+                || TryResolveTransitionDuration(token, out utility, out errorMessage)
+                || TryResolveTransitionDelay(token, out utility, out errorMessage)
+                || TryResolveTransitionTiming(token, out utility, out errorMessage)
+                || TryResolveCursor(token, out utility, out errorMessage)
+                || TryResolveBorder(token, out utility, out errorMessage)
+                || TryResolveRounded(token, out utility, out errorMessage)
+                || TryResolveBackground(token, out utility, out errorMessage)
+                || TryResolveColor(token, out utility, out errorMessage))
             {
-                if (!handler(token, out utility, out errorMessage))
-                {
-                    continue;
-                }
-
                 return errorMessage == null ? ResolveStatus.Supported : ResolveStatus.InvalidValue;
             }
 
@@ -537,7 +459,7 @@ namespace TailwindUSS.Editor
             return ResolveStatus.Supported;
         }
 
-        private static bool TryResolveFontSize(string token, out ResolvedUtility utility, out string errorMessage)
+        private bool TryResolveFontSize(string token, out ResolvedUtility utility, out string errorMessage)
         {
             errorMessage = null;
             utility = null;
@@ -548,7 +470,7 @@ namespace TailwindUSS.Editor
 
             var key = token.Substring("text-".Length);
             string value;
-            if (!FontSizes.TryGetValue(key, out value))
+            if (!fontSizes.TryGetValue(key, out value))
             {
                 return false;
             }
@@ -557,14 +479,35 @@ namespace TailwindUSS.Editor
             return true;
         }
 
-        private static bool TryResolveSpacing(string token, out ResolvedUtility utility, out string errorMessage)
+        private bool TryResolveFontFamily(string token, out ResolvedUtility utility, out string errorMessage)
         {
-            return TryResolveScaleBox(token, SpacingDefinitions, SpacingScale, "Unsupported spacing scale value.", out utility, out errorMessage);
+            utility = null;
+            errorMessage = null;
+            if (!token.StartsWith("font-", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            var key = token.Substring("font-".Length);
+            string value;
+            if (!fonts.TryGetValue(key, out value))
+            {
+                errorMessage = "Unsupported font alias.";
+                return true;
+            }
+
+            utility = Create(token, new StyleDeclaration("-unity-font", FormatAssetReference(value)));
+            return true;
         }
 
-        private static bool TryResolveInset(string token, out ResolvedUtility utility, out string errorMessage)
+        private bool TryResolveSpacing(string token, out ResolvedUtility utility, out string errorMessage)
         {
-            return TryResolveScaleBox(token, InsetDefinitions, SpacingScale, "Unsupported inset scale value.", out utility, out errorMessage);
+            return TryResolveScaleBox(token, SpacingDefinitions, spacingScale, "Unsupported spacing scale value.", out utility, out errorMessage);
+        }
+
+        private bool TryResolveInset(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            return TryResolveScaleBox(token, InsetDefinitions, spacingScale, "Unsupported inset scale value.", out utility, out errorMessage);
         }
 
         private static bool TryResolveOverflow(string token, out ResolvedUtility utility, out string errorMessage)
@@ -600,7 +543,7 @@ namespace TailwindUSS.Editor
             return TryResolveMappedSingleProperty(token, "opacity-", "opacity", OpacityScale, "Unsupported opacity value.", out utility, out errorMessage);
         }
 
-        private static bool TryResolveSize(string token, out ResolvedUtility utility, out string errorMessage)
+        private bool TryResolveSize(string token, out ResolvedUtility utility, out string errorMessage)
         {
             utility = null;
             errorMessage = null;
@@ -612,15 +555,15 @@ namespace TailwindUSS.Editor
                     continue;
                 }
 
-                return TryResolveMappedSinglePropertyCore(token.Substring(pair.Key.Length), token, pair.Value, SpacingScale, "Unsupported size scale value.", out utility, out errorMessage);
+                return TryResolveMappedSinglePropertyCore(token.Substring(pair.Key.Length), token, pair.Value, spacingScale, "Unsupported size scale value.", out utility, out errorMessage);
             }
 
             return false;
         }
 
-        private static bool TryResolveBasis(string token, out ResolvedUtility utility, out string errorMessage)
+        private bool TryResolveBasis(string token, out ResolvedUtility utility, out string errorMessage)
         {
-            return TryResolveMappedSingleProperty(token, "basis-", "flex-basis", SpacingScale, "Unsupported size scale value.", out utility, out errorMessage);
+            return TryResolveMappedSingleProperty(token, "basis-", "flex-basis", spacingScale, "Unsupported size scale value.", out utility, out errorMessage);
         }
 
         private static bool TryResolveOrder(string token, out ResolvedUtility utility, out string errorMessage)
@@ -628,19 +571,19 @@ namespace TailwindUSS.Editor
             return TryResolveMappedSingleProperty(token, "order-", "order", OrderScale, "Unsupported order value.", out utility, out errorMessage);
         }
 
-        private static bool TryResolveGap(string token, out ResolvedUtility utility, out string errorMessage)
+        private bool TryResolveGap(string token, out ResolvedUtility utility, out string errorMessage)
         {
-            if (TryResolveMappedSingleProperty(token, "gap-x-", "column-gap", SpacingScale, "Unsupported spacing scale value.", out utility, out errorMessage))
+            if (TryResolveMappedSingleProperty(token, "gap-x-", "column-gap", spacingScale, "Unsupported spacing scale value.", out utility, out errorMessage))
             {
                 return true;
             }
 
-            if (TryResolveMappedSingleProperty(token, "gap-y-", "row-gap", SpacingScale, "Unsupported spacing scale value.", out utility, out errorMessage))
+            if (TryResolveMappedSingleProperty(token, "gap-y-", "row-gap", spacingScale, "Unsupported spacing scale value.", out utility, out errorMessage))
             {
                 return true;
             }
 
-            return TryResolveMappedSingleProperty(token, "gap-", "gap", SpacingScale, "Unsupported spacing scale value.", out utility, out errorMessage);
+            return TryResolveMappedSingleProperty(token, "gap-", "gap", spacingScale, "Unsupported spacing scale value.", out utility, out errorMessage);
         }
 
         private static bool TryResolveTracking(string token, out ResolvedUtility utility, out string errorMessage)
@@ -653,7 +596,7 @@ namespace TailwindUSS.Editor
             return TryResolveMappedSingleProperty(token, "leading-", "line-height", LeadingScale, "Unsupported leading value.", out utility, out errorMessage);
         }
 
-        private static bool TryResolveTransform(string token, out ResolvedUtility utility, out string errorMessage)
+        private bool TryResolveTransform(string token, out ResolvedUtility utility, out string errorMessage)
         {
             if (TryResolveMappedSingleProperty(token, "scale-", "scale", ScaleScale, "Unsupported scale value.", out utility, out errorMessage))
             {
@@ -733,7 +676,7 @@ namespace TailwindUSS.Editor
             return TryResolveMappedSingleProperty(token, "cursor-", "cursor", CursorValues, "Unsupported cursor value.", out utility, out errorMessage);
         }
 
-        private static bool TryResolveBorder(string token, out ResolvedUtility utility, out string errorMessage)
+        private bool TryResolveBorder(string token, out ResolvedUtility utility, out string errorMessage)
         {
             utility = null;
             errorMessage = null;
@@ -767,7 +710,7 @@ namespace TailwindUSS.Editor
                         continue;
                     }
 
-                    if (Colors.TryGetValue(key, out value))
+                    if (colors.TryGetValue(key, out value))
                     {
                         utility = Create(token, new StyleDeclaration(colorSide.Value, value));
                         return true;
@@ -791,7 +734,7 @@ namespace TailwindUSS.Editor
                 return true;
             }
 
-            if (Colors.TryGetValue(globalKey, out globalValue))
+            if (colors.TryGetValue(globalKey, out globalValue))
             {
                 utility = CreateBox(token, new[]
                 {
@@ -851,7 +794,7 @@ namespace TailwindUSS.Editor
             return true;
         }
 
-        private static bool TryResolveBackground(string token, out ResolvedUtility utility, out string errorMessage)
+        private bool TryResolveBackground(string token, out ResolvedUtility utility, out string errorMessage)
         {
             utility = null;
             errorMessage = null;
@@ -863,9 +806,15 @@ namespace TailwindUSS.Editor
 
             var key = token.Substring("bg-".Length);
             string value;
-            if (Colors.TryGetValue(key, out value))
+            if (colors.TryGetValue(key, out value))
             {
                 utility = Create(token, new StyleDeclaration("background-color", value));
+                return true;
+            }
+
+            if (backgroundImages.TryGetValue(key, out value))
+            {
+                utility = Create(token, new StyleDeclaration("background-image", FormatAssetReference(value)));
                 return true;
             }
 
@@ -875,7 +824,7 @@ namespace TailwindUSS.Editor
             return true;
         }
 
-        private static bool TryResolveColor(string token, out ResolvedUtility utility, out string errorMessage)
+        private bool TryResolveColor(string token, out ResolvedUtility utility, out string errorMessage)
         {
             utility = null;
             errorMessage = null;
@@ -888,14 +837,14 @@ namespace TailwindUSS.Editor
             return false;
         }
 
-        private static bool TryResolvePaletteToken(string token, string prefix, string[] properties, out ResolvedUtility utility, out string errorMessage)
+        private bool TryResolvePaletteToken(string token, string prefix, string[] properties, out ResolvedUtility utility, out string errorMessage)
         {
             utility = null;
             errorMessage = null;
 
             var key = token.Substring(prefix.Length);
             string value;
-            if (!Colors.TryGetValue(key, out value))
+            if (!colors.TryGetValue(key, out value))
             {
                 errorMessage = "Unsupported color token.";
                 return true;
@@ -980,7 +929,7 @@ namespace TailwindUSS.Editor
             return true;
         }
 
-        private static bool TryResolveTranslate(
+        private bool TryResolveTranslate(
             string token,
             string prefix,
             bool isX,
@@ -992,7 +941,7 @@ namespace TailwindUSS.Editor
 
             var key = token.Substring(prefix.Length);
             string value;
-            if (!TranslateScale.TryGetValue(key, out value))
+            if (!translateScale.TryGetValue(key, out value))
             {
                 errorMessage = "Unsupported translate value.";
                 return true;
@@ -1021,6 +970,37 @@ namespace TailwindUSS.Editor
             }
 
             return new ResolvedUtility(token, declarations);
+        }
+
+        private static IDictionary<string, string> CreateTranslateScale(IDictionary<string, string> spacing)
+        {
+            var merged = new Dictionary<string, string>(spacing, StringComparer.Ordinal);
+            if (!merged.ContainsKey("1/2"))
+            {
+                merged["1/2"] = "50%";
+            }
+
+            if (!merged.ContainsKey("full"))
+            {
+                merged["full"] = "100%";
+            }
+
+            return merged;
+        }
+
+        private static string FormatAssetReference(string value)
+        {
+            if (value.IndexOf('(') >= 0)
+            {
+                return value;
+            }
+
+            return string.Format("resource(\"{0}\")", EscapeString(value));
+        }
+
+        private static string EscapeString(string value)
+        {
+            return value.Replace("\\", "\\\\").Replace("\"", "\\\"");
         }
 
         private static bool IsNumericToken(string token)

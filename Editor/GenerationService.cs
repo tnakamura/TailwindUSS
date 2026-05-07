@@ -9,7 +9,6 @@ namespace TailwindUSS.Editor
     internal sealed class GenerationService
     {
         private readonly UxmlScanner scanner = new UxmlScanner();
-        private readonly UtilityResolver resolver = new UtilityResolver();
         private readonly UssEmitter emitter = new UssEmitter();
         private readonly UxmlStyleReferenceUpdater styleReferenceUpdater = new UxmlStyleReferenceUpdater();
 
@@ -41,6 +40,7 @@ namespace TailwindUSS.Editor
 
             var projectRoot = ConfigLoader.GetProjectRoot();
             var scanResult = scanner.Scan(projectRoot, config.inputGlobs);
+            var resolver = new UtilityResolver(config.theme);
             var utilities = new Dictionary<string, ResolvedUtility>(StringComparer.Ordinal);
 
             foreach (var occurrence in scanResult.Occurrences)
