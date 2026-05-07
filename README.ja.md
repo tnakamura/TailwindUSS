@@ -1,28 +1,28 @@
 # TailwindUSS
 
-English | [日本語](README.ja.md)
+[English](README.md) | 日本語
 
-TailwindUSS is a Unity Editor extension for UI Toolkit projects. It scans `class` attributes in UXML files, resolves a Tailwind-like utility subset, and generates a single USS file containing only the utilities used in the scanned files.
+TailwindUSS は、UI Toolkit プロジェクト向けの Unity Editor 拡張です。UXML 内の `class` 属性を走査し、Tailwind 風の utility の一部を解決して、実際に使用されている utility だけを含む単一の USS ファイルを生成します。
 
-## Features
+## 主な機能
 
-- Scans UXML files matched by configurable glob patterns
-- Generates USS only for the utility tokens found in those files
-- Validates unsupported utilities, unsupported variants, invalid values, and duplicate tokens
-- Supports pseudo-class variants such as `hover:` and compound variants such as `hover:focus:`
-- Can automatically insert a generated `<Style src="..." />` reference into scanned UXML files
-- Lets you extend or override built-in color, spacing, and font-size scales
-- Lets you define font and background-image aliases in configuration
+- 設定した glob パターンに一致する UXML を走査
+- 使用されている utility token だけを USS として生成
+- 未対応 utility、未対応 variant、不正な値、重複 token を検証
+- `hover:` や `hover:focus:` のような pseudo-class variant に対応
+- 必要に応じて生成された `<Style src="..." />` を走査対象 UXML に自動追加
+- 組み込みの color / spacing / font-size scale を設定で拡張・上書き可能
+- font alias と background image alias を設定可能
 
-## Requirements
+## 動作要件
 
 - Unity 2022.3
 
-## Installation
+## インストール
 
-This repository contains a Unity Package Manager package in `src/TailwindUSS`.
+このリポジトリには `src/TailwindUSS` 配下に Unity Package Manager パッケージが含まれています。
 
-Add it to your project's `Packages/manifest.json`:
+プロジェクトの `Packages/manifest.json` に次を追加してください。
 
 ```json
 {
@@ -32,19 +32,19 @@ Add it to your project's `Packages/manifest.json`:
 }
 ```
 
-You can also add the same Git URL from the Unity Package Manager UI.
+同じ Git URL は Unity Package Manager の UI から追加しても構いません。
 
-## Quick start
+## クイックスタート
 
-1. Install the package.
-2. Create `tailwinduss.config.json` in the Unity project root, or use `Tools/TailwindUSS/Create Default Config`.
-3. Add utility classes to UXML `class` attributes.
-4. Run `Tools/TailwindUSS/Generate`.
-5. Use the generated USS file from `outputUssPath`.
+1. パッケージをインストールする
+2. Unity プロジェクトルートに `tailwinduss.config.json` を作成する、または `Tools/TailwindUSS/Create Default Config` を実行する
+3. UXML の `class` 属性に utility class を記述する
+4. `Tools/TailwindUSS/Generate` を実行する
+5. `outputUssPath` に出力された USS を利用する
 
-## Configuration
+## 設定
 
-Create `tailwinduss.config.json` at the Unity project root.
+Unity プロジェクトルートに `tailwinduss.config.json` を配置します。
 
 ```json
 {
@@ -71,39 +71,39 @@ Create `tailwinduss.config.json` at the Unity project root.
 }
 ```
 
-If the file does not exist, TailwindUSS uses in-memory defaults and shows a warning in the Unity Editor. Menu command: `Tools/TailwindUSS/Create Default Config`.
+設定ファイルが存在しない場合、TailwindUSS はメモリ上のデフォルト設定を使い、Unity Editor に warning を出します。既定ファイルは `Tools/TailwindUSS/Create Default Config` から生成できます。
 
-### Config fields
+### 設定項目
 
-- `inputGlobs`: UXML files to scan. If empty, the default is effectively `Assets/**/*.uxml`.
-- `outputUssPath`: Relative or absolute path of the generated USS file.
-- `autoAttachGeneratedUss`: When `true`, TailwindUSS inserts a matching `Style` element at the top of each scanned UXML file if it is not already present.
-- `theme.colors`: Extends or overrides built-in colors.
-- `theme.spacing`: Extends or overrides built-in spacing and size tokens.
-- `theme.fontSizes`: Extends or overrides built-in font sizes.
-- `theme.fonts`: Maps `font-*` aliases to USS asset references. Plain strings are emitted as `resource("...")`; values already using `resource(...)` or `url(...)` are passed through.
-- `theme.backgroundImages`: Maps `bg-*` aliases to `background-image` values using the same asset reference rules.
+- `inputGlobs`: 走査対象の UXML。空の場合は実質的に `Assets/**/*.uxml` が既定値です。
+- `outputUssPath`: 生成される USS の相対パスまたは絶対パス。
+- `autoAttachGeneratedUss`: `true` の場合、対象 UXML の先頭に同じ `src` を持つ `Style` 要素がなければ追加します。
+- `theme.colors`: 組み込み color scale の拡張・上書き。
+- `theme.spacing`: 組み込み spacing / size token の拡張・上書き。
+- `theme.fontSizes`: 組み込み font size の拡張・上書き。
+- `theme.fonts`: `font-*` alias を USS の asset reference にマップします。通常の文字列は `resource("...")` として出力され、`resource(...)` と `url(...)` はそのまま使われます。
+- `theme.backgroundImages`: `bg-*` alias を `background-image` にマップし、asset reference の扱いは `theme.fonts` と同じです。
 
-## Editor menu
+## Editor メニュー
 
 - `Tools/TailwindUSS/Generate`
 - `Tools/TailwindUSS/Validate`
 - `Tools/TailwindUSS/Create Default Config`
 
-## Diagnostics behavior
+## Diagnostics の挙動
 
-TailwindUSS reports the following in the Unity Editor:
+TailwindUSS は Unity Editor 上で次を報告します。
 
-- Warnings for unsupported utilities
-- Warnings for unsupported variants
-- Warnings for invalid scale or token values
-- Warnings for duplicate tokens inside a single `class` attribute
-- Errors for config loading failures
-- Errors for UXML parse failures
-- Errors for USS write failures
-- Errors for automatic style-reference update failures
+- 未対応 utility に対する warning
+- 未対応 variant に対する warning
+- 不正な scale / token 値に対する warning
+- 同一 `class` 属性内の重複 token に対する warning
+- config 読み込み失敗に対する error
+- UXML parse 失敗に対する error
+- USS 書き込み失敗に対する error
+- 自動 style 参照更新失敗に対する error
 
-## Supported variants
+## 対応 variant
 
 - `hover:`
 - `active:`
@@ -111,16 +111,16 @@ TailwindUSS reports the following in the Unity Editor:
 - `disabled:`
 - `checked:`
 - `selected:`
-- Compound variants such as `hover:focus:`
+- `hover:focus:` のような複合 variant
 
-## Currently implemented utility subset
+## 現在実装されている utility subset
 
-For the broader Unity USS compatibility matrix and the roadmap for still-unimplemented utilities, see:
+Unity USS とのより広い互換表と、未実装 utility のロードマップは次を参照してください。
 
 - `docs/tailwind-uss-feature-matrix-ja.md`
 - `docs/tailwind-uss-implementation-plan-ja.md`
 
-### Layout
+### レイアウト
 
 - `flex`
 - `hidden`
@@ -152,7 +152,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `z-auto`
 - `opacity-*`
 
-### Alignment
+### 配置
 
 - `items-start`
 - `items-center`
@@ -170,7 +170,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `self-center`
 - `self-stretch`
 
-### Spacing
+### 余白
 
 - `p-*`
 - `px-*`
@@ -190,7 +190,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `gap-x-*`
 - `gap-y-*`
 
-### Size
+### サイズ
 
 - `w-*`
 - `h-*`
@@ -201,7 +201,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `basis-*`
 - `order-*`
 
-### Color
+### 色
 
 - `bg-*`
 - `bg-transparent`
@@ -213,9 +213,9 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `border-b-*`
 - `border-l-*`
 
-### Background
+### 背景
 
-- `bg-*` (configured background image aliases)
+- `bg-*`（設定済み background image alias）
 - `bg-none`
 - `bg-cover`
 - `bg-contain`
@@ -229,7 +229,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `bg-repeat-x`
 - `bg-repeat-y`
 
-### Typography
+### タイポグラフィ
 
 - `text-xs`
 - `text-sm`
@@ -246,7 +246,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `text-9xl`
 - `font-normal`
 - `font-bold`
-- `font-*` (configured font aliases)
+- `font-*`（設定済み font alias）
 - `text-left`
 - `text-center`
 - `text-right`
@@ -279,7 +279,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `break-normal`
 - `break-all`
 
-### Border
+### ボーダー
 
 - `border`
 - `border-0`
@@ -291,7 +291,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `border-b`
 - `border-l`
 
-### Radius
+### 角丸
 
 - `rounded-none`
 - `rounded-sm`
@@ -316,7 +316,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `rounded-br-*`
 - `rounded-bl-*`
 
-### Transform
+### 変形
 
 - `scale-*`
 - `rotate-*`
@@ -324,7 +324,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `translate-y-*`
 - `origin-*`
 
-### Transition
+### トランジション
 
 - `transition`
 - `transition-colors`
@@ -337,7 +337,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `ease-out`
 - `ease-in-out`
 
-### Interaction
+### インタラクション
 
 - `cursor-default`
 - `cursor-pointer`
@@ -345,11 +345,11 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `cursor-move`
 - `cursor-not-allowed`
 
-## Token scales
+## Token スケール
 
-`theme.colors`, `theme.spacing`, and `theme.fontSizes` can extend or override the built-in values below.
+`theme.colors`、`theme.spacing`、`theme.fontSizes` により、以下の組み込み値を拡張・上書きできます。
 
-### Spacing and size scale
+### spacing / size スケール
 
 | token | value |
 | --- | --- |
@@ -364,7 +364,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 | 10 | 40px |
 | 12 | 48px |
 
-### Colors
+### 色
 
 - `white`
 - `black`
@@ -382,9 +382,9 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `indigo-*`
 - `pink-*`
 
-Supported palette steps for `gray`, `slate`, `zinc`, `neutral`, `stone`, `emerald`, `sky`, `indigo`, and `pink` are `100`, `300`, `500`, `700`, and `900`.
+`gray`、`slate`、`zinc`、`neutral`、`stone`、`emerald`、`sky`、`indigo`、`pink` は `100`、`300`、`500`、`700`、`900` に対応します。
 
-### Font sizes
+### フォントサイズ
 
 | token | value |
 | --- | --- |
@@ -402,22 +402,22 @@ Supported palette steps for `gray`, `slate`, `zinc`, `neutral`, `stone`, `emeral
 | 8xl | 96px |
 | 9xl | 128px |
 
-### Additional built-in scales
+### その他の組み込み scale
 
 - `opacity-*`: `0`, `5`, `10`, `20`, `25`, `30`, `40`, `50`, `60`, `70`, `75`, `80`, `90`, `95`, `100`
 - `z-*`: `0`, `10`, `20`, `30`, `40`, `50`, `auto`
-- `order-*`: `0` through `12`
+- `order-*`: `0` 〜 `12`
 - `tracking-*`: `tighter`, `tight`, `normal`, `wide`, `wider`, `widest`
 - `leading-*`: `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`
-- `border-*` widths: `0`, `2`, `4`, `8` plus the fixed `border` shorthand for `1px`
-- Radius values: `none`, `sm`, default, `md`, `lg`, `full`
+- `border-*` の width: `0`, `2`, `4`, `8`。加えて `border` shorthand は `1px`
+- radius 値: `none`, `sm`, default, `md`, `lg`, `full`
 - `scale-*`: `0`, `50`, `75`, `90`, `95`, `100`, `105`, `110`, `125`, `150`
 - `rotate-*`: `0`, `1`, `2`, `3`, `6`, `12`, `45`, `90`, `180`
-- `translate-x-*`, `translate-y-*`: spacing scale plus `1/2` and `full`
+- `translate-x-*`, `translate-y-*`: spacing scale に `1/2` と `full` を追加
 - `origin-*`: `center`, `top`, `top-right`, `right`, `bottom-right`, `bottom`, `bottom-left`, `left`, `top-left`
 - `duration-*`, `delay-*`: `75`, `100`, `150`, `200`, `300`, `500`, `700`, `1000`
 
-## Example
+## 例
 
 UXML:
 
@@ -427,7 +427,7 @@ UXML:
 </ui:VisualElement>
 ```
 
-Generated USS:
+生成される USS:
 
 ```css
 /* Generated by TailwindUSS. */
@@ -475,40 +475,40 @@ Generated USS:
 }
 ```
 
-## Development
+## 開発
 
-### Automated tests
+### 自動テスト
 
-Run tests from the repository root:
+リポジトリルートで次を実行します。
 
 ```bash
 dotnet test test/TailwindUSS.Editor.Tests/TailwindUSS.Editor.Tests.csproj
 dotnet test test/TailwindUSS.Editor.Unit/TailwindUSS.Editor.Unit.csproj
 ```
 
-Collect coverage in Cobertura format:
+Cobertura 形式で coverage を取得する場合:
 
 ```bash
 dotnet test test/TailwindUSS.Editor.Tests/TailwindUSS.Editor.Tests.csproj --settings test/coverlet.runsettings --collect:"XPlat Code Coverage"
 ```
 
-Coverage reports are written under `test/TailwindUSS.Editor.Tests/TestResults/`.
+coverage レポートは `test/TailwindUSS.Editor.Tests/TestResults/` 以下に出力されます。
 
-## Package structure
+## パッケージ構成
 
 - `src/TailwindUSS/package.json`: Unity package manifest
-- `src/TailwindUSS/Editor/TailwindUSS.Editor.asmdef`: editor-only assembly definition
-- `src/TailwindUSS/Editor/*.cs`: config loading, scanning, parsing, resolving, emitting, validation, generation, and menu commands
+- `src/TailwindUSS/Editor/TailwindUSS.Editor.asmdef`: editor 専用 assembly definition
+- `src/TailwindUSS/Editor/*.cs`: config 読み込み、走査、parse、resolve、emit、validation、generation、menu command
 
-## Documentation
+## ドキュメント
 
-Additional project documents are currently maintained in Japanese:
+追加ドキュメントは現在日本語で管理されています。
 
-- `docs/tailwind-uss-feature-matrix-ja.md`: Tailwind CSS / Unity USS compatibility matrix and implemented status
-- `docs/tailwind-uss-implementation-plan-ja.md`: implementation roadmap for utilities not yet supported
-- `docs/mvp-spec-ja.md`: MVP specification
-- `docs/implementation-approaches-ja.md`: design notes and implementation approaches
+- `docs/tailwind-uss-feature-matrix-ja.md`: Tailwind CSS / Unity USS の互換表と実装状況
+- `docs/tailwind-uss-implementation-plan-ja.md`: 未対応 utility の実装ロードマップ
+- `docs/mvp-spec-ja.md`: MVP 仕様
+- `docs/implementation-approaches-ja.md`: 設計メモと実装アプローチ
 
-## License
+## ライセンス
 
 MIT
