@@ -124,6 +124,8 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 
 - `flex`
 - `hidden`
+- `visible`
+- `invisible`
 - `flex-row`
 - `flex-col`
 - `flex-wrap`
@@ -198,7 +200,11 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `min-h-*`
 - `max-w-*`
 - `max-h-*`
+- `size-*`
+- `w-auto`, `h-auto`, `w-1/2`, `h-1/2`, `w-full`, `h-full`
+- `max-w-none`, `max-h-none`
 - `basis-*`
+- `basis-auto`, `basis-1/2`, `basis-full`
 - `order-*`
 
 ### Color
@@ -244,8 +250,15 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `text-7xl`
 - `text-8xl`
 - `text-9xl`
+- `font-thin`
+- `font-extralight`
+- `font-light`
 - `font-normal`
+- `font-medium`
+- `font-semibold`
 - `font-bold`
+- `font-extrabold`
+- `font-black`
 - `font-*` (configured font aliases)
 - `text-left`
 - `text-center`
@@ -278,6 +291,9 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `text-clip`
 - `break-normal`
 - `break-all`
+- `underline`
+- `line-through`
+- `no-underline`
 
 ### Border
 
@@ -286,6 +302,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `border-2`
 - `border-4`
 - `border-8`
+- `border-solid`
 - `border-t`
 - `border-r`
 - `border-b`
@@ -404,6 +421,11 @@ Supported palette steps for `gray`, `slate`, `zinc`, `neutral`, `stone`, `emeral
 
 ### Additional built-in scales
 
+- `size-*`, `w-*`, `h-*`, `basis-*`: spacing scale plus `auto`, `1/2`, and `full`
+- `min-w-*`, `min-h-*`: spacing scale plus `1/2` and `full`
+- `max-w-*`, `max-h-*`: spacing scale plus `1/2`, `full`, and `none`
+- `font-*` weights: `thin`, `extralight`, `light`, `normal`, `medium` -> `font-weight: normal`; `semibold`, `bold`, `extrabold`, `black` -> `font-weight: bold`
+- `text-decoration`: `underline`, `line-through`, `no-underline`
 - `opacity-*`: `0`, `5`, `10`, `20`, `25`, `30`, `40`, `50`, `60`, `70`, `75`, `80`, `90`, `95`, `100`
 - `z-*`: `0`, `10`, `20`, `30`, `40`, `50`, `auto`
 - `order-*`: `0` through `12`

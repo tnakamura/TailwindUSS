@@ -223,6 +223,32 @@ namespace TailwindUSS.Editor.Tests
         }
 
         [Test]
+        public void Generate_WritesNewlySupportedMatrixUtilities()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
+            scope.WriteAssetFile("UI/Expanded.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"visible size-full max-w-none border-solid\" /><ui:Label class=\"font-semibold underline line-through w-1/2 h-auto basis-full\" /></ui:UXML>");
+
+            var result = new GenerationService().Generate();
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(10));
+            Assert.That(result.WarningCount, Is.EqualTo(0));
+            Assert.That(result.ErrorCount, Is.EqualTo(0));
+            Assert.That(output, Does.Contain(".basis-full {\n    flex-basis: 100%;\n}"));
+            Assert.That(output, Does.Contain(".border-solid {\n}"));
+            Assert.That(output, Does.Contain(".font-semibold {\n    font-weight: bold;\n}"));
+            Assert.That(output, Does.Contain(".h-auto {\n    height: auto;\n}"));
+            Assert.That(output, Does.Contain(".line-through {\n    text-decoration: line-through;\n}"));
+            Assert.That(output, Does.Contain(".max-w-none {\n    max-width: none;\n}"));
+            Assert.That(output, Does.Contain(".size-full {\n    width: 100%;\n    height: 100%;\n}"));
+            Assert.That(output, Does.Contain(".underline {\n    text-decoration: underline;\n}"));
+            Assert.That(output, Does.Contain(".visible {\n    visibility: visible;\n}"));
+            Assert.That(output, Does.Contain(".w-1\\/2 {\n    width: 50%;\n}"));
+        }
+
+        [Test]
         public void LogDiagnostic_LoadsAssetContextForAssetPaths()
         {
             var diagnostic = new TailwindUssDiagnostic(

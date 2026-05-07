@@ -11,6 +11,10 @@ namespace TailwindUSS.Editor
         private readonly IDictionary<string, string> colors;
         private readonly IDictionary<string, string> fonts;
         private readonly IDictionary<string, string> backgroundImages;
+        private readonly IDictionary<string, string> sizeScale;
+        private readonly IDictionary<string, string> minSizeScale;
+        private readonly IDictionary<string, string> maxSizeScale;
+        private readonly IDictionary<string, string> basisScale;
         private readonly IDictionary<string, string> translateScale;
 
         private static readonly IDictionary<string, string> ZIndexScale = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -68,6 +72,19 @@ namespace TailwindUSS.Editor
             { "wide", "0.025em" },
             { "wider", "0.05em" },
             { "widest", "0.1em" }
+        };
+
+        private static readonly IDictionary<string, string> FontWeightValues = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "thin", "normal" },
+            { "extralight", "normal" },
+            { "light", "normal" },
+            { "normal", "normal" },
+            { "medium", "normal" },
+            { "semibold", "bold" },
+            { "bold", "bold" },
+            { "extrabold", "bold" },
+            { "black", "bold" }
         };
 
         private static readonly IDictionary<string, string> LeadingScale = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -222,10 +239,11 @@ namespace TailwindUSS.Editor
                 { "justify-between", token => Create(token, new StyleDeclaration("justify-content", "space-between")) },
                 { "justify-around", token => Create(token, new StyleDeclaration("justify-content", "space-around")) },
                 { "justify-evenly", token => Create(token, new StyleDeclaration("justify-content", "space-evenly")) },
-                { "font-normal", token => Create(token, new StyleDeclaration("-unity-font-style", "normal")) },
-                { "font-bold", token => Create(token, new StyleDeclaration("-unity-font-style", "bold")) },
                 { "italic", token => Create(token, new StyleDeclaration("-unity-font-style", "italic")) },
                 { "not-italic", token => Create(token, new StyleDeclaration("-unity-font-style", "normal")) },
+                { "underline", token => Create(token, new StyleDeclaration("text-decoration", "underline")) },
+                { "line-through", token => Create(token, new StyleDeclaration("text-decoration", "line-through")) },
+                { "no-underline", token => Create(token, new StyleDeclaration("text-decoration", "none")) },
                 { "text-left", token => Create(token, new StyleDeclaration("-unity-text-align", "middle-left")) },
                 { "text-center", token => Create(token, new StyleDeclaration("-unity-text-align", "middle-center")) },
                 { "text-right", token => Create(token, new StyleDeclaration("-unity-text-align", "middle-right")) },
@@ -248,6 +266,8 @@ namespace TailwindUSS.Editor
                 { "break-all", token => Create(token, new StyleDeclaration("word-break", "break-all")) },
                 { "relative", token => Create(token, new StyleDeclaration("position", "relative")) },
                 { "absolute", token => Create(token, new StyleDeclaration("position", "absolute")) },
+                { "visible", token => Create(token, new StyleDeclaration("visibility", "visible")) },
+                { "invisible", token => Create(token, new StyleDeclaration("visibility", "hidden")) },
                 { "flex-wrap", token => Create(token, new StyleDeclaration("flex-wrap", "wrap")) },
                 { "flex-nowrap", token => Create(token, new StyleDeclaration("flex-wrap", "nowrap")) },
                 { "flex-wrap-reverse", token => Create(token, new StyleDeclaration("flex-wrap", "wrap-reverse")) },
@@ -261,6 +281,7 @@ namespace TailwindUSS.Editor
                 { "border-2", token => CreateBox(token, BorderWidthProperties, "2px") },
                 { "border-4", token => CreateBox(token, BorderWidthProperties, "4px") },
                 { "border-8", token => CreateBox(token, BorderWidthProperties, "8px") },
+                { "border-solid", token => CreateEmpty(token) },
                 { "rounded-none", token => CreateBox(token, RadiusProperties, "0px") },
                 { "rounded-sm", token => CreateBox(token, RadiusProperties, "2px") },
                 { "rounded", token => CreateBox(token, RadiusProperties, "4px") },
@@ -299,16 +320,6 @@ namespace TailwindUSS.Editor
             new KeyValuePair<string, string[]>("mb-", new[] { "margin-bottom" }),
             new KeyValuePair<string, string[]>("ml-", new[] { "margin-left" }),
             new KeyValuePair<string, string[]>("m-", new[] { "margin-top", "margin-right", "margin-bottom", "margin-left" })
-        };
-
-        private static readonly KeyValuePair<string, string>[] SizeDefinitions =
-        {
-            new KeyValuePair<string, string>("min-w-", "min-width"),
-            new KeyValuePair<string, string>("min-h-", "min-height"),
-            new KeyValuePair<string, string>("max-w-", "max-width"),
-            new KeyValuePair<string, string>("max-h-", "max-height"),
-            new KeyValuePair<string, string>("w-", "width"),
-            new KeyValuePair<string, string>("h-", "height")
         };
 
         private static readonly KeyValuePair<string, string[]>[] InsetDefinitions =
@@ -386,6 +397,10 @@ namespace TailwindUSS.Editor
             colors = mergedTheme.colors;
             fonts = mergedTheme.fonts;
             backgroundImages = mergedTheme.backgroundImages;
+            sizeScale = CreateSizeScale(spacingScale);
+            minSizeScale = CreateMinSizeScale(spacingScale);
+            maxSizeScale = CreateMaxSizeScale(spacingScale);
+            basisScale = CreateBasisScale(spacingScale);
             translateScale = CreateTranslateScale(spacingScale);
         }
 
@@ -402,6 +417,7 @@ namespace TailwindUSS.Editor
             }
 
             if (TryResolveFontSize(token, out utility, out errorMessage)
+                || TryResolveFontWeight(token, out utility, out errorMessage)
                 || TryResolveFontFamily(token, out utility, out errorMessage)
                 || TryResolveSpacing(token, out utility, out errorMessage)
                 || TryResolveInset(token, out utility, out errorMessage)
@@ -500,6 +516,26 @@ namespace TailwindUSS.Editor
             return true;
         }
 
+        private static bool TryResolveFontWeight(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            utility = null;
+            errorMessage = null;
+            if (!token.StartsWith("font-", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            var key = token.Substring("font-".Length);
+            string value;
+            if (!FontWeightValues.TryGetValue(key, out value))
+            {
+                return false;
+            }
+
+            utility = Create(token, new StyleDeclaration("font-weight", value));
+            return true;
+        }
+
         private bool TryResolveSpacing(string token, out ResolvedUtility utility, out string errorMessage)
         {
             return TryResolveScaleBox(token, SpacingDefinitions, spacingScale, "Unsupported spacing scale value.", out utility, out errorMessage);
@@ -545,25 +581,35 @@ namespace TailwindUSS.Editor
 
         private bool TryResolveSize(string token, out ResolvedUtility utility, out string errorMessage)
         {
-            utility = null;
-            errorMessage = null;
-
-            foreach (var pair in SizeDefinitions)
+            if (TryResolveScaleBox(
+                token,
+                new[] { new KeyValuePair<string, string[]>("size-", new[] { "width", "height" }) },
+                sizeScale,
+                "Unsupported size scale value.",
+                out utility,
+                out errorMessage))
             {
-                if (!token.StartsWith(pair.Key, StringComparison.Ordinal))
-                {
-                    continue;
-                }
-
-                return TryResolveMappedSinglePropertyCore(token.Substring(pair.Key.Length), token, pair.Value, spacingScale, "Unsupported size scale value.", out utility, out errorMessage);
+                return true;
             }
 
+            if (TryResolveMappedSingleProperty(token, "min-w-", "min-width", minSizeScale, "Unsupported size scale value.", out utility, out errorMessage)
+                || TryResolveMappedSingleProperty(token, "min-h-", "min-height", minSizeScale, "Unsupported size scale value.", out utility, out errorMessage)
+                || TryResolveMappedSingleProperty(token, "max-w-", "max-width", maxSizeScale, "Unsupported size scale value.", out utility, out errorMessage)
+                || TryResolveMappedSingleProperty(token, "max-h-", "max-height", maxSizeScale, "Unsupported size scale value.", out utility, out errorMessage)
+                || TryResolveMappedSingleProperty(token, "w-", "width", sizeScale, "Unsupported size scale value.", out utility, out errorMessage)
+                || TryResolveMappedSingleProperty(token, "h-", "height", sizeScale, "Unsupported size scale value.", out utility, out errorMessage))
+            {
+                return true;
+            }
+
+            utility = null;
+            errorMessage = null;
             return false;
         }
 
         private bool TryResolveBasis(string token, out ResolvedUtility utility, out string errorMessage)
         {
-            return TryResolveMappedSingleProperty(token, "basis-", "flex-basis", spacingScale, "Unsupported size scale value.", out utility, out errorMessage);
+            return TryResolveMappedSingleProperty(token, "basis-", "flex-basis", basisScale, "Unsupported size scale value.", out utility, out errorMessage);
         }
 
         private static bool TryResolveOrder(string token, out ResolvedUtility utility, out string errorMessage)
@@ -956,6 +1002,11 @@ namespace TailwindUSS.Editor
             return new ResolvedUtility(token, declarations);
         }
 
+        private static ResolvedUtility CreateEmpty(string token)
+        {
+            return new ResolvedUtility(token, Array.Empty<StyleDeclaration>());
+        }
+
         private static ResolvedUtility Create(string token, IList<StyleDeclaration> declarations)
         {
             return new ResolvedUtility(token, declarations);
@@ -974,15 +1025,58 @@ namespace TailwindUSS.Editor
 
         private static IDictionary<string, string> CreateTranslateScale(IDictionary<string, string> spacing)
         {
-            var merged = new Dictionary<string, string>(spacing, StringComparer.Ordinal);
-            if (!merged.ContainsKey("1/2"))
-            {
-                merged["1/2"] = "50%";
-            }
+            return CreateMergedScale(
+                spacing,
+                new KeyValuePair<string, string>("1/2", "50%"),
+                new KeyValuePair<string, string>("full", "100%"));
+        }
 
-            if (!merged.ContainsKey("full"))
+        private static IDictionary<string, string> CreateSizeScale(IDictionary<string, string> spacing)
+        {
+            return CreateMergedScale(
+                spacing,
+                new KeyValuePair<string, string>("1/2", "50%"),
+                new KeyValuePair<string, string>("full", "100%"),
+                new KeyValuePair<string, string>("auto", "auto"));
+        }
+
+        private static IDictionary<string, string> CreateMinSizeScale(IDictionary<string, string> spacing)
+        {
+            return CreateMergedScale(
+                spacing,
+                new KeyValuePair<string, string>("1/2", "50%"),
+                new KeyValuePair<string, string>("full", "100%"));
+        }
+
+        private static IDictionary<string, string> CreateMaxSizeScale(IDictionary<string, string> spacing)
+        {
+            return CreateMergedScale(
+                spacing,
+                new KeyValuePair<string, string>("1/2", "50%"),
+                new KeyValuePair<string, string>("full", "100%"),
+                new KeyValuePair<string, string>("none", "none"));
+        }
+
+        private static IDictionary<string, string> CreateBasisScale(IDictionary<string, string> spacing)
+        {
+            return CreateMergedScale(
+                spacing,
+                new KeyValuePair<string, string>("1/2", "50%"),
+                new KeyValuePair<string, string>("full", "100%"),
+                new KeyValuePair<string, string>("auto", "auto"));
+        }
+
+        private static IDictionary<string, string> CreateMergedScale(
+            IDictionary<string, string> source,
+            params KeyValuePair<string, string>[] additions)
+        {
+            var merged = new Dictionary<string, string>(source, StringComparer.Ordinal);
+            foreach (var addition in additions)
             {
-                merged["full"] = "100%";
+                if (!merged.ContainsKey(addition.Key))
+                {
+                    merged[addition.Key] = addition.Value;
+                }
             }
 
             return merged;
