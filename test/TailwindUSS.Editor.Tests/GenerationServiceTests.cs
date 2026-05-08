@@ -47,12 +47,28 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".bg-blue-500"));
             Assert.That(output, Does.Contain(".flex"));
             Assert.That(output, Does.Contain(".rounded"));
-            Assert.That(updatedMain, Does.Contain("<ui:Style src=\"Assets/Generated/TailwindUSS.generated.uss\" />"));
+            Assert.That(updatedMain, Does.Contain("<ui:Style src=\"project://database/Assets/Generated/TailwindUSS.generated.uss\" />"));
             Assert.That(AssetDatabase.RefreshCallCount, Is.EqualTo(1));
             Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Duplicate token 'flex'")), Is.True);
             Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Invalid utility token 'p-7'")), Is.True);
             Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Unsupported utility token 'unknown'")), Is.True);
             Assert.That(Debug.Entries.Last().Message, Does.Contain("TailwindUSS generation finished."));
+        }
+
+        [Test]
+        public void Generate_RewritesLegacyAutoAttachedStyleReference()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":true}");
+            scope.WriteAssetFile("UI/Main.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:Style src=\"Assets/Generated/TailwindUSS.generated.uss\" /><ui:VisualElement class=\"flex\" /></ui:UXML>");
+
+            var result = new GenerationService().Generate();
+
+            var updatedMain = File.ReadAllText(scope.GetAssetPath("UI", "Main.uxml"));
+
+            Assert.That(result.ErrorCount, Is.EqualTo(0));
+            Assert.That(updatedMain, Does.Not.Contain("src=\"Assets/Generated/TailwindUSS.generated.uss\""));
+            Assert.That(updatedMain, Does.Contain("src=\"project://database/Assets/Generated/TailwindUSS.generated.uss\""));
         }
 
         [Test]
