@@ -172,10 +172,10 @@ namespace TailwindUSS.Editor
                 ? diagnostic.Message
                 : string.Format("{0} ({1})", diagnostic.Message, location);
 
-            Object context = null;
+            UnityEngine.Object context = null;
             if (!string.IsNullOrEmpty(diagnostic.RelativeFilePath) && diagnostic.RelativeFilePath.StartsWith("Assets/", StringComparison.Ordinal))
             {
-                context = AssetDatabase.LoadAssetAtPath<Object>(diagnostic.RelativeFilePath);
+                context = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(diagnostic.RelativeFilePath);
             }
 
             if (diagnostic.Severity == DiagnosticSeverity.Error)
