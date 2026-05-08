@@ -47,6 +47,39 @@ namespace TailwindUSS.Editor
             { "100", "1" }
         };
 
+        private static readonly IDictionary<string, string> BlurScale = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "none", "0px" },
+            { "sm", "4px" },
+            { string.Empty, "8px" },
+            { "md", "12px" },
+            { "lg", "16px" },
+            { "xl", "24px" },
+            { "2xl", "40px" },
+            { "3xl", "64px" }
+        };
+
+        private static readonly IDictionary<string, string> ContrastScale = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "0", "0%" },
+            { "50", "50%" },
+            { "75", "75%" },
+            { "100", "100%" },
+            { "125", "125%" },
+            { "150", "150%" },
+            { "200", "200%" }
+        };
+
+        private static readonly IDictionary<string, string> HueRotateScale = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "0", "0deg" },
+            { "15", "15deg" },
+            { "30", "30deg" },
+            { "60", "60deg" },
+            { "90", "90deg" },
+            { "180", "180deg" }
+        };
+
         private static readonly IDictionary<string, string> OrderScale = new Dictionary<string, string>(StringComparer.Ordinal)
         {
             { "0", "0" },
@@ -424,6 +457,7 @@ namespace TailwindUSS.Editor
                 || TryResolveOverflow(token, out utility, out errorMessage)
                 || TryResolveZIndex(token, out utility, out errorMessage)
                 || TryResolveOpacity(token, out utility, out errorMessage)
+                || TryResolveFilter(token, out utility, out errorMessage)
                 || TryResolveSize(token, out utility, out errorMessage)
                 || TryResolveBasis(token, out utility, out errorMessage)
                 || TryResolveOrder(token, out utility, out errorMessage)
@@ -470,7 +504,11 @@ namespace TailwindUSS.Editor
                 selectorSuffix += suffix;
             }
 
-            utility = new ResolvedUtility(occurrence.OriginalToken, utility.Declarations, selectorSuffix);
+            utility = new ResolvedUtility(
+                occurrence.OriginalToken,
+                utility.Declarations,
+                selectorSuffix,
+                filterContribution: utility.FilterContribution);
             errorMessage = null;
             return ResolveStatus.Supported;
         }
@@ -577,6 +615,40 @@ namespace TailwindUSS.Editor
         private static bool TryResolveOpacity(string token, out ResolvedUtility utility, out string errorMessage)
         {
             return TryResolveMappedSingleProperty(token, "opacity-", "opacity", OpacityScale, "Unsupported opacity value.", out utility, out errorMessage);
+        }
+
+        private static bool TryResolveFilter(string token, out ResolvedUtility utility, out string errorMessage)
+        {
+            if (token == "blur")
+            {
+                utility = CreateFilter(token, "blur", string.Format("blur({0})", BlurScale[string.Empty]));
+                errorMessage = null;
+                return true;
+            }
+
+            if (TryResolveMappedFilter(token, "blur-", "blur", BlurScale, "Unsupported blur value.", "blur({0})", out utility, out errorMessage))
+            {
+                return true;
+            }
+
+            if (TryResolveFixedFilter(token, "grayscale", "grayscale", "grayscale(100%)", out utility, out errorMessage)
+                || TryResolveFixedFilter(token, "grayscale-0", "grayscale", "grayscale(0%)", out utility, out errorMessage)
+                || TryResolveInvalidFixedFilter(token, "grayscale-", "Unsupported grayscale value.", out utility, out errorMessage)
+                || TryResolveFixedFilter(token, "invert", "invert", "invert(100%)", out utility, out errorMessage)
+                || TryResolveFixedFilter(token, "invert-0", "invert", "invert(0%)", out utility, out errorMessage)
+                || TryResolveInvalidFixedFilter(token, "invert-", "Unsupported invert value.", out utility, out errorMessage)
+                || TryResolveFixedFilter(token, "sepia", "sepia", "sepia(100%)", out utility, out errorMessage)
+                || TryResolveFixedFilter(token, "sepia-0", "sepia", "sepia(0%)", out utility, out errorMessage)
+                || TryResolveInvalidFixedFilter(token, "sepia-", "Unsupported sepia value.", out utility, out errorMessage)
+                || TryResolveMappedFilter(token, "contrast-", "contrast", ContrastScale, "Unsupported contrast value.", "contrast({0})", out utility, out errorMessage)
+                || TryResolveMappedFilter(token, "hue-rotate-", "hue-rotate", HueRotateScale, "Unsupported hue-rotate value.", "hue-rotate({0})", out utility, out errorMessage))
+            {
+                return true;
+            }
+
+            utility = null;
+            errorMessage = null;
+            return false;
         }
 
         private bool TryResolveSize(string token, out ResolvedUtility utility, out string errorMessage)
@@ -975,6 +1047,72 @@ namespace TailwindUSS.Editor
             return true;
         }
 
+        private static bool TryResolveFixedFilter(
+            string token,
+            string exactToken,
+            string family,
+            string function,
+            out ResolvedUtility utility,
+            out string errorMessage)
+        {
+            if (token != exactToken)
+            {
+                utility = null;
+                errorMessage = null;
+                return false;
+            }
+
+            utility = CreateFilter(token, family, function);
+            errorMessage = null;
+            return true;
+        }
+
+        private static bool TryResolveInvalidFixedFilter(
+            string token,
+            string prefix,
+            string invalidMessage,
+            out ResolvedUtility utility,
+            out string errorMessage)
+        {
+            utility = null;
+            errorMessage = null;
+            if (!token.StartsWith(prefix, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            errorMessage = invalidMessage;
+            return true;
+        }
+
+        private static bool TryResolveMappedFilter(
+            string token,
+            string prefix,
+            string family,
+            IDictionary<string, string> valueMap,
+            string invalidMessage,
+            string functionFormat,
+            out ResolvedUtility utility,
+            out string errorMessage)
+        {
+            utility = null;
+            errorMessage = null;
+            if (!token.StartsWith(prefix, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            string value;
+            if (!valueMap.TryGetValue(token.Substring(prefix.Length), out value))
+            {
+                errorMessage = invalidMessage;
+                return true;
+            }
+
+            utility = CreateFilter(token, family, string.Format(functionFormat, value));
+            return true;
+        }
+
         private bool TryResolveTranslate(
             string token,
             string prefix,
@@ -1010,6 +1148,14 @@ namespace TailwindUSS.Editor
         private static ResolvedUtility Create(string token, IList<StyleDeclaration> declarations)
         {
             return new ResolvedUtility(token, declarations);
+        }
+
+        private static ResolvedUtility CreateFilter(string token, string family, string function)
+        {
+            return new ResolvedUtility(
+                token,
+                new[] { new StyleDeclaration("filter", function) },
+                filterContribution: new FilterContribution(family, function));
         }
 
         private static ResolvedUtility CreateBox(string token, IEnumerable<string> properties, string value)

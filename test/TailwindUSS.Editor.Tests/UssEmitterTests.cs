@@ -56,5 +56,22 @@ namespace TailwindUSS.Editor.Tests
 
             Assert.That(output.Replace("\r\n", "\n"), Does.Contain(".hover\\:bg-blue-500:hover {\n    background-color: #3B82F6;\n}"));
         }
+
+        [Test]
+        public void Emit_UsesSelectorOverrideWhenProvided()
+        {
+            var emitter = new UssEmitter();
+            var utilities = new[]
+            {
+                new ResolvedUtility(
+                    ".hover\\:blur-sm.grayscale:hover",
+                    new[] { new StyleDeclaration("filter", "blur(4px) grayscale(100%)") },
+                    selectorOverride: ".hover\\:blur-sm.grayscale:hover")
+            };
+
+            var output = emitter.Emit(utilities);
+
+            Assert.That(output.Replace("\r\n", "\n"), Does.Contain(".hover\\:blur-sm.grayscale:hover {\n    filter: blur(4px) grayscale(100%);\n}"));
+        }
     }
 }

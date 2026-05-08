@@ -186,6 +186,45 @@ namespace TailwindUSS.Editor.Tests
         }
 
         [Test]
+        public void Generate_ComposesFilterUtilitiesAcrossBaseAndVariants()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
+            scope.WriteAssetFile("UI/Filtered.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:Button class=\"transition duration-150 grayscale invert-0 sepia contrast-150 hover:blur-sm focus:hue-rotate-60\" /></ui:UXML>");
+
+            var result = new GenerationService().Generate();
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(5));
+            Assert.That(result.WarningCount, Is.EqualTo(0));
+            Assert.That(result.ErrorCount, Is.EqualTo(0));
+            Assert.That(output, Does.Contain(".grayscale.invert-0.sepia.contrast-150 {\n    filter: grayscale(100%) invert(0%) sepia(100%) contrast(150%);\n}"));
+            Assert.That(output, Does.Contain(".hover\\:blur-sm.grayscale.invert-0.sepia.contrast-150:hover {\n    filter: blur(4px) grayscale(100%) invert(0%) sepia(100%) contrast(150%);\n}"));
+            Assert.That(output, Does.Contain(".grayscale.invert-0.sepia.contrast-150.focus\\:hue-rotate-60:focus {\n    filter: grayscale(100%) invert(0%) sepia(100%) contrast(150%) hue-rotate(60deg);\n}"));
+            Assert.That(output, Does.Contain(".transition {\n    transition-property: all;\n}"));
+            Assert.That(output, Does.Contain(".duration-150 {\n    transition-duration: 150ms;\n}"));
+        }
+
+        [Test]
+        public void Generate_WarnsAndUsesLastTokenForDuplicateFilterFamily()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
+            scope.WriteAssetFile("UI/Filtered.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"blur-sm blur-lg grayscale\" /></ui:UXML>");
+
+            var result = new GenerationService().Generate();
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(1));
+            Assert.That(result.WarningCount, Is.EqualTo(1));
+            Assert.That(result.ErrorCount, Is.EqualTo(0));
+            Assert.That(output, Does.Contain(".blur-lg.grayscale {\n    filter: blur(16px) grayscale(100%);\n}"));
+            Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Duplicate filter family 'blur'")), Is.True);
+        }
+
+        [Test]
         public void Generate_UsesConfiguredThemeOverridesAndAssetAliases()
         {
             using var scope = new TestProjectScope();

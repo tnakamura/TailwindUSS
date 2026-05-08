@@ -15,6 +15,7 @@ namespace TailwindUSS.Editor
         {
             var result = new UxmlScanResult();
             var regexes = BuildRegexes(inputGlobs);
+            var classAttributeId = 1;
 
             foreach (var filePath in Directory.GetFiles(projectRoot, "*.uxml", SearchOption.AllDirectories))
             {
@@ -49,7 +50,8 @@ namespace TailwindUSS.Editor
                             relativeFilePath,
                             lineNumber,
                             element.Name.LocalName,
-                            result.Diagnostics);
+                            result.Diagnostics,
+                            classAttributeId++);
 
                         foreach (var token in tokens)
                         {

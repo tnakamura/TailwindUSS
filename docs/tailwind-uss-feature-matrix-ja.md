@@ -2,9 +2,9 @@
 
 ## この文書の目的
 
-この文書は、**Tailwind CSS の機能のうち Unity 2022.3 UI Toolkit / USS で実現可能なもの**を整理し、**TailwindUSS で実装済みか、未実装か**を明示するための一覧である。
+この文書は、**Tailwind CSS の機能のうち Unity 6.3+ UI Toolkit / USS で実現可能なもの**を整理し、**TailwindUSS で実装済みか、未実装か**を明示するための一覧である。
 
-- 判定対象は TailwindUSS パッケージ直下の Unity Package Manager 用 package manifest (`src/TailwindUSS/package.json`) が示す **Unity 2022.3** を前提にする。
+- 判定対象は TailwindUSS パッケージ直下の Unity Package Manager 用 package manifest (`src/TailwindUSS/package.json`) が示す **Unity 6.3+** を前提にする。
 - 「実現可能」は **USS のプロパティ・疑似クラス・トランジションで表現できる**ことを意味する。
 - 「実装済み」は **現行コード (`src/TailwindUSS/Editor/UtilityResolver.cs`) で解決でき、README にも載っている**状態を指す。
 
@@ -33,6 +33,7 @@
 | ボーダー | `border`, `border-0`, `border-2`, `border-4`, `border-8`, `border-solid`, `border-t`, `border-r`, `border-b`, `border-l` | `border-*-width` |
 | 角丸 | `rounded-none`, `rounded-sm`, `rounded`, `rounded-md`, `rounded-lg`, `rounded-full`, `rounded-t*`, `rounded-r*`, `rounded-b*`, `rounded-l*`, `rounded-tl*`, `rounded-tr*`, `rounded-br*`, `rounded-bl*` | `border-*-radius` |
 | 変形 | `scale-*`, `rotate-*`, `translate-x-*`, `translate-y-*`, `origin-*` | `scale`, `rotate`, `translate`, `transform-origin` |
+| フィルター | `blur-*`, `grayscale`, `grayscale-0`, `invert`, `invert-0`, `sepia`, `sepia-0`, `contrast-*`, `hue-rotate-*` | `filter` (複数 token を 1 宣言へ合成) |
 | トランジション | `transition`, `transition-colors`, `transition-opacity`, `transition-transform`, `duration-*`, `delay-*`, `ease-linear`, `ease-in`, `ease-out`, `ease-in-out` | `transition-property`, `transition-duration`, `transition-delay`, `transition-timing-function` |
 | インタラクション | `cursor-default`, `cursor-pointer`, `cursor-text`, `cursor-move`, `cursor-not-allowed` | `cursor` |
 
@@ -53,6 +54,9 @@
 - font weight: `thin`, `extralight`, `light`, `normal`, `medium` -> `normal`; `semibold`, `bold`, `extrabold`, `black` -> `bold`
 - text decoration: `underline`, `line-through`, `no-underline`
 - transition duration / delay: `75`, `100`, `150`, `200`, `300`, `500`, `700`, `1000`
+- blur: `none`, `sm`, default, `md`, `lg`, `xl`, `2xl`, `3xl`
+- contrast: `0`, `50`, `75`, `100`, `125`, `150`, `200`
+- hue-rotate: `0`, `15`, `30`, `60`, `90`, `180`
 
 ## Tailwind CSS 機能の対応可能一覧
 
@@ -111,7 +115,7 @@
 | `break-normal`, `break-all` | ✅ | ✅ | `word-break` に対応 |
 | `font-*` configured aliases | ✅ | ✅ | `theme.fonts` で alias を定義すると `-unity-font` を生成 |
 | `underline`, `line-through`, `no-underline` | ⚪ | ✅ | `text-decoration` の基本値に対応 |
-| `decoration-*` | ❌ | ❌ | Unity 2022.3 では Tailwind 同等の decoration color / style / thickness は持てない |
+| `decoration-*` | ❌ | ❌ | Unity 6.3+ でも Tailwind 同等の decoration color / style / thickness は持てない |
 
 ### 5. 背景
 
@@ -137,7 +141,7 @@
 | `border-solid` | ⚪ | ✅ | USS は実質 `solid` のみのため no-op utility として扱う |
 | `opacity-*` | ✅ | ✅ | Tailwind 既定 opacity scale に対応 |
 | `outline-*`, `ring-*`, `ring-offset-*` | ❌ | ❌ | USS に Tailwind 相当の outline / ring 機構がない |
-| `shadow-*`, `drop-shadow-*` | ❌ | ❌ | USS に box-shadow / filter がない |
+| `shadow-*`, `drop-shadow-*` | ❌ | ❌ | built-in `filter` は追加されたが `drop-shadow()` や box-shadow 相当は未対応 |
 
 ### 7. 変形・トランジション・状態
 
@@ -165,35 +169,22 @@ feature matrix 上で『USS で実現可能 / 未実装』としていた utilit
 
 今後の拡張候補として残るのは、matrix の対象外としていた arbitrary な background image utilities など、追加仕様を伴うものに限られる。
 
-## Unity 6.3+ を前提にした再評価
+## Unity 6.3+ で追加された filter 系 utility
 
-現行パッケージの package manifest は `Unity 2022.3` を対象にしているため、以下は **サポート対象を Unity 6.3+ に引き上げる場合の追加候補**として整理する。
+サポート対象を Unity 6.3+ に引き上げたことで、built-in `filter` に直接マッピングできる utility を実装済みとした。
 
-Unity 6.3 では UI Toolkit / USS に built-in `filter` と custom filter の導線が追加されており、**Tailwind の filter 系 utility の一部**は 2022.3 前提より現実的になる。
-
-| 項目 | Unity 2022.3 | Unity 6.3+ | Tailwind utility 候補 | 補足 |
+| 項目 | Unity 6.3+ | TailwindUSS | Tailwind utility | 補足 |
 | --- | --- | --- | --- | --- |
-| built-in `filter` | ❌ | 🟡 | `blur-*`, `grayscale`, `grayscale-0`, `invert`, `invert-0`, `sepia`, `sepia-0`, `contrast-*`, `hue-rotate-*` | Unity 6.3 の built-in filters で直接マッピングしやすい |
-| `filter` の transition | ⚪ | 🟡 | 既存の `transition`, `duration-*`, `delay-*`, `ease-*` と併用 | filter 値の変化は既存 variant と相性がよい。`hover:blur-sm` のような組み合わせが候補 |
-| custom filter | ❌ | ⚪ | 直接対応よりも将来拡張候補 | shader / asset 依存が強く、Tailwind の標準 utility とは 1:1 にしづらい |
+| built-in `filter` | ✅ | ✅ | `blur-*`, `grayscale`, `grayscale-0`, `invert`, `invert-0`, `sepia`, `sepia-0`, `contrast-*`, `hue-rotate-*` | 同一要素上の複数 token は 1 つの `filter` 宣言へ合成して出力する |
+| `filter` の transition | ✅ | ✅ | 既存の `transition`, `duration-*`, `delay-*`, `ease-*` と併用 | `hover:blur-sm` や `focus:hue-rotate-60` のような variant 併用をサポート |
+| custom filter | ⚪ | ❌ | 将来拡張候補 | shader / asset 依存が強く、Tailwind の標準 utility とは 1:1 にしづらい |
 | `drop-shadow-*`, `shadow-*` | ❌ | ❌ | なし | built-in filter 群に `drop-shadow()` は見当たらず、box-shadow 相当も依然弱い |
 | `backdrop-blur-*`, `backdrop-*` | ❌ | ❌ | なし | 標準の built-in filter だけで Tailwind の backdrop 系をそのまま再現しづらい |
 | `brightness-*`, `saturate-*` | ❌ | ❌ | 当面なし | Unity 6.3 の built-in filter 一覧に標準対応が見当たらない |
 
-### Unity 6.3+ で優先度が上がる utility
-
-低コスト順に並べると、まず着手候補になるのは次の順序である。
-
-1. `blur-*`
-2. `grayscale`, `grayscale-0`
-3. `invert`, `invert-0`
-4. `sepia`, `sepia-0`
-5. `contrast-*`
-6. `hue-rotate-*`
-
 ### Unity 6.3+ でも残る制約
 
-- `filter` 系 utility は **複数 token を 1 つの `filter` 宣言へ合成する設計**が必要になる。
+- `filter` 系 utility は **複数 token を 1 つの `filter` 宣言へ合成する設計**が必要であり、TailwindUSS は同一 family 重複時に warning を出して後勝ちで固定している。
 - `shadow-*` / `drop-shadow-*` / `ring-*` / `outline-*` は、6.3 にしてもそのまま Tailwind 互換にはなりにくい。
 - custom filter を採用すると shader / asset / pipeline 依存が発生し、現行の「設定ファイル中心で完結する」設計から外れやすい。
 
@@ -205,7 +196,7 @@ Unity 6.3 では UI Toolkit / USS に built-in `filter` と custom filter の導
 - Space / divide / peer / group 系
 - Responsive variants (`sm:`, `md:` など)
 - Container queries
-- Filters / backdrop filters（※Unity 2022.3 前提では対象外。Unity 6.3+ の built-in filter は別途再評価対象）
+- Backdrop filters / custom filters（built-in `filter` のうち `blur-*`, `grayscale`, `invert`, `sepia`, `contrast-*`, `hue-rotate-*` は実装済み）
 - Shadow / ring / outline
 - Blend modes
 - Tables
