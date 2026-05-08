@@ -43,6 +43,10 @@ You can also add the same Git URL from the Unity Package Manager UI.
 4. Run `Tools/TailwindUSS/Generate`.
 5. Use the generated USS file from `outputUssPath`.
 
+## Sample project
+
+A Unity 6.3 sample project is available in `samples/TailwindUSS.Sample`. It references this repository through `file:../../src/TailwindUSS`, includes a ready-to-open UXML example, and checks in the generated USS output for reference.
+
 ## Configuration
 
 Create `tailwinduss.config.json` at the Unity project root.

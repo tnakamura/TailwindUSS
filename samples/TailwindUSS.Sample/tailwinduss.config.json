@@ -1,0 +1,10 @@
+{
+  "inputGlobs": ["Assets/UI/**/*.uxml"],
+  "outputUssPath": "Assets/Generated/TailwindUSS.generated.uss",
+  "autoAttachGeneratedUss": true,
+  "theme": {
+    "colors": {
+      "brand": "#6750A4"
+    }
+  }
+}

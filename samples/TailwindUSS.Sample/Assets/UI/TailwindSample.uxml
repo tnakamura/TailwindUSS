@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="Assets/Generated/TailwindUSS.generated.uss" />
+    <ui:VisualElement class="flex flex-col gap-4 p-4 bg-slate-100">
+        <ui:Label class="text-3xl text-brand" text="TailwindUSS Sample" />
+        <ui:Label class="text-sm text-slate-700" text="This sample demonstrates a UI Toolkit layout styled with TailwindUSS utility classes." />
+        <ui:VisualElement class="flex flex-row items-center justify-between mt-3 p-4 bg-white rounded border border-brand">
+            <ui:Label class="text-sm text-slate-700" text="Run Tools/TailwindUSS/Generate to refresh the sample USS output." />
+            <ui:Button class="px-4 py-2 bg-brand text-white rounded cursor-pointer hover:bg-blue-500 transition duration-150" text="Generate USS" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
