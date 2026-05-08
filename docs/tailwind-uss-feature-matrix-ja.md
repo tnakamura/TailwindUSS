@@ -165,6 +165,38 @@ feature matrix 上で『USS で実現可能 / 未実装』としていた utilit
 
 今後の拡張候補として残るのは、matrix の対象外としていた arbitrary な background image utilities など、追加仕様を伴うものに限られる。
 
+## Unity 6.3+ を前提にした再評価
+
+現行パッケージの package manifest は `Unity 2022.3` を対象にしているため、以下は **サポート対象を Unity 6.3+ に引き上げる場合の追加候補**として整理する。
+
+Unity 6.3 では UI Toolkit / USS に built-in `filter` と custom filter の導線が追加されており、**Tailwind の filter 系 utility の一部**は 2022.3 前提より現実的になる。
+
+| 項目 | Unity 2022.3 | Unity 6.3+ | Tailwind utility 候補 | 補足 |
+| --- | --- | --- | --- | --- |
+| built-in `filter` | ❌ | 🟡 | `blur-*`, `grayscale`, `grayscale-0`, `invert`, `invert-0`, `sepia`, `sepia-0`, `contrast-*`, `hue-rotate-*` | Unity 6.3 の built-in filters で直接マッピングしやすい |
+| `filter` の transition | ⚪ | 🟡 | 既存の `transition`, `duration-*`, `delay-*`, `ease-*` と併用 | filter 値の変化は既存 variant と相性がよい。`hover:blur-sm` のような組み合わせが候補 |
+| custom filter | ❌ | ⚪ | 直接対応よりも将来拡張候補 | shader / asset 依存が強く、Tailwind の標準 utility とは 1:1 にしづらい |
+| `drop-shadow-*`, `shadow-*` | ❌ | ❌ | なし | built-in filter 群に `drop-shadow()` は見当たらず、box-shadow 相当も依然弱い |
+| `backdrop-blur-*`, `backdrop-*` | ❌ | ❌ | なし | 標準の built-in filter だけで Tailwind の backdrop 系をそのまま再現しづらい |
+| `brightness-*`, `saturate-*` | ❌ | ❌ | 当面なし | Unity 6.3 の built-in filter 一覧に標準対応が見当たらない |
+
+### Unity 6.3+ で優先度が上がる utility
+
+低コスト順に並べると、まず着手候補になるのは次の順序である。
+
+1. `blur-*`
+2. `grayscale`, `grayscale-0`
+3. `invert`, `invert-0`
+4. `sepia`, `sepia-0`
+5. `contrast-*`
+6. `hue-rotate-*`
+
+### Unity 6.3+ でも残る制約
+
+- `filter` 系 utility は **複数 token を 1 つの `filter` 宣言へ合成する設計**が必要になる。
+- `shadow-*` / `drop-shadow-*` / `ring-*` / `outline-*` は、6.3 にしてもそのまま Tailwind 互換にはなりにくい。
+- custom filter を採用すると shader / asset / pipeline 依存が発生し、現行の「設定ファイル中心で完結する」設計から外れやすい。
+
 ## 実装しない前提でよいもの
 
 以下は Tailwind 本家にはあるが、**Unity USS を前提にする限り TailwindUSS の対象外として整理した方がよい**。
@@ -173,7 +205,7 @@ feature matrix 上で『USS で実現可能 / 未実装』としていた utilit
 - Space / divide / peer / group 系
 - Responsive variants (`sm:`, `md:` など)
 - Container queries
-- Filters / backdrop filters
+- Filters / backdrop filters（※Unity 2022.3 前提では対象外。Unity 6.3+ の built-in filter は別途再評価対象）
 - Shadow / ring / outline
 - Blend modes
 - Tables
