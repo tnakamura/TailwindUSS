@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace TailwindUSS.Editor
@@ -16,7 +17,7 @@ namespace TailwindUSS.Editor
 
         public IList<ResolvedUtility> Compose(IList<ResolvedTokenOccurrence> filterOccurrences, IList<TailwindUssDiagnostic> diagnostics)
         {
-            var compositeUtilities = new Dictionary<string, ResolvedUtility>(System.StringComparer.Ordinal);
+            var compositeUtilities = new Dictionary<string, ResolvedUtility>(StringComparer.Ordinal);
             var occurrencesByClassAttribute = new Dictionary<int, List<ResolvedTokenOccurrence>>();
 
             foreach (var filterOccurrence in filterOccurrences)
@@ -44,7 +45,7 @@ namespace TailwindUSS.Editor
             IList<TailwindUssDiagnostic> diagnostics,
             IDictionary<string, ResolvedUtility> compositeUtilities)
         {
-            var groupsBySelectorSuffix = new Dictionary<string, List<ResolvedTokenOccurrence>>(System.StringComparer.Ordinal);
+            var groupsBySelectorSuffix = new Dictionary<string, List<ResolvedTokenOccurrence>>(StringComparer.Ordinal);
             foreach (var occurrence in occurrences)
             {
                 List<ResolvedTokenOccurrence> groupedOccurrences;
@@ -89,7 +90,7 @@ namespace TailwindUSS.Editor
             IList<ResolvedTokenOccurrence> occurrences,
             IList<TailwindUssDiagnostic> diagnostics)
         {
-            var selected = new Dictionary<string, ResolvedTokenOccurrence>(System.StringComparer.Ordinal);
+            var selected = new Dictionary<string, ResolvedTokenOccurrence>(StringComparer.Ordinal);
             foreach (var occurrence in occurrences)
             {
                 var family = occurrence.Utility.FilterContribution.Family;
