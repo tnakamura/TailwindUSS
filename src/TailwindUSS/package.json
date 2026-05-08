@@ -11,6 +11,9 @@
     "uxml",
     "tailwind"
   ],
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.2"
+  },
   "author": {
     "name": "tnakamura"
   }

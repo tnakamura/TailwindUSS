@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace TailwindUSS.Editor
@@ -10,18 +9,10 @@ namespace TailwindUSS.Editor
     internal static class ConfigLoader
     {
         internal const string FileName = "tailwinduss.config.json";
-        private static readonly JsonSerializerOptions ReadOptions = new JsonSerializerOptions
+        private static readonly JsonSerializerSettings WriteSettings = new JsonSerializerSettings
         {
-            IncludeFields = true,
-            PropertyNameCaseInsensitive = false
-        };
-
-        private static readonly JsonSerializerOptions WriteOptions = new JsonSerializerOptions
-        {
-            IncludeFields = true,
-            PropertyNamingPolicy = null,
-            WriteIndented = true,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            Formatting = Formatting.Indented,
+            NullValueHandling = NullValueHandling.Ignore
         };
 
         internal static string GetProjectRoot()
@@ -51,7 +42,7 @@ namespace TailwindUSS.Editor
             try
             {
                 var json = File.ReadAllText(configPath);
-                config = JsonSerializer.Deserialize<TailwindUssConfig>(json, ReadOptions);
+                config = JsonConvert.DeserializeObject<TailwindUssConfig>(json);
                 if (config == null)
                 {
                     errorMessage = "Config JSON could not be parsed.";
@@ -78,7 +69,7 @@ namespace TailwindUSS.Editor
         internal static void WriteDefaultConfig()
         {
             var configPath = GetConfigPath();
-            var json = JsonSerializer.Serialize(TailwindUssConfig.CreateDefault(), WriteOptions);
+            var json = JsonConvert.SerializeObject(TailwindUssConfig.CreateDefault(), WriteSettings);
             File.WriteAllText(configPath, json + Environment.NewLine);
         }
 
