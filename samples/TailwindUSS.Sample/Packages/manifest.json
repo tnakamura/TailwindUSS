@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "com.tnakamura.tailwinduss": "file:../../src/TailwindUSS"
+  }
+}
