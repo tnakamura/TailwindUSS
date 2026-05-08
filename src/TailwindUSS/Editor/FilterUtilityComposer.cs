@@ -122,8 +122,8 @@ namespace TailwindUSS.Editor
                 return;
             }
 
-            var selectorBuilder = new System.Text.StringBuilder();
             var filterBuilder = new System.Text.StringBuilder();
+            var classNames = new List<string>();
 
             for (var i = 0; i < FilterOrder.Length; i++)
             {
@@ -133,7 +133,7 @@ namespace TailwindUSS.Editor
                     continue;
                 }
 
-                selectorBuilder.Append('.').Append(UssEmitter.EscapeClassName(occurrence.Utility.Token));
+                classNames.Add(occurrence.Utility.Token);
                 if (filterBuilder.Length > 0)
                 {
                     filterBuilder.Append(' ');
@@ -142,12 +142,12 @@ namespace TailwindUSS.Editor
                 filterBuilder.Append(occurrence.Utility.FilterContribution.Function);
             }
 
-            if (selectorBuilder.Length == 0 || filterBuilder.Length == 0)
+            if (classNames.Count == 0 || filterBuilder.Length == 0)
             {
                 return;
             }
 
-            var selector = selectorBuilder.Append(selectorSuffix).ToString();
+            var selector = UssEmitter.BuildSelector(classNames, selectorSuffix);
             compositeUtilities[selector] = new ResolvedUtility(
                 selector,
                 new[] { new StyleDeclaration("filter", filterBuilder.ToString()) },

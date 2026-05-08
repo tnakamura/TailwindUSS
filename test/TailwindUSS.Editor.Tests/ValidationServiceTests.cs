@@ -38,7 +38,11 @@ namespace TailwindUSS.Editor.Tests
         public void Validate_ReportsDuplicateAndInvalidFilterUtilities()
         {
             using var scope = new TestProjectScope();
-            scope.WriteAssetFile("UI/Main.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"blur-sm blur-lg grayscale contrast-110\" /></ui:UXML>");
+            scope.WriteAssetFile("UI/Main.uxml", """
+            <ui:UXML xmlns:ui="UnityEngine.UIElements">
+                <ui:VisualElement class="blur-sm blur-lg grayscale contrast-110" />
+            </ui:UXML>
+            """);
 
             var result = new ValidationService().Validate();
 

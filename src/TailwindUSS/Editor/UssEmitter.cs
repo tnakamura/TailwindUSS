@@ -58,6 +58,18 @@ namespace TailwindUSS.Editor
             return builder.ToString();
         }
 
+        internal static string BuildSelector(IEnumerable<string> classNames, string selectorSuffix = "")
+        {
+            var builder = new StringBuilder();
+            foreach (var className in classNames)
+            {
+                builder.Append('.').Append(EscapeClassName(className));
+            }
+
+            builder.Append(selectorSuffix);
+            return builder.ToString();
+        }
+
         private static string GetSelector(ResolvedUtility utility)
         {
             if (!string.IsNullOrEmpty(utility.SelectorOverride))
@@ -65,7 +77,7 @@ namespace TailwindUSS.Editor
                 return utility.SelectorOverride;
             }
 
-            return string.Concat(".", EscapeClassName(utility.Token), utility.SelectorSuffix);
+            return BuildSelector(new[] { utility.Token }, utility.SelectorSuffix);
         }
     }
 }
