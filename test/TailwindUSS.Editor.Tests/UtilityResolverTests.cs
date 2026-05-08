@@ -85,6 +85,17 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("z-10", "z-index", "10")]
         [TestCase("z-auto", "z-index", "auto")]
         [TestCase("opacity-50", "opacity", "0.5")]
+        [TestCase("blur-none", "filter", "blur(0px)")]
+        [TestCase("blur-sm", "filter", "blur(4px)")]
+        [TestCase("blur", "filter", "blur(8px)")]
+        [TestCase("grayscale", "filter", "grayscale(100%)")]
+        [TestCase("grayscale-0", "filter", "grayscale(0%)")]
+        [TestCase("invert", "filter", "invert(100%)")]
+        [TestCase("invert-0", "filter", "invert(0%)")]
+        [TestCase("sepia", "filter", "sepia(100%)")]
+        [TestCase("sepia-0", "filter", "sepia(0%)")]
+        [TestCase("contrast-150", "filter", "contrast(150%)")]
+        [TestCase("hue-rotate-60", "filter", "hue-rotate(60deg)")]
         [TestCase("self-auto", "align-self", "auto")]
         [TestCase("self-start", "align-self", "flex-start")]
         [TestCase("self-end", "align-self", "flex-end")]
@@ -116,6 +127,25 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(utility.Token, Is.EqualTo(token));
             Assert.That(utility.Declarations.Select(declaration => declaration.PropertyName), Is.EqualTo(new[] { propertyName }));
             Assert.That(utility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(new[] { value }));
+        }
+
+        [TestCase("blur-sm", "blur", "blur(4px)")]
+        [TestCase("grayscale", "grayscale", "grayscale(100%)")]
+        [TestCase("invert-0", "invert", "invert(0%)")]
+        [TestCase("sepia", "sepia", "sepia(100%)")]
+        [TestCase("contrast-150", "contrast", "contrast(150%)")]
+        [TestCase("hue-rotate-60", "hue-rotate", "hue-rotate(60deg)")]
+        public void TryResolve_PopulatesFilterContributionMetadata(string token, string family, string function)
+        {
+            var resolver = new UtilityResolver();
+
+            var status = resolver.TryResolve(token, out var utility, out var errorMessage);
+
+            Assert.That(status, Is.EqualTo(ResolveStatus.Supported));
+            Assert.That(errorMessage, Is.Null);
+            Assert.That(utility.FilterContribution, Is.Not.Null);
+            Assert.That(utility.FilterContribution.Family, Is.EqualTo(family));
+            Assert.That(utility.FilterContribution.Function, Is.EqualTo(function));
         }
 
         [TestCase("px-4", new[] { "padding-left", "padding-right" }, "16px")]
@@ -301,6 +331,12 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("top-7", "Unsupported inset scale value.")]
         [TestCase("z-15", "Unsupported z-index value.")]
         [TestCase("opacity-73", "Unsupported opacity value.")]
+        [TestCase("blur-super", "Unsupported blur value.")]
+        [TestCase("grayscale-50", "Unsupported grayscale value.")]
+        [TestCase("invert-50", "Unsupported invert value.")]
+        [TestCase("sepia-50", "Unsupported sepia value.")]
+        [TestCase("contrast-110", "Unsupported contrast value.")]
+        [TestCase("hue-rotate-45", "Unsupported hue-rotate value.")]
         [TestCase("basis-7", "Unsupported size scale value.")]
         [TestCase("basis-none", "Unsupported size scale value.")]
         [TestCase("order-13", "Unsupported order value.")]

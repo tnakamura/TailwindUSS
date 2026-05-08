@@ -14,12 +14,12 @@ namespace TailwindUSS.Editor
             builder.AppendLine();
 
             var sorted = new List<ResolvedUtility>(utilities);
-            sorted.Sort((left, right) => string.CompareOrdinal(left.Token, right.Token));
+            sorted.Sort((left, right) => string.CompareOrdinal(GetSelector(left), GetSelector(right)));
 
             for (var i = 0; i < sorted.Count; i++)
             {
                 var utility = sorted[i];
-                builder.Append('.').Append(EscapeClassName(utility.Token)).Append(utility.SelectorSuffix).AppendLine(" {");
+                builder.Append(GetSelector(utility)).AppendLine(" {");
 
                 foreach (var declaration in utility.Declarations)
                 {
@@ -40,7 +40,7 @@ namespace TailwindUSS.Editor
             return builder.ToString();
         }
 
-        private static string EscapeClassName(string className)
+        internal static string EscapeClassName(string className)
         {
             var builder = new StringBuilder(className.Length);
             foreach (var character in className)
@@ -56,6 +56,16 @@ namespace TailwindUSS.Editor
             }
 
             return builder.ToString();
+        }
+
+        private static string GetSelector(ResolvedUtility utility)
+        {
+            if (!string.IsNullOrEmpty(utility.SelectorOverride))
+            {
+                return utility.SelectorOverride;
+            }
+
+            return string.Concat(".", EscapeClassName(utility.Token), utility.SelectorSuffix);
         }
     }
 }

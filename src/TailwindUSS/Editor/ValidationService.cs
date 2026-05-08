@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TailwindUSS.Editor
@@ -6,6 +7,7 @@ namespace TailwindUSS.Editor
     internal sealed class ValidationService
     {
         private readonly UxmlScanner scanner = new UxmlScanner();
+        private readonly FilterUtilityComposer filterUtilityComposer = new FilterUtilityComposer();
 
         public CommandResult Validate()
         {
@@ -36,6 +38,7 @@ namespace TailwindUSS.Editor
             var scanResult = scanner.Scan(ConfigLoader.GetProjectRoot(), config.inputGlobs);
             var resolver = new UtilityResolver(config.theme);
             var supportedCount = 0;
+            var filterOccurrences = new List<ResolvedTokenOccurrence>();
 
             foreach (var occurrence in scanResult.Occurrences)
             {
@@ -46,6 +49,10 @@ namespace TailwindUSS.Editor
                 {
                     case ResolveStatus.Supported:
                         supportedCount++;
+                        if (utility.IsFilterUtility)
+                        {
+                            filterOccurrences.Add(new ResolvedTokenOccurrence(occurrence, utility));
+                        }
                         break;
                     case ResolveStatus.UnsupportedVariant:
                         scanResult.Diagnostics.Add(new TailwindUssDiagnostic(
@@ -79,6 +86,8 @@ namespace TailwindUSS.Editor
                         break;
                 }
             }
+
+            filterUtilityComposer.Compose(filterOccurrences, scanResult.Diagnostics);
 
             foreach (var diagnostic in scanResult.Diagnostics)
             {

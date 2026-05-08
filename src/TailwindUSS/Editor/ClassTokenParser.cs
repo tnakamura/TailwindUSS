@@ -5,7 +5,7 @@ namespace TailwindUSS.Editor
 {
     internal sealed class ClassTokenParser
     {
-        public IList<UxmlTokenOccurrence> Parse(string classValue, string relativeFilePath, int lineNumber, string elementName, IList<TailwindUssDiagnostic> diagnostics)
+        public IList<UxmlTokenOccurrence> Parse(string classValue, string relativeFilePath, int lineNumber, string elementName, IList<TailwindUssDiagnostic> diagnostics, int classAttributeId = 0)
         {
             var tokens = new List<UxmlTokenOccurrence>();
             var seen = new HashSet<string>(StringComparer.Ordinal);
@@ -39,7 +39,8 @@ namespace TailwindUSS.Editor
                     elementName,
                     part,
                     variantChain,
-                    segments[segments.Length - 1]));
+                    segments[segments.Length - 1],
+                    classAttributeId));
             }
 
             return tokens;

@@ -61,7 +61,8 @@ namespace TailwindUSS.Editor
             string elementName,
             string originalToken,
             IList<string> variantChain,
-            string baseToken)
+            string baseToken,
+            int classAttributeId = 0)
         {
             RelativeFilePath = relativeFilePath;
             LineNumber = lineNumber;
@@ -69,6 +70,7 @@ namespace TailwindUSS.Editor
             OriginalToken = originalToken;
             VariantChain = variantChain;
             BaseToken = baseToken;
+            ClassAttributeId = classAttributeId;
         }
 
         public string RelativeFilePath { get; private set; }
@@ -77,6 +79,7 @@ namespace TailwindUSS.Editor
         public string OriginalToken { get; private set; }
         public IList<string> VariantChain { get; private set; }
         public string BaseToken { get; private set; }
+        public int ClassAttributeId { get; private set; }
     }
 
     internal sealed class StyleDeclaration
@@ -93,16 +96,50 @@ namespace TailwindUSS.Editor
 
     internal sealed class ResolvedUtility
     {
-        public ResolvedUtility(string token, IList<StyleDeclaration> declarations, string selectorSuffix = "")
+        public ResolvedUtility(
+            string token,
+            IList<StyleDeclaration> declarations,
+            string selectorSuffix = "",
+            string selectorOverride = null,
+            FilterContribution filterContribution = null)
         {
             Token = token;
             Declarations = declarations;
             SelectorSuffix = selectorSuffix;
+            SelectorOverride = selectorOverride;
+            FilterContribution = filterContribution;
         }
 
         public string Token { get; private set; }
         public IList<StyleDeclaration> Declarations { get; private set; }
         public string SelectorSuffix { get; private set; }
+        public string SelectorOverride { get; private set; }
+        public FilterContribution FilterContribution { get; private set; }
+        public bool IsFilterUtility => FilterContribution != null;
+    }
+
+    internal sealed class FilterContribution
+    {
+        public FilterContribution(string family, string function)
+        {
+            Family = family;
+            Function = function;
+        }
+
+        public string Family { get; private set; }
+        public string Function { get; private set; }
+    }
+
+    internal sealed class ResolvedTokenOccurrence
+    {
+        public ResolvedTokenOccurrence(UxmlTokenOccurrence occurrence, ResolvedUtility utility)
+        {
+            Occurrence = occurrence;
+            Utility = utility;
+        }
+
+        public UxmlTokenOccurrence Occurrence { get; private set; }
+        public ResolvedUtility Utility { get; private set; }
     }
 
     internal sealed class UxmlScanResult

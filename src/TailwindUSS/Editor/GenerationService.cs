@@ -11,6 +11,7 @@ namespace TailwindUSS.Editor
         private readonly UxmlScanner scanner = new UxmlScanner();
         private readonly UssEmitter emitter = new UssEmitter();
         private readonly UxmlStyleReferenceUpdater styleReferenceUpdater = new UxmlStyleReferenceUpdater();
+        private readonly FilterUtilityComposer filterUtilityComposer = new FilterUtilityComposer();
 
         public CommandResult Generate()
         {
@@ -42,6 +43,7 @@ namespace TailwindUSS.Editor
             var scanResult = scanner.Scan(projectRoot, config.inputGlobs);
             var resolver = new UtilityResolver(config.theme);
             var utilities = new Dictionary<string, ResolvedUtility>(StringComparer.Ordinal);
+            var filterOccurrences = new List<ResolvedTokenOccurrence>();
 
             foreach (var occurrence in scanResult.Occurrences)
             {
@@ -51,7 +53,11 @@ namespace TailwindUSS.Editor
                 switch (status)
                 {
                     case ResolveStatus.Supported:
-                        if (!utilities.ContainsKey(occurrence.OriginalToken))
+                        if (utility.IsFilterUtility)
+                        {
+                            filterOccurrences.Add(new ResolvedTokenOccurrence(occurrence, utility));
+                        }
+                        else if (!utilities.ContainsKey(occurrence.OriginalToken))
                         {
                             utilities.Add(occurrence.OriginalToken, utility);
                         }
@@ -92,6 +98,9 @@ namespace TailwindUSS.Editor
 
             try
             {
+                var compositeFilterUtilities = filterUtilityComposer.Compose(filterOccurrences, scanResult.Diagnostics);
+                var emittedUtilities = new List<ResolvedUtility>(utilities.Values);
+                emittedUtilities.AddRange(compositeFilterUtilities);
                 var outputAbsolutePath = GetAbsoluteOutputPath(projectRoot, config.outputUssPath);
                 var outputDirectory = Path.GetDirectoryName(outputAbsolutePath);
                 if (!string.IsNullOrEmpty(outputDirectory))
@@ -99,8 +108,9 @@ namespace TailwindUSS.Editor
                     Directory.CreateDirectory(outputDirectory);
                 }
 
-                File.WriteAllText(outputAbsolutePath, emitter.Emit(utilities.Values));
+                File.WriteAllText(outputAbsolutePath, emitter.Emit(emittedUtilities));
                 result.OutputAssetPath = NormalizeAssetPath(projectRoot, outputAbsolutePath);
+                result.GeneratedUtilityCount = emittedUtilities.Count;
             }
             catch (Exception exception)
             {
@@ -126,7 +136,10 @@ namespace TailwindUSS.Editor
 
             AssetDatabase.Refresh();
 
-            result.GeneratedUtilityCount = utilities.Count;
+            if (result.GeneratedUtilityCount == 0)
+            {
+                result.GeneratedUtilityCount = utilities.Count;
+            }
             result.WarningCount = CountDiagnostics(scanResult.Diagnostics, DiagnosticSeverity.Warning);
             result.ErrorCount = CountDiagnostics(scanResult.Diagnostics, DiagnosticSeverity.Error);
 

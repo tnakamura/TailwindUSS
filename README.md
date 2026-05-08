@@ -16,8 +16,8 @@ TailwindUSS is a Unity Editor extension for UI Toolkit projects. It scans `class
 
 ## Requirements
 
-- Unity 2022.3
-- The current support baseline remains Unity 2022.3. For a reassessment of additional utilities that become feasible with Unity 6.3+ and the migration plan, see `docs/tailwind-uss-feature-matrix-ja.md` and `docs/tailwind-uss-implementation-plan-ja.md`.
+- Unity 6.3 or newer
+- For the current Unity USS compatibility matrix and remaining roadmap, see `docs/tailwind-uss-feature-matrix-ja.md` and `docs/tailwind-uss-implementation-plan-ja.md`.
 
 ## Installation
 
@@ -120,7 +120,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 
 - `docs/tailwind-uss-feature-matrix-ja.md`
 - `docs/tailwind-uss-implementation-plan-ja.md`
-- Those documents also include a Unity 6.3+ reassessment for filter-related utilities and a detailed migration plan.
+- Those documents track the Unity 6.3+ filter support now implemented here and the remaining roadmap.
 
 ### Layout
 
@@ -343,6 +343,16 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `translate-y-*`
 - `origin-*`
 
+### Filters
+
+- `blur-none`, `blur-sm`, `blur`, `blur-md`, `blur-lg`, `blur-xl`, `blur-2xl`, `blur-3xl`
+- `grayscale`, `grayscale-0`
+- `invert`, `invert-0`
+- `sepia`, `sepia-0`
+- `contrast-0`, `contrast-50`, `contrast-75`, `contrast-100`, `contrast-125`, `contrast-150`, `contrast-200`
+- `hue-rotate-0`, `hue-rotate-15`, `hue-rotate-30`, `hue-rotate-60`, `hue-rotate-90`, `hue-rotate-180`
+- Multiple filter utilities used on the same element are emitted as a single composed `filter` declaration. When the same filter family appears more than once, TailwindUSS warns and uses the last token.
+
 ### Transition
 
 - `transition`
@@ -440,6 +450,9 @@ Supported palette steps for `gray`, `slate`, `zinc`, `neutral`, `stone`, `emeral
 - `translate-x-*`, `translate-y-*`: spacing scale plus `1/2` and `full`
 - `origin-*`: `center`, `top`, `top-right`, `right`, `bottom-right`, `bottom`, `bottom-left`, `left`, `top-left`
 - `duration-*`, `delay-*`: `75`, `100`, `150`, `200`, `300`, `500`, `700`, `1000`
+- `blur-*`: `none`, `sm`, default, `md`, `lg`, `xl`, `2xl`, `3xl`
+- `contrast-*`: `0`, `50`, `75`, `100`, `125`, `150`, `200`
+- `hue-rotate-*`: `0`, `15`, `30`, `60`, `90`, `180`
 
 ## Example
 
