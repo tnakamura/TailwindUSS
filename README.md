@@ -17,6 +17,7 @@ TailwindUSS is a Unity Editor extension for UI Toolkit projects. It scans `class
 ## Requirements
 
 - Unity 2022.3
+- The current support baseline remains Unity 2022.3. For a reassessment of additional utilities that become feasible with Unity 6.3+ and the migration plan, see `docs/tailwind-uss-feature-matrix-ja.md` and `docs/tailwind-uss-implementation-plan-ja.md`.
 
 ## Installation
 
@@ -119,6 +120,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 
 - `docs/tailwind-uss-feature-matrix-ja.md`
 - `docs/tailwind-uss-implementation-plan-ja.md`
+- Those documents also include a Unity 6.3+ reassessment for filter-related utilities and a detailed migration plan.
 
 ### Layout
 
