@@ -66,10 +66,63 @@ namespace TailwindUSS.Editor
             }
         }
 
-        internal static void WriteDefaultConfig()
+        internal static bool TryLoadEditable(out TailwindUssConfig config, out string errorMessage, out bool fileExists)
         {
             var configPath = GetConfigPath();
-            var json = JsonConvert.SerializeObject(TailwindUssConfig.CreateDefault(), WriteSettings);
+            fileExists = File.Exists(configPath);
+            errorMessage = null;
+
+            if (!fileExists)
+            {
+                config = TailwindUssConfig.CreateDefault();
+                return true;
+            }
+
+            try
+            {
+                var json = File.ReadAllText(configPath);
+                config = JsonConvert.DeserializeObject<TailwindUssConfig>(json);
+                if (config == null)
+                {
+                    errorMessage = "Config JSON could not be parsed.";
+                    return false;
+                }
+
+                if (!TryValidateThemeEntries(config.theme, out errorMessage))
+                {
+                    config = null;
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception exception)
+            {
+                config = null;
+                errorMessage = exception.Message;
+                return false;
+            }
+        }
+
+        internal static void WriteDefaultConfig()
+        {
+            WriteConfig(TailwindUssConfig.CreateDefault());
+        }
+
+        internal static void WriteConfig(TailwindUssConfig config)
+        {
+            if (config == null)
+            {
+                throw new ArgumentNullException("config");
+            }
+
+            if (!TryValidateThemeEntries(config.theme, out var errorMessage))
+            {
+                throw new InvalidOperationException(errorMessage);
+            }
+
+            var configPath = GetConfigPath();
+            var json = JsonConvert.SerializeObject(CreateSerializableCopy(config), WriteSettings);
             File.WriteAllText(configPath, json + Environment.NewLine);
         }
 
@@ -143,6 +196,61 @@ namespace TailwindUSS.Editor
             }
 
             return true;
+        }
+
+        private static TailwindUssConfig CreateSerializableCopy(TailwindUssConfig config)
+        {
+            return new TailwindUssConfig
+            {
+                inputGlobs = config.inputGlobs ?? Array.Empty<string>(),
+                outputUssPath = config.outputUssPath ?? string.Empty,
+                autoAttachGeneratedUss = config.autoAttachGeneratedUss,
+                theme = CreateSerializableTheme(config.theme)
+            };
+        }
+
+        private static TailwindUssTheme CreateSerializableTheme(TailwindUssTheme theme)
+        {
+            if (theme == null)
+            {
+                return null;
+            }
+
+            var serializableTheme = new TailwindUssTheme
+            {
+                colors = CloneEntries(theme.colors),
+                spacing = CloneEntries(theme.spacing),
+                fontSizes = CloneEntries(theme.fontSizes),
+                fonts = CloneEntries(theme.fonts),
+                backgroundImages = CloneEntries(theme.backgroundImages)
+            };
+
+            if (serializableTheme.colors == null &&
+                serializableTheme.spacing == null &&
+                serializableTheme.fontSizes == null &&
+                serializableTheme.fonts == null &&
+                serializableTheme.backgroundImages == null)
+            {
+                return null;
+            }
+
+            return serializableTheme;
+        }
+
+        private static Dictionary<string, string> CloneEntries(IDictionary<string, string> entries)
+        {
+            if (entries == null || entries.Count == 0)
+            {
+                return null;
+            }
+
+            var clone = new Dictionary<string, string>(StringComparer.Ordinal);
+            foreach (var pair in entries)
+            {
+                clone[pair.Key] = pair.Value;
+            }
+
+            return clone;
         }
     }
 }

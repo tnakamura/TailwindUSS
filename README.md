@@ -38,7 +38,7 @@ You can also add the same Git URL from the Unity Package Manager UI.
 ## Quick start
 
 1. Install the package.
-2. Create `tailwinduss.config.json` in the Unity project root, or use `Tools/TailwindUSS/Create Default Config`.
+2. Open `Project Settings > TailwindUSS` to edit settings in the Unity Editor, or create `tailwinduss.config.json` in the Unity project root / use `Tools/TailwindUSS/Create Default Config`.
 3. Add utility classes to UXML `class` attributes.
 4. Run `Tools/TailwindUSS/Generate`.
 5. Use the generated USS file from `outputUssPath`.
@@ -49,7 +49,7 @@ A Unity 6.3 sample project is available in `samples/TailwindUSS.Sample`. It refe
 
 ## Configuration
 
-Create `tailwinduss.config.json` at the Unity project root.
+Edit settings from `Project Settings > TailwindUSS`, or create `tailwinduss.config.json` at the Unity project root directly.
 
 ```json
 {
@@ -76,7 +76,7 @@ Create `tailwinduss.config.json` at the Unity project root.
 }
 ```
 
-If the file does not exist, TailwindUSS uses in-memory defaults and shows a warning in the Unity Editor. Menu command: `Tools/TailwindUSS/Create Default Config`.
+If the file does not exist, TailwindUSS uses in-memory defaults and shows a warning in the Unity Editor. You can save the file from `Project Settings > TailwindUSS`, or use `Tools/TailwindUSS/Create Default Config`.
 
 ### Config fields
 
@@ -94,6 +94,7 @@ If the file does not exist, TailwindUSS uses in-memory defaults and shows a warn
 - `Tools/TailwindUSS/Generate`
 - `Tools/TailwindUSS/Validate`
 - `Tools/TailwindUSS/Create Default Config`
+- `Tools/TailwindUSS/Settings`
 
 ## Diagnostics behavior
 

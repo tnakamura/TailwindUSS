@@ -19,6 +19,9 @@ namespace TailwindUSS.Editor.Tests
             Application.dataPath = AssetsPath;
             AssetDatabase.Reset();
             EditorUtility.Reset();
+            EditorGUILayout.Reset();
+            GUILayout.Reset();
+            SettingsService.Reset();
             Debug.Reset();
         }
 

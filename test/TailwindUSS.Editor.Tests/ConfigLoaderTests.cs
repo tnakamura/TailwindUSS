@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 
 namespace TailwindUSS.Editor.Tests
@@ -115,6 +116,49 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(writtenJson, Does.Contain("\"outputUssPath\""));
             Assert.That(writtenJson, Does.Not.Contain("\"theme\""));
             Assert.That(writtenJson, Does.EndWith(Environment.NewLine));
+        }
+
+        [Test]
+        public void TryLoadEditable_DoesNotMergeBuiltInThemeDefaults()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, """
+            {
+              "theme": {
+                "colors": { "brand": "#112233" }
+              }
+            }
+            """);
+
+            var succeeded = ConfigLoader.TryLoadEditable(out var config, out var errorMessage, out var fileExists);
+
+            Assert.That(succeeded, Is.True);
+            Assert.That(errorMessage, Is.Null);
+            Assert.That(fileExists, Is.True);
+            Assert.That(config.theme.colors.Keys, Is.EqualTo(new[] { "brand" }));
+        }
+
+        [Test]
+        public void WriteConfig_WritesProvidedOverridesWithoutBuiltInThemeDefaults()
+        {
+            using var scope = new TestProjectScope();
+
+            ConfigLoader.WriteConfig(new TailwindUssConfig
+            {
+                inputGlobs = new[] { "Assets/UI/**/*.uxml" },
+                outputUssPath = "Assets/Generated/Custom.uss",
+                autoAttachGeneratedUss = true,
+                theme = new TailwindUssTheme
+                {
+                    colors = new Dictionary<string, string> { { "brand", "#112233" } }
+                }
+            });
+
+            var writtenJson = File.ReadAllText(Path.Combine(scope.RootPath, ConfigLoader.FileName));
+
+            Assert.That(writtenJson, Does.Contain("\"brand\": \"#112233\""));
+            Assert.That(writtenJson, Does.Not.Contain("\"blue-500\""));
+            Assert.That(writtenJson, Does.Contain("\"autoAttachGeneratedUss\": true"));
         }
     }
 }

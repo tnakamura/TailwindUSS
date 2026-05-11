@@ -63,6 +63,16 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.Any(entry => entry.Message.Contains("TailwindUSS validation finished.")), Is.True);
         }
 
+        [Test]
+        public void SettingsMenuCommand_OpensProjectSettings()
+        {
+            using var scope = new TestProjectScope();
+
+            InvokeNonPublicStatic("OpenSettings");
+
+            Assert.That(SettingsService.LastOpenedProjectSettingsPath, Is.EqualTo(TailwindUssSettingsProvider.SettingsPath));
+        }
+
         private static void InvokeCreateDefaultConfig()
         {
             InvokeNonPublicStatic("CreateDefaultConfig");
