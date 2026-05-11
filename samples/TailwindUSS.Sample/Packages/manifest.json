@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "com.github-tnakamura.tailwinduss": "file:../../src/TailwindUSS"
+    "com.github-tnakamura.tailwinduss": "file:../../../src/TailwindUSS"
   }
 }

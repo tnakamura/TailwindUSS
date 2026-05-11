@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.github-tnakamura.tailwinduss": {
-      "version": "file:../../src/TailwindUSS",
+      "version": "file:../../../src/TailwindUSS",
       "depth": 0,
       "source": "local",
       "dependencies": {
