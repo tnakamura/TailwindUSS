@@ -48,5 +48,11 @@ namespace TailwindUSS.Editor
                 Debug.LogError(string.Format("Failed to create TailwindUSS config: {0}", exception.Message));
             }
         }
+
+        [MenuItem("Tools/TailwindUSS/Settings")]
+        private static void OpenSettings()
+        {
+            TailwindUssSettingsProvider.OpenProjectSettings();
+        }
     }
 }
