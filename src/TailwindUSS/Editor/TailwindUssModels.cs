@@ -300,19 +300,19 @@ namespace TailwindUSS.Editor
     internal sealed class CommandResult
     {
         /// <summary>
-        /// The output asset path.
+        /// Gets or sets the output asset path.
         /// </summary>
         public string OutputAssetPath;
         /// <summary>
-        /// The generated utility count.
+        /// Gets or sets the generated utility count.
         /// </summary>
         public int GeneratedUtilityCount;
         /// <summary>
-        /// The warning count.
+        /// Gets or sets the warning count.
         /// </summary>
         public int WarningCount;
         /// <summary>
-        /// The error count.
+        /// Gets or sets the error count.
         /// </summary>
         public int ErrorCount;
     }

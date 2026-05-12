@@ -23,7 +23,7 @@ namespace UnityEngine
     }
 
     /// <summary>
-    /// Provides the json utility functionality.
+    /// Provides JSON utility functionality for unit tests.
     /// </summary>
     public static class JsonUtility
     {
@@ -56,7 +56,7 @@ namespace UnityEngine
     }
 
     /// <summary>
-    /// Provides the debug functionality.
+    /// Provides debug logging functionality for unit tests.
     /// </summary>
     public static class Debug
     {
@@ -116,7 +116,7 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Logs warning.
+        /// Logs a warning message.
         /// </summary>
         public static void LogWarning(object message)
         {
@@ -124,7 +124,7 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Logs warning.
+        /// Logs a warning message with context.
         /// </summary>
         public static void LogWarning(object message, Object context)
         {
@@ -132,7 +132,7 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Logs error.
+        /// Logs an error message.
         /// </summary>
         public static void LogError(object message)
         {
@@ -140,7 +140,7 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Logs error.
+        /// Logs an error message with context.
         /// </summary>
         public static void LogError(object message, Object context)
         {
@@ -207,7 +207,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Loads asset at path.
+        /// Loads an asset at the specified path.
         /// </summary>
         public static T LoadAssetAtPath<T>(string assetPath) where T : Object, new()
         {
