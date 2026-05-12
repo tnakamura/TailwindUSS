@@ -1,0 +1,141 @@
+using System;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+public sealed class TailwindSampleNavigation : MonoBehaviour
+{
+    private static readonly string[] ScreenNames =
+    {
+        "HomeScreen",
+        "LessonScreen",
+        "ShopScreen",
+        "MenuScreen"
+    };
+
+    private static readonly string[] TabButtonNames =
+    {
+        "HomeTabButton",
+        "LessonTabButton",
+        "ShopTabButton",
+        "MenuTabButton"
+    };
+
+    private static readonly string[] Titles =
+    {
+        "ホーム",
+        "レッスン",
+        "ショップ",
+        "メニュー"
+    };
+
+    private static readonly string[] Subtitles =
+    {
+        "今日のおすすめをチェック",
+        "進行中のコースを再開",
+        "便利なアイテムを見つけよう",
+        "設定やサポートにアクセス"
+    };
+
+    private VisualElement[] screens;
+    private Button[] tabButtons;
+    private Action[] clickHandlers;
+    private Label appBarTitle;
+    private Label appBarSubtitle;
+
+    private void OnEnable()
+    {
+        var document = GetComponent<UIDocument>();
+        if (document == null)
+        {
+            return;
+        }
+
+        var root = document.rootVisualElement;
+        if (root == null)
+        {
+            return;
+        }
+
+        appBarTitle = root.Q<Label>("AppBarTitle");
+        appBarSubtitle = root.Q<Label>("AppBarSubtitle");
+        screens = new VisualElement[ScreenNames.Length];
+        tabButtons = new Button[TabButtonNames.Length];
+        clickHandlers = new Action[TabButtonNames.Length];
+
+        for (var i = 0; i < ScreenNames.Length; i++)
+        {
+            screens[i] = root.Q<VisualElement>(ScreenNames[i]);
+            tabButtons[i] = root.Q<Button>(TabButtonNames[i]);
+
+            if (tabButtons[i] == null)
+            {
+                continue;
+            }
+
+            var index = i;
+            clickHandlers[i] = () => ShowScreen(index);
+            tabButtons[i].clicked += clickHandlers[i];
+        }
+
+        ShowScreen(0);
+    }
+
+    private void OnDisable()
+    {
+        if (tabButtons == null || clickHandlers == null)
+        {
+            return;
+        }
+
+        for (var i = 0; i < tabButtons.Length; i++)
+        {
+            if (tabButtons[i] != null && clickHandlers[i] != null)
+            {
+                tabButtons[i].clicked -= clickHandlers[i];
+            }
+        }
+    }
+
+    private void ShowScreen(int selectedIndex)
+    {
+        for (var i = 0; i < ScreenNames.Length; i++)
+        {
+            var isSelected = i == selectedIndex;
+            if (screens[i] != null)
+            {
+                screens[i].EnableInClassList("hidden", !isSelected);
+            }
+
+            if (tabButtons[i] != null)
+            {
+                UpdateTabButton(tabButtons[i], isSelected);
+            }
+        }
+
+        if (appBarTitle != null)
+        {
+            appBarTitle.text = Titles[selectedIndex];
+        }
+
+        if (appBarSubtitle != null)
+        {
+            appBarSubtitle.text = Subtitles[selectedIndex];
+        }
+    }
+
+    private static void UpdateTabButton(Button button, bool isSelected)
+    {
+        button.EnableInClassList("bg-brand", isSelected);
+        button.EnableInClassList("border-brand", isSelected);
+        button.EnableInClassList("text-white", isSelected);
+        button.EnableInClassList("bg-white", !isSelected);
+        button.EnableInClassList("border-slate-300", !isSelected);
+        button.EnableInClassList("text-slate-500", !isSelected);
+
+        foreach (var label in button.Query<Label>().ToList())
+        {
+            label.EnableInClassList("text-white", isSelected);
+            label.EnableInClassList("text-slate-500", !isSelected);
+        }
+    }
+}
