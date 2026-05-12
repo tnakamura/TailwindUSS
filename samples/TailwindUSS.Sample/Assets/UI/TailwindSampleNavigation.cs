@@ -44,6 +44,11 @@ public sealed class TailwindSampleNavigation : MonoBehaviour
 
     private void OnEnable()
     {
+        if (!HasConsistentConfiguration())
+        {
+            return;
+        }
+
         var document = GetComponent<UIDocument>();
         if (document == null)
         {
@@ -67,7 +72,7 @@ public sealed class TailwindSampleNavigation : MonoBehaviour
             screens[i] = root.Q<VisualElement>(ScreenNames[i]);
             tabButtons[i] = root.Q<Button>(TabButtonNames[i]);
 
-            if (tabButtons[i] == null)
+            if (screens[i] == null || tabButtons[i] == null)
             {
                 continue;
             }
@@ -98,6 +103,15 @@ public sealed class TailwindSampleNavigation : MonoBehaviour
 
     private void ShowScreen(int selectedIndex)
     {
+        if (!HasConsistentConfiguration() ||
+            screens == null ||
+            tabButtons == null ||
+            selectedIndex < 0 ||
+            selectedIndex >= ScreenNames.Length)
+        {
+            return;
+        }
+
         for (var i = 0; i < ScreenNames.Length; i++)
         {
             var isSelected = i == selectedIndex;
@@ -137,5 +151,12 @@ public sealed class TailwindSampleNavigation : MonoBehaviour
             label.EnableInClassList("text-white", isSelected);
             label.EnableInClassList("text-slate-500", !isSelected);
         }
+    }
+
+    private static bool HasConsistentConfiguration()
+    {
+        return ScreenNames.Length == TabButtonNames.Length &&
+               ScreenNames.Length == Titles.Length &&
+               ScreenNames.Length == Subtitles.Length;
     }
 }
