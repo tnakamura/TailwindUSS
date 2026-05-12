@@ -353,12 +353,12 @@ namespace TailwindUSS.Editor
             }
 
             /// <summary>
-            /// Gets the key.
+            /// Gets the configuration key.
             /// </summary>
             public string Key { get; }
 
             /// <summary>
-            /// Gets the value.
+            /// Gets the configuration value.
             /// </summary>
             public string Value { get; }
         }

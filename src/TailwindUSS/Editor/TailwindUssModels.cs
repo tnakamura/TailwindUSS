@@ -60,31 +60,31 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Gets or sets the severity.
+        /// Gets the severity.
         /// </summary>
         public DiagnosticSeverity Severity { get; private set; }
         /// <summary>
-        /// Gets or sets the issue kind.
+        /// Gets the issue kind.
         /// </summary>
         public TokenIssueKind? IssueKind { get; private set; }
         /// <summary>
-        /// Gets or sets the message.
+        /// Gets the message.
         /// </summary>
         public string Message { get; private set; }
         /// <summary>
-        /// Gets or sets the relative file path.
+        /// Gets the relative file path.
         /// </summary>
         public string RelativeFilePath { get; private set; }
         /// <summary>
-        /// Gets or sets the line number.
+        /// Gets the line number.
         /// </summary>
         public int LineNumber { get; private set; }
         /// <summary>
-        /// Gets or sets the element name.
+        /// Gets the element name.
         /// </summary>
         public string ElementName { get; private set; }
         /// <summary>
-        /// Gets or sets the token.
+        /// Gets the token.
         /// </summary>
         public string Token { get; private set; }
     }
@@ -116,31 +116,31 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Gets or sets the relative file path.
+        /// Gets the relative file path.
         /// </summary>
         public string RelativeFilePath { get; private set; }
         /// <summary>
-        /// Gets or sets the line number.
+        /// Gets the line number.
         /// </summary>
         public int LineNumber { get; private set; }
         /// <summary>
-        /// Gets or sets the element name.
+        /// Gets the element name.
         /// </summary>
         public string ElementName { get; private set; }
         /// <summary>
-        /// Gets or sets the original token.
+        /// Gets the original token.
         /// </summary>
         public string OriginalToken { get; private set; }
         /// <summary>
-        /// Gets or sets the variant chain.
+        /// Gets the variant chain.
         /// </summary>
         public IList<string> VariantChain { get; private set; }
         /// <summary>
-        /// Gets or sets the base token.
+        /// Gets the base token.
         /// </summary>
         public string BaseToken { get; private set; }
         /// <summary>
-        /// Gets or sets the class attribute id.
+        /// Gets the class attribute identifier.
         /// </summary>
         public int ClassAttributeId { get; private set; }
     }
@@ -160,11 +160,11 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Gets or sets the property name.
+        /// Gets the property name.
         /// </summary>
         public string PropertyName { get; private set; }
         /// <summary>
-        /// Gets or sets the value.
+        /// Gets the value.
         /// </summary>
         public string Value { get; private set; }
     }
@@ -192,23 +192,23 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Gets or sets the token.
+        /// Gets the token.
         /// </summary>
         public string Token { get; private set; }
         /// <summary>
-        /// Gets or sets the declarations.
+        /// Gets the declarations.
         /// </summary>
         public IList<StyleDeclaration> Declarations { get; private set; }
         /// <summary>
-        /// Gets or sets the selector suffix.
+        /// Gets the selector suffix.
         /// </summary>
         public string SelectorSuffix { get; private set; }
         /// <summary>
-        /// Gets or sets the selector override.
+        /// Gets the selector override.
         /// </summary>
         public string SelectorOverride { get; private set; }
         /// <summary>
-        /// Gets or sets the filter contribution.
+        /// Gets the filter contribution.
         /// </summary>
         public FilterContribution FilterContribution { get; private set; }
         /// <summary>
@@ -232,11 +232,11 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Gets or sets the family.
+        /// Gets the family.
         /// </summary>
         public string Family { get; private set; }
         /// <summary>
-        /// Gets or sets the function.
+        /// Gets the function.
         /// </summary>
         public string Function { get; private set; }
     }
@@ -256,11 +256,11 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Gets or sets the occurrence.
+        /// Gets the occurrence.
         /// </summary>
         public UxmlTokenOccurrence Occurrence { get; private set; }
         /// <summary>
-        /// Gets or sets the utility.
+        /// Gets the utility.
         /// </summary>
         public ResolvedUtility Utility { get; private set; }
     }
@@ -281,15 +281,15 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Gets or sets the matched files.
+        /// Gets the matched files.
         /// </summary>
         public IList<string> MatchedFiles { get; private set; }
         /// <summary>
-        /// Gets or sets the occurrences.
+        /// Gets the occurrences.
         /// </summary>
         public IList<UxmlTokenOccurrence> Occurrences { get; private set; }
         /// <summary>
-        /// Gets or sets the diagnostics.
+        /// Gets the diagnostics.
         /// </summary>
         public IList<TailwindUssDiagnostic> Diagnostics { get; private set; }
     }

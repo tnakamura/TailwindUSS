@@ -76,15 +76,15 @@ namespace UnityEngine
             }
 
             /// <summary>
-            /// Gets or sets the level.
+            /// Gets the level.
             /// </summary>
             public string Level { get; private set; }
             /// <summary>
-            /// Gets or sets the message.
+            /// Gets the message.
             /// </summary>
             public string Message { get; private set; }
             /// <summary>
-            /// Gets or sets the context.
+            /// Gets the context.
             /// </summary>
             public Object Context { get; private set; }
         }
@@ -156,7 +156,7 @@ namespace UnityEditor
     using UnityEngine;
 
     /// <summary>
-    /// Represents the menu item.
+    /// Represents a menu item attribute for Unity Editor menu commands.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public sealed class MenuItem : Attribute
@@ -170,7 +170,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Gets or sets the menu path.
+        /// Gets the menu path.
         /// </summary>
         public string MenuPath { get; private set; }
     }
@@ -238,19 +238,19 @@ namespace UnityEditor
             }
 
             /// <summary>
-            /// Gets or sets the title.
+            /// Gets the title.
             /// </summary>
             public string Title { get; private set; }
             /// <summary>
-            /// Gets or sets the message.
+            /// Gets the message.
             /// </summary>
             public string Message { get; private set; }
             /// <summary>
-            /// Gets or sets the ok.
+            /// Gets the text for the OK button.
             /// </summary>
             public string Ok { get; private set; }
             /// <summary>
-            /// Gets or sets the cancel.
+            /// Gets the text for the Cancel button.
             /// </summary>
             public string Cancel { get; private set; }
         }
@@ -326,12 +326,12 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Gets or sets the settings path.
+        /// Gets the settings path.
         /// </summary>
         public string settingsPath { get; private set; }
 
         /// <summary>
-        /// Gets or sets the scope.
+        /// Gets the scope.
         /// </summary>
         public SettingsScope scope { get; private set; }
 
@@ -416,12 +416,12 @@ namespace UnityEditor
             }
 
             /// <summary>
-            /// Gets or sets the message.
+            /// Gets the message.
             /// </summary>
             public string Message { get; private set; }
 
             /// <summary>
-            /// Gets or sets the message type.
+            /// Gets the message type.
             /// </summary>
             public MessageType MessageType { get; private set; }
         }

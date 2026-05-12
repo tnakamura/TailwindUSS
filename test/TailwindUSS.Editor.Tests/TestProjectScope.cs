@@ -32,11 +32,11 @@ namespace TailwindUSS.Editor.Tests
         }
 
         /// <summary>
-        /// Gets or sets the root path.
+        /// Gets the root path.
         /// </summary>
         public string RootPath { get; private set; }
         /// <summary>
-        /// Gets or sets the assets path.
+        /// Gets the assets path.
         /// </summary>
         public string AssetsPath { get; private set; }
 
