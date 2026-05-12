@@ -10,7 +10,7 @@ namespace TailwindUSS.Editor
     internal sealed class UssEmitter
     {
         /// <summary>
-        /// Emits the operation.
+        /// Emits USS output from resolved utility tokens.
         /// </summary>
         public string Emit(IEnumerable<ResolvedUtility> utilities)
         {
@@ -47,7 +47,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Executes the escape class name operation.
+        /// Escapes special characters in a class name for USS selector compatibility.
         /// </summary>
         internal static string EscapeClassName(string className)
         {
@@ -68,7 +68,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Builds selector.
+        /// Builds a selector from class names with an optional selector suffix.
         /// </summary>
         internal static string BuildSelector(IEnumerable<string> classNames, string selectorSuffix = "")
         {

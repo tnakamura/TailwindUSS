@@ -41,7 +41,7 @@ namespace TailwindUSS.Editor.Tests
         public string AssetsPath { get; private set; }
 
         /// <summary>
-        /// Tests that get asset path.
+        /// Gets the full path for an asset relative to the Assets directory.
         /// </summary>
         public string GetAssetPath(params string[] segments)
         {
@@ -49,7 +49,7 @@ namespace TailwindUSS.Editor.Tests
         }
 
         /// <summary>
-        /// Tests that get project path.
+        /// Gets the full path for a file relative to the project root.
         /// </summary>
         public string GetProjectPath(params string[] segments)
         {
@@ -57,7 +57,7 @@ namespace TailwindUSS.Editor.Tests
         }
 
         /// <summary>
-        /// Tests that write asset file.
+        /// Writes a file to the Assets directory and returns its full path.
         /// </summary>
         public string WriteAssetFile(string relativePath, string content)
         {
@@ -65,7 +65,7 @@ namespace TailwindUSS.Editor.Tests
         }
 
         /// <summary>
-        /// Tests that write project file.
+        /// Writes a file to the project directory and returns its full path.
         /// </summary>
         public string WriteProjectFile(string relativePath, string content)
         {
@@ -81,7 +81,7 @@ namespace TailwindUSS.Editor.Tests
         }
 
         /// <summary>
-        /// Tests that dispose.
+        /// Cleans up the temporary test project and restores the original Unity data path.
         /// </summary>
         public void Dispose()
         {

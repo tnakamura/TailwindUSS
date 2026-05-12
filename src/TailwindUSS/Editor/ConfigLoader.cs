@@ -22,7 +22,7 @@ namespace TailwindUSS.Editor
         };
 
         /// <summary>
-        /// Gets project root.
+        /// Gets the full path to the Unity project root directory.
         /// </summary>
         internal static string GetProjectRoot()
         {
@@ -30,7 +30,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Gets config path.
+        /// Gets the full path to the TailwindUSS configuration file.
         /// </summary>
         internal static string GetConfigPath()
         {
@@ -38,7 +38,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Attempts to load.
+        /// Attempts to load the TailwindUSS configuration from disk, falling back to defaults if the file is missing.
         /// </summary>
         internal static bool TryLoad(out TailwindUssConfig config, out string errorMessage, out bool usedDefaultConfig)
         {
@@ -82,7 +82,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Attempts to load editable.
+        /// Attempts to load the configuration file for editing without merging built-in defaults.
         /// </summary>
         internal static bool TryLoadEditable(out TailwindUssConfig config, out string errorMessage, out bool fileExists)
         {
@@ -123,7 +123,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Writes default config.
+        /// Writes a default configuration file to disk.
         /// </summary>
         internal static void WriteDefaultConfig()
         {
@@ -131,7 +131,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Writes config.
+        /// Writes the provided configuration to disk as JSON.
         /// </summary>
         internal static void WriteConfig(TailwindUssConfig config)
         {

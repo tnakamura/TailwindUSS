@@ -41,7 +41,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Gets the settings path.
+        /// Gets the path where the settings appear in Unity's Project Settings window.
         /// </summary>
         internal static string SettingsPath
         {
@@ -49,7 +49,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Creates settings provider.
+        /// Creates a settings provider instance for Unity's settings system.
         /// </summary>
         [SettingsProvider]
         internal static SettingsProvider CreateSettingsProvider()
@@ -58,7 +58,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Opens project settings.
+        /// Opens Unity's Project Settings window to the TailwindUSS settings page.
         /// </summary>
         internal static void OpenProjectSettings()
         {
@@ -66,7 +66,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Executes the on activate operation.
+        /// Called when the settings page is activated and reloads the configuration.
         /// </summary>
         public override void OnActivate(string searchContext, VisualElement rootElement)
         {
@@ -74,7 +74,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Executes the on gui operation.
+        /// Renders the settings UI in Unity's Project Settings window.
         /// </summary>
         public override void OnGUI(string searchContext)
         {
@@ -344,7 +344,7 @@ namespace TailwindUSS.Editor
         private readonly struct ThemeEntry
         {
             /// <summary>
-            /// Executes the theme entry operation.
+            /// Initializes a new instance of the <see cref="ThemeEntry"/> struct with the specified key and value.
             /// </summary>
             public ThemeEntry(string key, string value)
             {

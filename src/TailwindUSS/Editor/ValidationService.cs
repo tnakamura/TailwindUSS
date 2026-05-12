@@ -13,7 +13,7 @@ namespace TailwindUSS.Editor
         private readonly FilterUtilityComposer filterUtilityComposer = new FilterUtilityComposer();
 
         /// <summary>
-        /// Validates the operation.
+        /// Validates utility tokens found in UXML files and reports diagnostics.
         /// </summary>
         public CommandResult Validate()
         {

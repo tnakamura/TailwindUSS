@@ -9,7 +9,7 @@ namespace TailwindUSS.Editor
     internal sealed class ClassTokenParser
     {
         /// <summary>
-        /// Parses the operation.
+        /// Parses utility class tokens from a class attribute value.
         /// </summary>
         public IList<UxmlTokenOccurrence> Parse(string classValue, string relativeFilePath, int lineNumber, string elementName, IList<TailwindUssDiagnostic> diagnostics, int classAttributeId = 0)
         {

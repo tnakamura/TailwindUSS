@@ -19,7 +19,7 @@ namespace TailwindUSS.Editor
         };
 
         /// <summary>
-        /// Composes the operation.
+        /// Composes filter utilities by combining multiple filter functions into single declarations.
         /// </summary>
         public IList<ResolvedUtility> Compose(IList<ResolvedTokenOccurrence> filterOccurrences, IList<TailwindUssDiagnostic> diagnostics)
         {

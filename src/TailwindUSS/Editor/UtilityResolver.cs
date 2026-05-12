@@ -444,7 +444,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Attempts to resolve.
+        /// Attempts to resolve a utility token to its declarations.
         /// </summary>
         public ResolveStatus TryResolve(string token, out ResolvedUtility utility, out string errorMessage)
         {
@@ -492,7 +492,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Attempts to resolve.
+        /// Attempts to resolve a token occurrence, including its variant chain, to declarations.
         /// </summary>
         public ResolveStatus TryResolve(UxmlTokenOccurrence occurrence, out ResolvedUtility utility, out string errorMessage)
         {

@@ -15,7 +15,7 @@ namespace TailwindUSS.Editor
         private readonly ClassTokenParser classTokenParser = new ClassTokenParser();
 
         /// <summary>
-        /// Scans the operation.
+        /// Scans UXML files matching the input globs for utility class tokens.
         /// </summary>
         public UxmlScanResult Scan(string projectRoot, IEnumerable<string> inputGlobs)
         {
@@ -174,7 +174,7 @@ namespace TailwindUSS.Editor
             private readonly System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
 
             /// <summary>
-            /// Appends the operation.
+            /// Appends a string value to the builder.
             /// </summary>
             public void Append(string value)
             {
@@ -182,7 +182,7 @@ namespace TailwindUSS.Editor
             }
 
             /// <summary>
-            /// Executes the to string operation.
+            /// Returns the accumulated string value.
             /// </summary>
             public override string ToString()
             {

@@ -17,7 +17,7 @@ namespace TailwindUSS.Editor
         private readonly FilterUtilityComposer filterUtilityComposer = new FilterUtilityComposer();
 
         /// <summary>
-        /// Generates the operation.
+        /// Generates USS output from utility tokens found in UXML files.
         /// </summary>
         public CommandResult Generate()
         {
@@ -160,7 +160,7 @@ namespace TailwindUSS.Editor
         }
 
         /// <summary>
-        /// Logs diagnostic.
+        /// Logs a diagnostic message to Unity's console with context information when available.
         /// </summary>
         internal static void LogDiagnostic(TailwindUssDiagnostic diagnostic)
         {

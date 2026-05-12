@@ -13,7 +13,7 @@ namespace TailwindUSS.Editor
         private const string ProjectAssetUriPrefix = "project://database/";
 
         /// <summary>
-        /// Ensures style reference.
+        /// Ensures that UXML files reference the generated USS file, adding or updating the style element as needed.
         /// </summary>
         public void EnsureStyleReference(string projectRoot, IEnumerable<string> relativeFilePaths, string outputUssPath, IList<TailwindUssDiagnostic> diagnostics)
         {

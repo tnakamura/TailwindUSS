@@ -27,7 +27,7 @@ namespace TailwindUSS.Editor
         public TailwindUssTheme theme;
 
         /// <summary>
-        /// Creates default.
+        /// Creates a new instance with default configuration values.
         /// </summary>
         public static TailwindUssConfig CreateDefault()
         {
@@ -63,7 +63,7 @@ namespace TailwindUSS.Editor
         public Dictionary<string, string> backgroundImages;
 
         /// <summary>
-        /// Creates merged.
+        /// Creates a merged theme by combining the provided theme with built-in defaults.
         /// </summary>
         public static TailwindUssTheme CreateMerged(TailwindUssTheme theme)
         {

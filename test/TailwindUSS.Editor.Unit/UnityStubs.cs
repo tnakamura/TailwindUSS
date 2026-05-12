@@ -5,14 +5,14 @@ using System.Text.Json;
 namespace UnityEngine
 {
     /// <summary>
-    /// Represents the object.
+    /// Represents a stub implementation of Unity's <see cref="Object"/> type for unit tests.
     /// </summary>
     public class Object
     {
     }
 
     /// <summary>
-    /// Provides the application functionality.
+    /// Provides a stub implementation of Unity's <see cref="Application"/> API for unit tests.
     /// </summary>
     public static class Application
     {
@@ -39,7 +39,7 @@ namespace UnityEngine
         };
 
         /// <summary>
-        /// Executes the from json operation.
+        /// Deserializes a JSON string to an object of type <typeparamref name="T"/>.
         /// </summary>
         public static T FromJson<T>(string json)
         {
@@ -47,7 +47,7 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Executes the to json operation.
+        /// Serializes an object to a JSON string.
         /// </summary>
         public static string ToJson(object obj, bool prettyPrint)
         {
@@ -61,7 +61,7 @@ namespace UnityEngine
     public static class Debug
     {
         /// <summary>
-        /// Represents the log entry.
+        /// Represents a captured debug log entry for test verification.
         /// </summary>
         public sealed class LogEntry
         {
@@ -92,7 +92,7 @@ namespace UnityEngine
         private static readonly List<LogEntry> entries = new List<LogEntry>();
 
         /// <summary>
-        /// Gets the entries.
+        /// Gets the captured log entries.
         /// </summary>
         public static IReadOnlyList<LogEntry> Entries
         {
@@ -100,7 +100,7 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Resets the operation.
+        /// Clears all captured log entries.
         /// </summary>
         public static void Reset()
         {
@@ -108,7 +108,7 @@ namespace UnityEngine
         }
 
         /// <summary>
-        /// Logs the operation.
+        /// Captures a log message for test verification.
         /// </summary>
         public static void Log(object message)
         {
@@ -185,12 +185,12 @@ namespace UnityEditor
         /// </summary>
         public static int RefreshCallCount { get; private set; }
         /// <summary>
-        /// Executes the list operation.
+        /// Gets the list of asset paths loaded through the stub.
         /// </summary>
         public static IList<string> LoadedAssetPaths { get; } = new List<string>();
 
         /// <summary>
-        /// Resets the operation.
+        /// Resets the refresh call count and clears loaded asset paths.
         /// </summary>
         public static void Reset()
         {
@@ -199,7 +199,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Executes the refresh operation.
+        /// Increments the refresh call count for test verification.
         /// </summary>
         public static void Refresh()
         {
@@ -260,12 +260,12 @@ namespace UnityEditor
         /// </summary>
         public static bool NextDisplayDialogResult { get; set; } = true;
         /// <summary>
-        /// Executes the list operation.
+        /// Gets the captured dialog calls for test verification.
         /// </summary>
         public static IList<DialogCall> Calls { get; } = new List<DialogCall>();
 
         /// <summary>
-        /// Resets the operation.
+        /// Resets the configured dialog result and clears captured dialog calls.
         /// </summary>
         public static void Reset()
         {
@@ -274,7 +274,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Executes the display dialog operation.
+        /// Captures a dialog call and returns the configured result for test verification.
         /// </summary>
         public static bool DisplayDialog(string title, string message, string ok, string cancel)
         {
@@ -393,11 +393,11 @@ namespace UnityEditor
     public static class EditorGUILayout
     {
         /// <summary>
-        /// Executes the list operation.
+        /// Gets the label fields rendered through the stub.
         /// </summary>
         public static IList<string> LabelFields { get; } = new List<string>();
         /// <summary>
-        /// Executes the list operation.
+        /// Gets the help boxes rendered through the stub.
         /// </summary>
         public static IList<HelpBoxCall> HelpBoxes { get; } = new List<HelpBoxCall>();
 
@@ -427,7 +427,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Resets the operation.
+        /// Clears captured label fields and help boxes.
         /// </summary>
         public static void Reset()
         {
@@ -436,7 +436,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Executes the label field operation.
+        /// Captures a label field for test verification.
         /// </summary>
         public static void LabelField(string label)
         {
@@ -444,7 +444,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Executes the text field operation.
+        /// Returns the provided text value unchanged.
         /// </summary>
         public static string TextField(string label, string text)
         {
@@ -452,7 +452,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Executes the toggle operation.
+        /// Returns the provided boolean value unchanged.
         /// </summary>
         public static bool Toggle(string label, bool value)
         {
@@ -460,7 +460,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Executes the help box operation.
+        /// Captures a help box for test verification.
         /// </summary>
         public static void HelpBox(string message, MessageType messageType)
         {
@@ -468,7 +468,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Executes the space operation.
+        /// Renders a vertical space as a no-op in the stub implementation.
         /// </summary>
         public static void Space()
         {
@@ -481,12 +481,12 @@ namespace UnityEditor
     public static class GUILayout
     {
         /// <summary>
-        /// Executes the list operation.
+        /// Gets the button labels rendered through the stub.
         /// </summary>
         public static IList<string> Buttons { get; } = new List<string>();
 
         /// <summary>
-        /// Resets the operation.
+        /// Clears captured button labels.
         /// </summary>
         public static void Reset()
         {
@@ -494,7 +494,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Executes the button operation.
+        /// Captures a button label and returns <see langword="false"/>.
         /// </summary>
         public static bool Button(string text)
         {
