@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Represents the utility resolver.
+    /// </summary>
     internal sealed class UtilityResolver
     {
         private delegate bool UtilityHandler(string token, out ResolvedUtility utility, out string errorMessage);
@@ -422,6 +425,9 @@ namespace TailwindUSS.Editor
             new KeyValuePair<string, string[]>("rounded-bl", new[] { "border-bottom-left-radius" })
         };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UtilityResolver"/> type.
+        /// </summary>
         public UtilityResolver(TailwindUssTheme theme = null)
         {
             var mergedTheme = TailwindUssTheme.CreateMerged(theme);
@@ -437,6 +443,9 @@ namespace TailwindUSS.Editor
             translateScale = CreateTranslateScale(spacingScale);
         }
 
+        /// <summary>
+        /// Attempts to resolve.
+        /// </summary>
         public ResolveStatus TryResolve(string token, out ResolvedUtility utility, out string errorMessage)
         {
             utility = null;
@@ -482,6 +491,9 @@ namespace TailwindUSS.Editor
             return ResolveStatus.Unsupported;
         }
 
+        /// <summary>
+        /// Attempts to resolve.
+        /// </summary>
         public ResolveStatus TryResolve(UxmlTokenOccurrence occurrence, out ResolvedUtility utility, out string errorMessage)
         {
             var status = TryResolve(occurrence.BaseToken, out utility, out errorMessage);

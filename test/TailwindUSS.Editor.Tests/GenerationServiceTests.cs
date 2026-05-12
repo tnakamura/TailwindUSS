@@ -3,8 +3,14 @@ using System.Linq;
 
 namespace TailwindUSS.Editor.Tests
 {
+    /// <summary>
+    /// Represents the generation service tests.
+    /// </summary>
     public sealed class GenerationServiceTests
     {
+        /// <summary>
+        /// Sets up the test state.
+        /// </summary>
         [SetUp]
         public void SetUp()
         {
@@ -12,6 +18,9 @@ namespace TailwindUSS.Editor.Tests
             Debug.Reset();
         }
 
+        /// <summary>
+        /// Tests that generate load failure returns error.
+        /// </summary>
         [Test]
         public void Generate_LoadFailureReturnsError()
         {
@@ -26,6 +35,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.Last().Message, Does.Contain("Failed to load"));
         }
 
+        /// <summary>
+        /// Tests that generate writes output and auto attaches styles.
+        /// </summary>
         [Test]
         public void Generate_WritesOutputAndAutoAttachesStyles()
         {
@@ -55,6 +67,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.Last().Message, Does.Contain("TailwindUSS generation finished."));
         }
 
+        /// <summary>
+        /// Tests that generate rewrites legacy auto attached style reference.
+        /// </summary>
         [Test]
         public void Generate_RewritesLegacyAutoAttachedStyleReference()
         {
@@ -71,6 +86,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(updatedMain, Does.Contain("src=\"project://database/Assets/Generated/TailwindUSS.generated.uss\""));
         }
 
+        /// <summary>
+        /// Tests that generate uses default config and logs warning when config is missing.
+        /// </summary>
         [Test]
         public void Generate_UsesDefaultConfigAndLogsWarningWhenConfigIsMissing()
         {
@@ -84,6 +102,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.First().Message, Does.Contain("config was not found"));
         }
 
+        /// <summary>
+        /// Tests that generate writes phase one layout utilities.
+        /// </summary>
         [Test]
         public void Generate_WritesPhaseOneLayoutUtilities()
         {
@@ -104,6 +125,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".overflow-hidden {\n    overflow: hidden;\n}"));
         }
 
+        /// <summary>
+        /// Tests that generate writes phase one flex and typography utilities.
+        /// </summary>
         [Test]
         public void Generate_WritesPhaseOneFlexAndTypographyUtilities()
         {
@@ -132,6 +156,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".uppercase {\n    text-transform: uppercase;\n}"));
         }
 
+        /// <summary>
+        /// Tests that generate writes phase two border and background utilities.
+        /// </summary>
         [Test]
         public void Generate_WritesPhaseTwoBorderAndBackgroundUtilities()
         {
@@ -156,6 +183,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".rounded-t-lg {\n    border-top-left-radius: 8px;\n    border-top-right-radius: 8px;\n}"));
         }
 
+        /// <summary>
+        /// Tests that generate writes variant selectors and reports unsupported variants.
+        /// </summary>
         [Test]
         public void Generate_WritesVariantSelectorsAndReportsUnsupportedVariants()
         {
@@ -176,6 +206,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Unsupported variant in utility token 'group-hover:bg-blue-500': Unsupported variant 'group-hover'.")), Is.True);
         }
 
+        /// <summary>
+        /// Tests that generate writes phase four transform transition and cursor utilities.
+        /// </summary>
         [Test]
         public void Generate_WritesPhaseFourTransformTransitionAndCursorUtilities()
         {
@@ -201,6 +234,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".translate-x-4 {\n    translate: 16px 0;\n}"));
         }
 
+        /// <summary>
+        /// Tests that generate composes filter utilities across base and variants.
+        /// </summary>
         [Test]
         public void Generate_ComposesFilterUtilitiesAcrossBaseAndVariants()
         {
@@ -222,6 +258,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".duration-150 {\n    transition-duration: 150ms;\n}"));
         }
 
+        /// <summary>
+        /// Tests that generate warns and uses last token for duplicate filter family.
+        /// </summary>
         [Test]
         public void Generate_WarnsAndUsesLastTokenForDuplicateFilterFamily()
         {
@@ -240,6 +279,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Duplicate filter family 'blur'")), Is.True);
         }
 
+        /// <summary>
+        /// Tests that generate uses configured theme overrides and asset aliases.
+        /// </summary>
         [Test]
         public void Generate_UsesConfiguredThemeOverridesAndAssetAliases()
         {
@@ -277,6 +319,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".translate-x-16 {\n    translate: 64px 0;\n}"));
         }
 
+        /// <summary>
+        /// Tests that generate writes newly supported matrix utilities.
+        /// </summary>
         [Test]
         public void Generate_WritesNewlySupportedMatrixUtilities()
         {
@@ -303,6 +348,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".w-1\\/2 {\n    width: 50%;\n}"));
         }
 
+        /// <summary>
+        /// Tests that log diagnostic loads asset context for asset paths.
+        /// </summary>
         [Test]
         public void LogDiagnostic_LoadsAssetContextForAssetPaths()
         {
@@ -322,6 +370,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.Last().Context, Is.Not.Null);
         }
 
+        /// <summary>
+        /// Tests that log diagnostic does not load context for non asset paths.
+        /// </summary>
         [Test]
         public void LogDiagnostic_DoesNotLoadContextForNonAssetPaths()
         {

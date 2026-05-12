@@ -4,11 +4,17 @@ using UnityEngine;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Represents the validation service.
+    /// </summary>
     internal sealed class ValidationService
     {
         private readonly UxmlScanner scanner = new UxmlScanner();
         private readonly FilterUtilityComposer filterUtilityComposer = new FilterUtilityComposer();
 
+        /// <summary>
+        /// Validates the operation.
+        /// </summary>
         public CommandResult Validate()
         {
             var result = new CommandResult();

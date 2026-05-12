@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Represents the tailwind uss settings provider.
+    /// </summary>
     internal sealed class TailwindUssSettingsProvider : SettingsProvider
     {
         private readonly List<string> inputGlobs = new List<string>();
@@ -21,6 +24,9 @@ namespace TailwindUSS.Editor
         private string statusMessage;
         private MessageType statusMessageType = MessageType.Info;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TailwindUssSettingsProvider"/> type.
+        /// </summary>
         internal TailwindUssSettingsProvider(string path, SettingsScope scope)
             : base(path, scope)
         {
@@ -34,27 +40,42 @@ namespace TailwindUSS.Editor
             };
         }
 
+        /// <summary>
+        /// Gets the settings path.
+        /// </summary>
         internal static string SettingsPath
         {
             get { return "Project/TailwindUSS"; }
         }
 
+        /// <summary>
+        /// Creates settings provider.
+        /// </summary>
         [SettingsProvider]
         internal static SettingsProvider CreateSettingsProvider()
         {
             return new TailwindUssSettingsProvider(SettingsPath, SettingsScope.Project);
         }
 
+        /// <summary>
+        /// Opens project settings.
+        /// </summary>
         internal static void OpenProjectSettings()
         {
             SettingsService.OpenProjectSettings(SettingsPath);
         }
 
+        /// <summary>
+        /// Executes the on activate operation.
+        /// </summary>
         public override void OnActivate(string searchContext, VisualElement rootElement)
         {
             Reload();
         }
 
+        /// <summary>
+        /// Executes the on gui operation.
+        /// </summary>
         public override void OnGUI(string searchContext)
         {
             if (!isLoaded)
@@ -322,14 +343,23 @@ namespace TailwindUSS.Editor
 
         private readonly struct ThemeEntry
         {
+            /// <summary>
+            /// Executes the theme entry operation.
+            /// </summary>
             public ThemeEntry(string key, string value)
             {
                 Key = key;
                 Value = value;
             }
 
+            /// <summary>
+            /// Gets the key.
+            /// </summary>
             public string Key { get; }
 
+            /// <summary>
+            /// Gets the value.
+            /// </summary>
             public string Value { get; }
         }
     }

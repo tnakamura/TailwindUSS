@@ -2,12 +2,18 @@ using System.Collections.Generic;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Defines the diagnostic severity.
+    /// </summary>
     internal enum DiagnosticSeverity
     {
         Warning,
         Error
     }
 
+    /// <summary>
+    /// Defines the token issue kind.
+    /// </summary>
     internal enum TokenIssueKind
     {
         Unsupported,
@@ -16,6 +22,9 @@ namespace TailwindUSS.Editor
         Duplicate
     }
 
+    /// <summary>
+    /// Defines the resolve status.
+    /// </summary>
     internal enum ResolveStatus
     {
         Supported,
@@ -24,8 +33,14 @@ namespace TailwindUSS.Editor
         InvalidValue
     }
 
+    /// <summary>
+    /// Represents the tailwind uss diagnostic.
+    /// </summary>
     internal sealed class TailwindUssDiagnostic
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TailwindUssDiagnostic"/> type.
+        /// </summary>
         public TailwindUssDiagnostic(
             DiagnosticSeverity severity,
             TokenIssueKind? issueKind,
@@ -44,17 +59,44 @@ namespace TailwindUSS.Editor
             Token = token;
         }
 
+        /// <summary>
+        /// Gets or sets the severity.
+        /// </summary>
         public DiagnosticSeverity Severity { get; private set; }
+        /// <summary>
+        /// Gets or sets the issue kind.
+        /// </summary>
         public TokenIssueKind? IssueKind { get; private set; }
+        /// <summary>
+        /// Gets or sets the message.
+        /// </summary>
         public string Message { get; private set; }
+        /// <summary>
+        /// Gets or sets the relative file path.
+        /// </summary>
         public string RelativeFilePath { get; private set; }
+        /// <summary>
+        /// Gets or sets the line number.
+        /// </summary>
         public int LineNumber { get; private set; }
+        /// <summary>
+        /// Gets or sets the element name.
+        /// </summary>
         public string ElementName { get; private set; }
+        /// <summary>
+        /// Gets or sets the token.
+        /// </summary>
         public string Token { get; private set; }
     }
 
+    /// <summary>
+    /// Represents the uxml token occurrence.
+    /// </summary>
     internal sealed class UxmlTokenOccurrence
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UxmlTokenOccurrence"/> type.
+        /// </summary>
         public UxmlTokenOccurrence(
             string relativeFilePath,
             int lineNumber,
@@ -73,29 +115,68 @@ namespace TailwindUSS.Editor
             ClassAttributeId = classAttributeId;
         }
 
+        /// <summary>
+        /// Gets or sets the relative file path.
+        /// </summary>
         public string RelativeFilePath { get; private set; }
+        /// <summary>
+        /// Gets or sets the line number.
+        /// </summary>
         public int LineNumber { get; private set; }
+        /// <summary>
+        /// Gets or sets the element name.
+        /// </summary>
         public string ElementName { get; private set; }
+        /// <summary>
+        /// Gets or sets the original token.
+        /// </summary>
         public string OriginalToken { get; private set; }
+        /// <summary>
+        /// Gets or sets the variant chain.
+        /// </summary>
         public IList<string> VariantChain { get; private set; }
+        /// <summary>
+        /// Gets or sets the base token.
+        /// </summary>
         public string BaseToken { get; private set; }
+        /// <summary>
+        /// Gets or sets the class attribute id.
+        /// </summary>
         public int ClassAttributeId { get; private set; }
     }
 
+    /// <summary>
+    /// Represents the style declaration.
+    /// </summary>
     internal sealed class StyleDeclaration
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StyleDeclaration"/> type.
+        /// </summary>
         public StyleDeclaration(string propertyName, string value)
         {
             PropertyName = propertyName;
             Value = value;
         }
 
+        /// <summary>
+        /// Gets or sets the property name.
+        /// </summary>
         public string PropertyName { get; private set; }
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
         public string Value { get; private set; }
     }
 
+    /// <summary>
+    /// Represents the resolved utility.
+    /// </summary>
     internal sealed class ResolvedUtility
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResolvedUtility"/> type.
+        /// </summary>
         public ResolvedUtility(
             string token,
             IList<StyleDeclaration> declarations,
@@ -110,40 +191,88 @@ namespace TailwindUSS.Editor
             FilterContribution = filterContribution;
         }
 
+        /// <summary>
+        /// Gets or sets the token.
+        /// </summary>
         public string Token { get; private set; }
+        /// <summary>
+        /// Gets or sets the declarations.
+        /// </summary>
         public IList<StyleDeclaration> Declarations { get; private set; }
+        /// <summary>
+        /// Gets or sets the selector suffix.
+        /// </summary>
         public string SelectorSuffix { get; private set; }
+        /// <summary>
+        /// Gets or sets the selector override.
+        /// </summary>
         public string SelectorOverride { get; private set; }
+        /// <summary>
+        /// Gets or sets the filter contribution.
+        /// </summary>
         public FilterContribution FilterContribution { get; private set; }
+        /// <summary>
+        /// Gets the is filter utility.
+        /// </summary>
         public bool IsFilterUtility => FilterContribution != null;
     }
 
+    /// <summary>
+    /// Represents the filter contribution.
+    /// </summary>
     internal sealed class FilterContribution
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FilterContribution"/> type.
+        /// </summary>
         public FilterContribution(string family, string function)
         {
             Family = family;
             Function = function;
         }
 
+        /// <summary>
+        /// Gets or sets the family.
+        /// </summary>
         public string Family { get; private set; }
+        /// <summary>
+        /// Gets or sets the function.
+        /// </summary>
         public string Function { get; private set; }
     }
 
+    /// <summary>
+    /// Represents the resolved token occurrence.
+    /// </summary>
     internal sealed class ResolvedTokenOccurrence
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResolvedTokenOccurrence"/> type.
+        /// </summary>
         public ResolvedTokenOccurrence(UxmlTokenOccurrence occurrence, ResolvedUtility utility)
         {
             Occurrence = occurrence;
             Utility = utility;
         }
 
+        /// <summary>
+        /// Gets or sets the occurrence.
+        /// </summary>
         public UxmlTokenOccurrence Occurrence { get; private set; }
+        /// <summary>
+        /// Gets or sets the utility.
+        /// </summary>
         public ResolvedUtility Utility { get; private set; }
     }
 
+    /// <summary>
+    /// Represents the uxml scan result.
+    /// </summary>
     internal sealed class UxmlScanResult
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UxmlScanResult"/> type.
+        /// </summary>
         public UxmlScanResult()
         {
             MatchedFiles = new List<string>();
@@ -151,16 +280,40 @@ namespace TailwindUSS.Editor
             Diagnostics = new List<TailwindUssDiagnostic>();
         }
 
+        /// <summary>
+        /// Gets or sets the matched files.
+        /// </summary>
         public IList<string> MatchedFiles { get; private set; }
+        /// <summary>
+        /// Gets or sets the occurrences.
+        /// </summary>
         public IList<UxmlTokenOccurrence> Occurrences { get; private set; }
+        /// <summary>
+        /// Gets or sets the diagnostics.
+        /// </summary>
         public IList<TailwindUssDiagnostic> Diagnostics { get; private set; }
     }
 
+    /// <summary>
+    /// Represents the command result.
+    /// </summary>
     internal sealed class CommandResult
     {
+        /// <summary>
+        /// The output asset path.
+        /// </summary>
         public string OutputAssetPath;
+        /// <summary>
+        /// The generated utility count.
+        /// </summary>
         public int GeneratedUtilityCount;
+        /// <summary>
+        /// The warning count.
+        /// </summary>
         public int WarningCount;
+        /// <summary>
+        /// The error count.
+        /// </summary>
         public int ErrorCount;
     }
 }

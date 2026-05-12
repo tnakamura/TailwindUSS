@@ -6,8 +6,14 @@ using UnityEngine;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Provides the config loader functionality.
+    /// </summary>
     internal static class ConfigLoader
     {
+        /// <summary>
+        /// The file name.
+        /// </summary>
         internal const string FileName = "tailwinduss.config.json";
         private static readonly JsonSerializerSettings WriteSettings = new JsonSerializerSettings
         {
@@ -15,16 +21,25 @@ namespace TailwindUSS.Editor
             NullValueHandling = NullValueHandling.Ignore
         };
 
+        /// <summary>
+        /// Gets project root.
+        /// </summary>
         internal static string GetProjectRoot()
         {
             return Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
         }
 
+        /// <summary>
+        /// Gets config path.
+        /// </summary>
         internal static string GetConfigPath()
         {
             return Path.Combine(GetProjectRoot(), FileName);
         }
 
+        /// <summary>
+        /// Attempts to load.
+        /// </summary>
         internal static bool TryLoad(out TailwindUssConfig config, out string errorMessage, out bool usedDefaultConfig)
         {
             var configPath = GetConfigPath();
@@ -66,6 +81,9 @@ namespace TailwindUSS.Editor
             }
         }
 
+        /// <summary>
+        /// Attempts to load editable.
+        /// </summary>
         internal static bool TryLoadEditable(out TailwindUssConfig config, out string errorMessage, out bool fileExists)
         {
             var configPath = GetConfigPath();
@@ -104,11 +122,17 @@ namespace TailwindUSS.Editor
             }
         }
 
+        /// <summary>
+        /// Writes default config.
+        /// </summary>
         internal static void WriteDefaultConfig()
         {
             WriteConfig(TailwindUssConfig.CreateDefault());
         }
 
+        /// <summary>
+        /// Writes config.
+        /// </summary>
         internal static void WriteConfig(TailwindUssConfig config)
         {
             if (config == null)

@@ -2,8 +2,14 @@ using System.Linq;
 
 namespace TailwindUSS.Editor.Tests
 {
+    /// <summary>
+    /// Represents the uxml scanner tests.
+    /// </summary>
     public sealed class UxmlScannerTests
     {
+        /// <summary>
+        /// Tests that scan finds tokens in matching files and reports duplicates.
+        /// </summary>
         [Test]
         public void Scan_FindsTokensInMatchingFilesAndReportsDuplicates()
         {
@@ -22,6 +28,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(result.Diagnostics[0].LineNumber, Is.GreaterThan(0));
         }
 
+        /// <summary>
+        /// Tests that scan uses default glob when all configured globs are blank.
+        /// </summary>
         [Test]
         public void Scan_UsesDefaultGlobWhenAllConfiguredGlobsAreBlank()
         {
@@ -36,6 +45,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(result.Occurrences.Select(occurrence => occurrence.OriginalToken), Is.EqualTo(new[] { "flex" }));
         }
 
+        /// <summary>
+        /// Tests that scan supports single character wildcards.
+        /// </summary>
         [Test]
         public void Scan_SupportsSingleCharacterWildcards()
         {
@@ -50,6 +62,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(result.MatchedFiles, Is.EqualTo(new[] { "Assets/UI/Menu1.uxml" }));
         }
 
+        /// <summary>
+        /// Tests that scan reports parse errors.
+        /// </summary>
         [Test]
         public void Scan_ReportsParseErrors()
         {

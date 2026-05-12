@@ -4,8 +4,14 @@ using System.Text;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Represents the uss emitter.
+    /// </summary>
     internal sealed class UssEmitter
     {
+        /// <summary>
+        /// Emits the operation.
+        /// </summary>
         public string Emit(IEnumerable<ResolvedUtility> utilities)
         {
             var builder = new StringBuilder();
@@ -40,6 +46,9 @@ namespace TailwindUSS.Editor
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Executes the escape class name operation.
+        /// </summary>
         internal static string EscapeClassName(string className)
         {
             var builder = new StringBuilder(className.Length);
@@ -58,6 +67,9 @@ namespace TailwindUSS.Editor
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Builds selector.
+        /// </summary>
         internal static string BuildSelector(IEnumerable<string> classNames, string selectorSuffix = "")
         {
             var builder = new StringBuilder();

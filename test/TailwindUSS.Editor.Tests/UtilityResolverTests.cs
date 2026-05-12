@@ -3,8 +3,14 @@ using System.Linq;
 
 namespace TailwindUSS.Editor.Tests
 {
+    /// <summary>
+    /// Represents the utility resolver tests.
+    /// </summary>
     public sealed class UtilityResolverTests
     {
+        /// <summary>
+        /// Tests that try resolve resolves single declaration utilities.
+        /// </summary>
         [TestCase("flex", "display", "flex")]
         [TestCase("hidden", "display", "none")]
         [TestCase("flex-row", "flex-direction", "row")]
@@ -129,6 +135,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(utility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(new[] { value }));
         }
 
+        /// <summary>
+        /// Tests that try resolve populates filter contribution metadata.
+        /// </summary>
         [TestCase("blur-sm", "blur", "blur(4px)")]
         [TestCase("grayscale", "grayscale", "grayscale(100%)")]
         [TestCase("invert-0", "invert", "invert(0%)")]
@@ -148,6 +157,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(utility.FilterContribution.Function, Is.EqualTo(function));
         }
 
+        /// <summary>
+        /// Tests that try resolve resolves multi declaration utilities.
+        /// </summary>
         [TestCase("px-4", new[] { "padding-left", "padding-right" }, "16px")]
         [TestCase("py-2", new[] { "padding-top", "padding-bottom" }, "8px")]
         [TestCase("pt-3", new[] { "padding-top" }, "12px")]
@@ -201,6 +213,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(utility.Declarations.Select(declaration => declaration.Value), Is.All.EqualTo(value));
         }
 
+        /// <summary>
+        /// Tests that try resolve resolves multi declaration utilities with distinct values.
+        /// </summary>
         [TestCase("truncate", new[] { "overflow", "text-overflow", "white-space" }, new[] { "hidden", "ellipsis", "nowrap" })]
         public void TryResolve_ResolvesMultiDeclarationUtilitiesWithDistinctValues(string token, string[] properties, string[] values)
         {
@@ -215,6 +230,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(utility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(values));
         }
 
+        /// <summary>
+        /// Tests that try resolve resolves border solid as no op utility.
+        /// </summary>
         [Test]
         public void TryResolve_ResolvesBorderSolidAsNoOpUtility()
         {
@@ -229,6 +247,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(utility.Declarations, Is.Empty);
         }
 
+        /// <summary>
+        /// Tests that try resolve defaults selector suffix to empty string.
+        /// </summary>
         [Test]
         public void TryResolve_DefaultsSelectorSuffixToEmptyString()
         {
@@ -242,6 +263,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(utility.SelectorSuffix, Is.EqualTo(string.Empty));
         }
 
+        /// <summary>
+        /// Tests that try resolve applies variant selector suffixes to original token.
+        /// </summary>
         [Test]
         public void TryResolve_AppliesVariantSelectorSuffixesToOriginalToken()
         {
@@ -265,6 +289,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(utility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(new[] { "#3B82F6" }));
         }
 
+        /// <summary>
+        /// Tests that try resolve uses configured theme aliases and overrides.
+        /// </summary>
         [Test]
         public void TryResolve_UsesConfiguredThemeAliasesAndOverrides()
         {
@@ -304,6 +331,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(translateUtility.Declarations.Select(declaration => declaration.Value), Is.EqualTo(new[] { "64px 0" }));
         }
 
+        /// <summary>
+        /// Tests that try resolve returns unsupported variant for unknown variant.
+        /// </summary>
         [Test]
         public void TryResolve_ReturnsUnsupportedVariantForUnknownVariant()
         {
@@ -323,6 +353,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(errorMessage, Is.EqualTo("Unsupported variant 'group-hover'."));
         }
 
+        /// <summary>
+        /// Tests that try resolve returns invalid value for known prefixes with unknown values.
+        /// </summary>
         [TestCase("p-7", "Unsupported spacing scale value.")]
         [TestCase("w-7", "Unsupported size scale value.")]
         [TestCase("w-none", "Unsupported size scale value.")]
@@ -373,6 +406,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(errorMessage, Is.EqualTo(expectedMessage));
         }
 
+        /// <summary>
+        /// Tests that try resolve returns unsupported for unknown token.
+        /// </summary>
         [Test]
         public void TryResolve_ReturnsUnsupportedForUnknownToken()
         {

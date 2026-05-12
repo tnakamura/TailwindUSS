@@ -5,10 +5,16 @@ using System.Xml.Linq;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Represents the uxml style reference updater.
+    /// </summary>
     internal sealed class UxmlStyleReferenceUpdater
     {
         private const string ProjectAssetUriPrefix = "project://database/";
 
+        /// <summary>
+        /// Ensures style reference.
+        /// </summary>
         public void EnsureStyleReference(string projectRoot, IEnumerable<string> relativeFilePaths, string outputUssPath, IList<TailwindUssDiagnostic> diagnostics)
         {
             var canonicalStyleReference = CreateCanonicalStyleReference(outputUssPath);
