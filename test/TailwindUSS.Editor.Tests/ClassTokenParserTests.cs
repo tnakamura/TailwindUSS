@@ -3,8 +3,14 @@ using System.Linq;
 
 namespace TailwindUSS.Editor.Tests
 {
+    /// <summary>
+    /// Represents the class token parser tests.
+    /// </summary>
     public sealed class ClassTokenParserTests
     {
+        /// <summary>
+        /// Tests that parse returns distinct tokens and reports duplicates.
+        /// </summary>
         [Test]
         public void Parse_ReturnsDistinctTokensAndReportsDuplicates()
         {
@@ -19,6 +25,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(diagnostics.Select(diagnostic => diagnostic.Token), Is.EqualTo(new[] { "flex", "px-4" }));
         }
 
+        /// <summary>
+        /// Tests that parse ignores extra whitespace.
+        /// </summary>
         [Test]
         public void Parse_IgnoresExtraWhitespace()
         {
@@ -31,6 +40,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(diagnostics, Is.Empty);
         }
 
+        /// <summary>
+        /// Tests that parse splits variant chain and base token.
+        /// </summary>
         [Test]
         public void Parse_SplitsVariantChainAndBaseToken()
         {

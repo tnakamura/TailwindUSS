@@ -5,8 +5,14 @@ using UnityEngine;
 
 namespace TailwindUSS.Editor.Tests
 {
+    /// <summary>
+    /// Represents the tailwind uss menu tests.
+    /// </summary>
     public sealed class TailwindUssMenuTests
     {
+        /// <summary>
+        /// Tests that create default config writes config when user confirms overwrite.
+        /// </summary>
         [Test]
         public void CreateDefaultConfig_WritesConfigWhenUserConfirmsOverwrite()
         {
@@ -21,6 +27,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.Last().Message, Does.Contain("default config created"));
         }
 
+        /// <summary>
+        /// Tests that create default config does nothing when user cancels overwrite.
+        /// </summary>
         [Test]
         public void CreateDefaultConfig_DoesNothingWhenUserCancelsOverwrite()
         {
@@ -36,6 +45,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries, Is.Empty);
         }
 
+        /// <summary>
+        /// Tests that create default config logs errors when write fails.
+        /// </summary>
         [Test]
         public void CreateDefaultConfig_LogsErrorsWhenWriteFails()
         {
@@ -49,6 +61,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.Last().Message, Does.Contain("Failed to create TailwindUSS config:"));
         }
 
+        /// <summary>
+        /// Tests that generate and validate menu commands invoke services.
+        /// </summary>
         [Test]
         public void GenerateAndValidateMenuCommandsInvokeServices()
         {
@@ -63,6 +78,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.Any(entry => entry.Message.Contains("TailwindUSS validation finished.")), Is.True);
         }
 
+        /// <summary>
+        /// Tests that settings menu command opens project settings.
+        /// </summary>
         [Test]
         public void SettingsMenuCommand_OpensProjectSettings()
         {

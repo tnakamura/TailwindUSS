@@ -7,10 +7,16 @@ using System.Xml.Linq;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Represents the uxml scanner.
+    /// </summary>
     internal sealed class UxmlScanner
     {
         private readonly ClassTokenParser classTokenParser = new ClassTokenParser();
 
+        /// <summary>
+        /// Scans UXML files matching the input globs for utility class tokens.
+        /// </summary>
         public UxmlScanResult Scan(string projectRoot, IEnumerable<string> inputGlobs)
         {
             var result = new UxmlScanResult();
@@ -167,11 +173,17 @@ namespace TailwindUSS.Editor
         {
             private readonly System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
 
+            /// <summary>
+            /// Appends a string value to the builder.
+            /// </summary>
             public void Append(string value)
             {
                 stringBuilder.Append(value);
             }
 
+            /// <summary>
+            /// Returns the accumulated string value.
+            /// </summary>
             public override string ToString()
             {
                 return stringBuilder.ToString();

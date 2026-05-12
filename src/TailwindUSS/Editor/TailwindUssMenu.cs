@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Provides the tailwind uss menu functionality.
+    /// </summary>
     internal static class TailwindUssMenu
     {
         [MenuItem("Tools/TailwindUSS/Generate")]

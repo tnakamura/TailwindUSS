@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Represents the filter utility composer.
+    /// </summary>
     internal sealed class FilterUtilityComposer
     {
         private static readonly string[] FilterOrder =
@@ -15,6 +18,9 @@ namespace TailwindUSS.Editor
             "hue-rotate"
         };
 
+        /// <summary>
+        /// Composes filter utilities by combining multiple filter functions into single declarations.
+        /// </summary>
         public IList<ResolvedUtility> Compose(IList<ResolvedTokenOccurrence> filterOccurrences, IList<TailwindUssDiagnostic> diagnostics)
         {
             var compositeUtilities = new Dictionary<string, ResolvedUtility>(StringComparer.Ordinal);

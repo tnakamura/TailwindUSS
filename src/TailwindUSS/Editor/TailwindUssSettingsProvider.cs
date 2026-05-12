@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Represents the tailwind uss settings provider.
+    /// </summary>
     internal sealed class TailwindUssSettingsProvider : SettingsProvider
     {
         private readonly List<string> inputGlobs = new List<string>();
@@ -21,6 +24,9 @@ namespace TailwindUSS.Editor
         private string statusMessage;
         private MessageType statusMessageType = MessageType.Info;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TailwindUssSettingsProvider"/> type.
+        /// </summary>
         internal TailwindUssSettingsProvider(string path, SettingsScope scope)
             : base(path, scope)
         {
@@ -34,27 +40,42 @@ namespace TailwindUSS.Editor
             };
         }
 
+        /// <summary>
+        /// Gets the path where the settings appear in Unity's Project Settings window.
+        /// </summary>
         internal static string SettingsPath
         {
             get { return "Project/TailwindUSS"; }
         }
 
+        /// <summary>
+        /// Creates a settings provider instance for Unity's settings system.
+        /// </summary>
         [SettingsProvider]
         internal static SettingsProvider CreateSettingsProvider()
         {
             return new TailwindUssSettingsProvider(SettingsPath, SettingsScope.Project);
         }
 
+        /// <summary>
+        /// Opens Unity's Project Settings window to the TailwindUSS settings page.
+        /// </summary>
         internal static void OpenProjectSettings()
         {
             SettingsService.OpenProjectSettings(SettingsPath);
         }
 
+        /// <summary>
+        /// Called when the settings page is activated and reloads the configuration.
+        /// </summary>
         public override void OnActivate(string searchContext, VisualElement rootElement)
         {
             Reload();
         }
 
+        /// <summary>
+        /// Renders the settings UI in Unity's Project Settings window.
+        /// </summary>
         public override void OnGUI(string searchContext)
         {
             if (!isLoaded)
@@ -322,14 +343,23 @@ namespace TailwindUSS.Editor
 
         private readonly struct ThemeEntry
         {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ThemeEntry"/> struct with the specified key and value.
+            /// </summary>
             public ThemeEntry(string key, string value)
             {
                 Key = key;
                 Value = value;
             }
 
+            /// <summary>
+            /// Gets the configuration key.
+            /// </summary>
             public string Key { get; }
 
+            /// <summary>
+            /// Gets the configuration value.
+            /// </summary>
             public string Value { get; }
         }
     }

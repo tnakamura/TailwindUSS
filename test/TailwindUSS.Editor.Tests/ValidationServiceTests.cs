@@ -2,8 +2,14 @@ using System.Linq;
 
 namespace TailwindUSS.Editor.Tests
 {
+    /// <summary>
+    /// Represents the validation service tests.
+    /// </summary>
     public sealed class ValidationServiceTests
     {
+        /// <summary>
+        /// Tests that validate load failure returns error.
+        /// </summary>
         [Test]
         public void Validate_LoadFailureReturnsError()
         {
@@ -17,6 +23,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.Last().Level, Is.EqualTo("Error"));
         }
 
+        /// <summary>
+        /// Tests that validate counts supported warnings and errors.
+        /// </summary>
         [Test]
         public void Validate_CountsSupportedWarningsAndErrors()
         {
@@ -34,6 +43,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.Last().Message, Does.Contain("TailwindUSS validation finished."));
         }
 
+        /// <summary>
+        /// Tests that validate reports duplicate and invalid filter utilities.
+        /// </summary>
         [Test]
         public void Validate_ReportsDuplicateAndInvalidFilterUtilities()
         {

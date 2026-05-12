@@ -3,29 +3,68 @@ using System.Collections.Generic;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Represents the tailwind uss config.
+    /// </summary>
     [Serializable]
     internal sealed class TailwindUssConfig
     {
+        /// <summary>
+        /// The input globs.
+        /// </summary>
         public string[] inputGlobs = { "Assets/**/*.uxml" };
+        /// <summary>
+        /// The output uss path.
+        /// </summary>
         public string outputUssPath = "Assets/Generated/TailwindUSS.generated.uss";
+        /// <summary>
+        /// The auto attach generated uss.
+        /// </summary>
         public bool autoAttachGeneratedUss;
+        /// <summary>
+        /// The theme.
+        /// </summary>
         public TailwindUssTheme theme;
 
+        /// <summary>
+        /// Creates a new instance with default configuration values.
+        /// </summary>
         public static TailwindUssConfig CreateDefault()
         {
             return new TailwindUssConfig();
         }
     }
 
+    /// <summary>
+    /// Represents the tailwind uss theme.
+    /// </summary>
     [Serializable]
     internal sealed class TailwindUssTheme
     {
+        /// <summary>
+        /// The colors.
+        /// </summary>
         public Dictionary<string, string> colors;
+        /// <summary>
+        /// The spacing.
+        /// </summary>
         public Dictionary<string, string> spacing;
+        /// <summary>
+        /// The font sizes.
+        /// </summary>
         public Dictionary<string, string> fontSizes;
+        /// <summary>
+        /// The fonts.
+        /// </summary>
         public Dictionary<string, string> fonts;
+        /// <summary>
+        /// The background images.
+        /// </summary>
         public Dictionary<string, string> backgroundImages;
 
+        /// <summary>
+        /// Creates a merged theme by combining the provided theme with built-in defaults.
+        /// </summary>
         public static TailwindUssTheme CreateMerged(TailwindUssTheme theme)
         {
             var merged = new TailwindUssTheme

@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Represents the generation service.
+    /// </summary>
     internal sealed class GenerationService
     {
         private readonly UxmlScanner scanner = new UxmlScanner();
@@ -13,6 +16,9 @@ namespace TailwindUSS.Editor
         private readonly UxmlStyleReferenceUpdater styleReferenceUpdater = new UxmlStyleReferenceUpdater();
         private readonly FilterUtilityComposer filterUtilityComposer = new FilterUtilityComposer();
 
+        /// <summary>
+        /// Generates USS output from utility tokens found in UXML files.
+        /// </summary>
         public CommandResult Generate()
         {
             var result = new CommandResult();
@@ -153,6 +159,9 @@ namespace TailwindUSS.Editor
             return result;
         }
 
+        /// <summary>
+        /// Logs a diagnostic message to Unity's console with context information when available.
+        /// </summary>
         internal static void LogDiagnostic(TailwindUssDiagnostic diagnostic)
         {
             var location = string.Empty;

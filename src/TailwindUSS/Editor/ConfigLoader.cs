@@ -6,8 +6,14 @@ using UnityEngine;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Provides the config loader functionality.
+    /// </summary>
     internal static class ConfigLoader
     {
+        /// <summary>
+        /// The file name.
+        /// </summary>
         internal const string FileName = "tailwinduss.config.json";
         private static readonly JsonSerializerSettings WriteSettings = new JsonSerializerSettings
         {
@@ -15,16 +21,25 @@ namespace TailwindUSS.Editor
             NullValueHandling = NullValueHandling.Ignore
         };
 
+        /// <summary>
+        /// Gets the full path to the Unity project root directory.
+        /// </summary>
         internal static string GetProjectRoot()
         {
             return Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
         }
 
+        /// <summary>
+        /// Gets the full path to the TailwindUSS configuration file.
+        /// </summary>
         internal static string GetConfigPath()
         {
             return Path.Combine(GetProjectRoot(), FileName);
         }
 
+        /// <summary>
+        /// Attempts to load the TailwindUSS configuration from disk, falling back to defaults if the file is missing.
+        /// </summary>
         internal static bool TryLoad(out TailwindUssConfig config, out string errorMessage, out bool usedDefaultConfig)
         {
             var configPath = GetConfigPath();
@@ -66,6 +81,9 @@ namespace TailwindUSS.Editor
             }
         }
 
+        /// <summary>
+        /// Attempts to load the configuration file for editing without merging built-in defaults.
+        /// </summary>
         internal static bool TryLoadEditable(out TailwindUssConfig config, out string errorMessage, out bool fileExists)
         {
             var configPath = GetConfigPath();
@@ -104,11 +122,17 @@ namespace TailwindUSS.Editor
             }
         }
 
+        /// <summary>
+        /// Writes a default configuration file to disk.
+        /// </summary>
         internal static void WriteDefaultConfig()
         {
             WriteConfig(TailwindUssConfig.CreateDefault());
         }
 
+        /// <summary>
+        /// Writes the provided configuration to disk as JSON.
+        /// </summary>
         internal static void WriteConfig(TailwindUssConfig config)
         {
             if (config == null)

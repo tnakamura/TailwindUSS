@@ -3,8 +3,14 @@ using System.IO;
 
 namespace TailwindUSS.Editor.Tests
 {
+    /// <summary>
+    /// Represents the uxml style reference updater tests.
+    /// </summary>
     public sealed class UxmlStyleReferenceUpdaterTests
     {
+        /// <summary>
+        /// Tests that ensure style reference adds style element when missing.
+        /// </summary>
         [Test]
         public void EnsureStyleReference_AddsStyleElementWhenMissing()
         {
@@ -21,6 +27,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(diagnostics, Is.Empty);
         }
 
+        /// <summary>
+        /// Tests that ensure style reference does not add duplicate style element.
+        /// </summary>
         [Test]
         public void EnsureStyleReference_DoesNotAddDuplicateStyleElement()
         {
@@ -37,6 +46,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(diagnostics, Is.Empty);
         }
 
+        /// <summary>
+        /// Tests that ensure style reference rewrites legacy asset path reference.
+        /// </summary>
         [Test]
         public void EnsureStyleReference_RewritesLegacyAssetPathReference()
         {
@@ -54,6 +66,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(diagnostics, Is.Empty);
         }
 
+        /// <summary>
+        /// Tests that ensure style reference reports errors for broken xml.
+        /// </summary>
         [Test]
         public void EnsureStyleReference_ReportsErrorsForBrokenXml()
         {

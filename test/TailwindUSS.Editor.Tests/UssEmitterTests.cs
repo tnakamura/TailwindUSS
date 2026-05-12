@@ -1,7 +1,13 @@
 namespace TailwindUSS.Editor.Tests
 {
+    /// <summary>
+    /// Represents the uss emitter tests.
+    /// </summary>
     public sealed class UssEmitterTests
     {
+        /// <summary>
+        /// Tests that emit sorts utilities and formats declarations.
+        /// </summary>
         [Test]
         public void Emit_SortsUtilitiesAndFormatsDeclarations()
         {
@@ -23,6 +29,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output.Replace("\r\n", "\n"), Is.EqualTo(expected));
         }
 
+        /// <summary>
+        /// Tests that emit appends selector suffix when provided.
+        /// </summary>
         [Test]
         public void Emit_AppendsSelectorSuffixWhenProvided()
         {
@@ -40,6 +49,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output.Replace("\r\n", "\n"), Does.Contain(".example:hover {\n    display: flex;\n}"));
         }
 
+        /// <summary>
+        /// Tests that emit escapes variant class names before appending selector suffix.
+        /// </summary>
         [Test]
         public void Emit_EscapesVariantClassNamesBeforeAppendingSelectorSuffix()
         {
@@ -57,6 +69,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output.Replace("\r\n", "\n"), Does.Contain(".hover\\:bg-blue-500:hover {\n    background-color: #3B82F6;\n}"));
         }
 
+        /// <summary>
+        /// Tests that emit uses selector override when provided.
+        /// </summary>
         [Test]
         public void Emit_UsesSelectorOverrideWhenProvided()
         {

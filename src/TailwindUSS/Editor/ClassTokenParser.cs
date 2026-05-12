@@ -3,8 +3,14 @@ using System.Collections.Generic;
 
 namespace TailwindUSS.Editor
 {
+    /// <summary>
+    /// Represents the class token parser.
+    /// </summary>
     internal sealed class ClassTokenParser
     {
+        /// <summary>
+        /// Parses utility class tokens from a class attribute value.
+        /// </summary>
         public IList<UxmlTokenOccurrence> Parse(string classValue, string relativeFilePath, int lineNumber, string elementName, IList<TailwindUssDiagnostic> diagnostics, int classAttributeId = 0)
         {
             var tokens = new List<UxmlTokenOccurrence>();
