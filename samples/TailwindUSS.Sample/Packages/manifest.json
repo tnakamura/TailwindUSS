@@ -1,6 +1,6 @@
 {
   "dependencies": {
     "com.github-tnakamura.tailwinduss": "file:../../../src/TailwindUSS",
-    "com.unity.ui.toolkit": "1.0.0"
+    "com.unity.modules.uielements": "1.0.0"
   }
 }
