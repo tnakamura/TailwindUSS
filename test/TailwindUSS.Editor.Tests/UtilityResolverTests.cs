@@ -78,8 +78,6 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("basis-auto", "flex-basis", "auto")]
         [TestCase("basis-full", "flex-basis", "100%")]
         [TestCase("order-4", "order", "4")]
-        [TestCase("gap-x-2", "column-gap", "8px")]
-        [TestCase("gap-y-3", "row-gap", "12px")]
         [TestCase("overflow-hidden", "overflow", "hidden")]
         [TestCase("overflow-visible", "overflow", "visible")]
         [TestCase("overflow-scroll", "overflow", "scroll")]
@@ -195,7 +193,6 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("border-slate-500", new[] { "border-top-color", "border-right-color", "border-bottom-color", "border-left-color" }, "#64748B")]
         [TestCase("rounded-t-lg", new[] { "border-top-left-radius", "border-top-right-radius" }, "8px")]
         [TestCase("rounded-r-md", new[] { "border-top-right-radius", "border-bottom-right-radius" }, "6px")]
-        [TestCase("gap-4", new[] { "column-gap", "row-gap" }, "16px")]
         [TestCase("size-4", new[] { "width", "height" }, "16px")]
         [TestCase("size-full", new[] { "width", "height" }, "100%")]
         public void TryResolve_ResolvesMultiDeclarationUtilities(string token, string[] properties, string value)
@@ -371,7 +368,6 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("basis-7", "Unsupported size scale value.")]
         [TestCase("basis-none", "Unsupported size scale value.")]
         [TestCase("order-13", "Unsupported order value.")]
-        [TestCase("gap-7", "Unsupported spacing scale value.")]
         [TestCase("tracking-super", "Unsupported tracking value.")]
         [TestCase("leading-11", "Unsupported leading value.")]
         [TestCase("scale-115", "Unsupported scale value.")]
@@ -426,6 +422,10 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("lowercase")]
         [TestCase("capitalize")]
         [TestCase("normal-case")]
+        [TestCase("gap-4")]
+        [TestCase("gap-x-2")]
+        [TestCase("gap-y-3")]
+        [TestCase("gap-7")]
         public void TryResolve_ReturnsUnsupportedForKnownUnityUnsupportedToken(string token)
         {
             var resolver = new UtilityResolver();
@@ -434,7 +434,10 @@ namespace TailwindUSS.Editor.Tests
 
             Assert.That(status, Is.EqualTo(ResolveStatus.Unsupported));
             Assert.That(utility, Is.Null);
-            Assert.That(errorMessage, Is.EqualTo("Unity USS does not support text-transform; reproducing it requires changing the source text in text/value, not styling."));
+            Assert.That(errorMessage, Is.EqualTo(
+                token.StartsWith("gap-", System.StringComparison.Ordinal)
+                    ? "Unity USS does not support gap, row-gap, or column-gap; exact reproduction would require structural selectors that UI Toolkit USS lacks."
+                    : "Unity USS does not support text-transform; reproducing it requires changing the source text in text/value, not styling."));
         }
     }
 }

@@ -9,6 +9,7 @@ namespace TailwindUSS.Editor
     internal sealed class UtilityResolver
     {
         private const string UnsupportedTextTransformMessage = "Unity USS does not support text-transform; reproducing it requires changing the source text in text/value, not styling.";
+        private const string UnsupportedGapMessage = "Unity USS does not support gap, row-gap, or column-gap; exact reproduction would require structural selectors that UI Toolkit USS lacks.";
 
         private delegate bool UtilityHandler(string token, out ResolvedUtility utility, out string errorMessage);
         private readonly IDictionary<string, string> spacingScale;
@@ -473,6 +474,12 @@ namespace TailwindUSS.Editor
                 return ResolveStatus.Unsupported;
             }
 
+            if (token.StartsWith("gap-", StringComparison.Ordinal))
+            {
+                errorMessage = UnsupportedGapMessage;
+                return ResolveStatus.Unsupported;
+            }
+
             if (TryResolveFontSize(token, out utility, out errorMessage)
                 || TryResolveFontWeight(token, out utility, out errorMessage)
                 || TryResolveFontFamily(token, out utility, out errorMessage)
@@ -485,7 +492,6 @@ namespace TailwindUSS.Editor
                 || TryResolveSize(token, out utility, out errorMessage)
                 || TryResolveBasis(token, out utility, out errorMessage)
                 || TryResolveOrder(token, out utility, out errorMessage)
-                || TryResolveGap(token, out utility, out errorMessage)
                 || TryResolveTracking(token, out utility, out errorMessage)
                 || TryResolveLeading(token, out utility, out errorMessage)
                 || TryResolveTransform(token, out utility, out errorMessage)
@@ -714,43 +720,6 @@ namespace TailwindUSS.Editor
         private static bool TryResolveOrder(string token, out ResolvedUtility utility, out string errorMessage)
         {
             return TryResolveMappedSingleProperty(token, "order-", "order", OrderScale, "Unsupported order value.", out utility, out errorMessage);
-        }
-
-        private bool TryResolveGap(string token, out ResolvedUtility utility, out string errorMessage)
-        {
-            if (TryResolveMappedSingleProperty(token, "gap-x-", "column-gap", spacingScale, "Unsupported spacing scale value.", out utility, out errorMessage))
-            {
-                return true;
-            }
-
-            if (TryResolveMappedSingleProperty(token, "gap-y-", "row-gap", spacingScale, "Unsupported spacing scale value.", out utility, out errorMessage))
-            {
-                return true;
-            }
-
-            if (!token.StartsWith("gap-", StringComparison.Ordinal))
-            {
-                utility = null;
-                errorMessage = null;
-                return false;
-            }
-
-            var key = token.Substring("gap-".Length);
-            string value;
-            if (!spacingScale.TryGetValue(key, out value))
-            {
-                utility = null;
-                errorMessage = "Unsupported spacing scale value.";
-                return true;
-            }
-
-            utility = Create(token, new[]
-            {
-                new StyleDeclaration("column-gap", value),
-                new StyleDeclaration("row-gap", value)
-            });
-            errorMessage = null;
-            return true;
         }
 
         private static bool TryResolveTracking(string token, out ResolvedUtility utility, out string errorMessage)

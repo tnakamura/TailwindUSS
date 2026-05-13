@@ -66,26 +66,6 @@
     font-weight: bold;
 }
 
-.gap-1 {
-    column-gap: 4px;
-    row-gap: 4px;
-}
-
-.gap-2 {
-    column-gap: 8px;
-    row-gap: 8px;
-}
-
-.gap-3 {
-    column-gap: 12px;
-    row-gap: 12px;
-}
-
-.gap-4 {
-    column-gap: 16px;
-    row-gap: 16px;
-}
-
 .grow {
     flex-grow: 1;
 }
@@ -112,6 +92,30 @@
 
 .leading-5 {
     line-height: 20px;
+}
+
+.ml-2 {
+    margin-left: 8px;
+}
+
+.ml-3 {
+    margin-left: 12px;
+}
+
+.mt-1 {
+    margin-top: 4px;
+}
+
+.mt-2 {
+    margin-top: 8px;
+}
+
+.mt-3 {
+    margin-top: 12px;
+}
+
+.mt-4 {
+    margin-top: 16px;
 }
 
 .overflow-scroll {

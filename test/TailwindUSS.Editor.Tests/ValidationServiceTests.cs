@@ -45,6 +45,25 @@ namespace TailwindUSS.Editor.Tests
         }
 
         /// <summary>
+        /// Tests that validate reports gap utilities as unsupported.
+        /// </summary>
+        [Test]
+        public void Validate_ReportsGapUtilitiesAsUnsupported()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteAssetFile("UI/Main.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"gap-4 gap-x-2 gap-y-3\" /></ui:UXML>");
+
+            var result = new ValidationService().Validate();
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(0));
+            Assert.That(result.WarningCount, Is.EqualTo(3));
+            Assert.That(result.ErrorCount, Is.EqualTo(0));
+            Assert.That(Debug.Entries.Any(entry => entry.Message.Contains("Unsupported utility token 'gap-4': Unity USS does not support gap, row-gap, or column-gap; exact reproduction would require structural selectors that UI Toolkit USS lacks.")), Is.True);
+            Assert.That(Debug.Entries.Any(entry => entry.Message.Contains("Unsupported utility token 'gap-x-2': Unity USS does not support gap, row-gap, or column-gap; exact reproduction would require structural selectors that UI Toolkit USS lacks.")), Is.True);
+            Assert.That(Debug.Entries.Any(entry => entry.Message.Contains("Unsupported utility token 'gap-y-3': Unity USS does not support gap, row-gap, or column-gap; exact reproduction would require structural selectors that UI Toolkit USS lacks.")), Is.True);
+        }
+
+        /// <summary>
         /// Tests that validate reports duplicate and invalid filter utilities.
         /// </summary>
         [Test]

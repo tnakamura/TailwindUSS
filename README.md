@@ -181,6 +181,8 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 
 ### Spacing
 
+Gap utilities are excluded because Unity USS has no gap, row-gap, or column-gap support, and UI Toolkit lacks the structural selectors needed for an exact USS-only polyfill. For simple layouts, use margin utilities on child elements instead.
+
 - `p-*`
 - `px-*`
 - `py-*`
@@ -195,9 +197,6 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `mr-*`
 - `mb-*`
 - `ml-*`
-- `gap-*`
-- `gap-x-*`
-- `gap-y-*`
 
 ### Size
 

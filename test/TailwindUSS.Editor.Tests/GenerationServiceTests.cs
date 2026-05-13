@@ -133,19 +133,17 @@ namespace TailwindUSS.Editor.Tests
         {
             using var scope = new TestProjectScope();
             scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
-            scope.WriteAssetFile("UI/Text.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"flex-wrap gap-x-4 gap-y-2 mt-3 self-center basis-4 order-2\" /><ui:Label class=\"truncate tracking-wide leading-6 text-xl uppercase break-all\" /></ui:UXML>");
+            scope.WriteAssetFile("UI/Text.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"flex-wrap mt-3 self-center basis-4 order-2\" /><ui:Label class=\"truncate tracking-wide leading-6 text-xl uppercase break-all\" /></ui:UXML>");
 
             var result = new GenerationService().Generate();
 
             var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
 
-            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(12));
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(10));
             Assert.That(result.WarningCount, Is.EqualTo(1));
             Assert.That(output, Does.Contain(".basis-4 {\n    flex-basis: 16px;\n}"));
             Assert.That(output, Does.Contain(".break-all {\n    word-break: break-all;\n}"));
             Assert.That(output, Does.Contain(".flex-wrap {\n    flex-wrap: wrap;\n}"));
-            Assert.That(output, Does.Contain(".gap-x-4 {\n    column-gap: 16px;\n}"));
-            Assert.That(output, Does.Contain(".gap-y-2 {\n    row-gap: 8px;\n}"));
             Assert.That(output, Does.Contain(".leading-6 {\n    line-height: 24px;\n}"));
             Assert.That(output, Does.Contain(".mt-3 {\n    margin-top: 12px;\n}"));
             Assert.That(output, Does.Contain(".order-2 {\n    order: 2;\n}"));
@@ -158,23 +156,25 @@ namespace TailwindUSS.Editor.Tests
         }
 
         /// <summary>
-        /// Tests that generate expands gap utilities to row-gap and column-gap declarations.
+        /// Tests that generate skips gap utilities and reports them as unsupported.
         /// </summary>
         [Test]
-        public void Generate_WritesGapUtilityAsRowAndColumnGap()
+        public void Generate_SkipsGapUtilitiesAndLogsUnsupportedWarnings()
         {
             using var scope = new TestProjectScope();
             scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
-            scope.WriteAssetFile("UI/Gap.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"gap-4\" /></ui:UXML>");
+            scope.WriteAssetFile("UI/Gap.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"gap-4 gap-x-2 gap-y-3\" /></ui:UXML>");
 
             var result = new GenerationService().Generate();
 
             var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
 
-            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(1));
-            Assert.That(result.WarningCount, Is.EqualTo(0));
-            Assert.That(output, Does.Contain(".gap-4 {\n    column-gap: 16px;\n    row-gap: 16px;\n}"));
-            Assert.That(output, Does.Not.Contain(".gap-4 {\n    gap: 16px;\n}"));
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(0));
+            Assert.That(result.WarningCount, Is.EqualTo(3));
+            Assert.That(output, Does.Not.Contain(".gap-4 {"));
+            Assert.That(output, Does.Not.Contain(".gap-x-2 {"));
+            Assert.That(output, Does.Not.Contain(".gap-y-3 {"));
+            Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Unsupported utility token 'gap-4': Unity USS does not support gap, row-gap, or column-gap; exact reproduction would require structural selectors that UI Toolkit USS lacks.")), Is.True);
         }
 
         /// <summary>
