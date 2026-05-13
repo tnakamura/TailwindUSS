@@ -40,7 +40,7 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(Debug.Entries.Any(entry => entry.Message.Contains("Duplicate token 'unknown'")), Is.True);
             Assert.That(Debug.Entries.Any(entry => entry.Message.Contains("Invalid utility token 'p-7'")), Is.True);
             Assert.That(Debug.Entries.Any(entry => entry.Message.Contains("Unsupported utility token 'unknown'")), Is.True);
-            Assert.That(Debug.Entries.Any(entry => entry.Message.Contains("Unsupported utility token 'uppercase': Unity USS does not support text-transform.")), Is.True);
+            Assert.That(Debug.Entries.Any(entry => entry.Message.Contains("Unsupported utility token 'uppercase': Unity USS does not support text-transform; reproducing it requires changing the source text in text/value, not styling.")), Is.True);
             Assert.That(Debug.Entries.Last().Message, Does.Contain("TailwindUSS validation finished."));
         }
 

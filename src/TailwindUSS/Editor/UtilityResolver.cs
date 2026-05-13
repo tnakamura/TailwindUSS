@@ -8,7 +8,7 @@ namespace TailwindUSS.Editor
     /// </summary>
     internal sealed class UtilityResolver
     {
-        private const string UnsupportedTextTransformMessage = "Unity USS does not support text-transform.";
+        private const string UnsupportedTextTransformMessage = "Unity USS does not support text-transform; reproducing it requires changing the source text in text/value, not styling.";
 
         private delegate bool UtilityHandler(string token, out ResolvedUtility utility, out string errorMessage);
         private readonly IDictionary<string, string> spacingScale;

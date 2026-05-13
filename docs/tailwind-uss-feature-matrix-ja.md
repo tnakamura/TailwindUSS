@@ -111,7 +111,7 @@
 | `leading-*` | ✅ | ✅ | 初期実装は `leading-3`〜`leading-10` に対応 |
 | `whitespace-normal`, `whitespace-nowrap` | ✅ | ✅ | `white-space` に対応 |
 | `truncate`, `text-ellipsis`, `text-clip` | ✅ | ✅ | `text-overflow` と `overflow` の組み合わせを実装済み |
-| `uppercase`, `lowercase`, `capitalize`, `normal-case` | ❌ | ❌ | Unity USS に `text-transform` がないため未対応 |
+| `uppercase`, `lowercase`, `capitalize`, `normal-case` | ❌ | ❌ | Unity USS に `text-transform` がなく、他の USS プロパティでも代替できない。必要なら `text` / `value` の書き換えが必要 |
 | `break-normal`, `break-all` | ✅ | ✅ | `word-break` に対応 |
 | `font-*` configured aliases | ✅ | ✅ | `theme.fonts` で alias を定義すると `-unity-font` を生成 |
 | `underline`, `line-through`, `no-underline` | ⚪ | ✅ | `text-decoration` の基本値に対応 |

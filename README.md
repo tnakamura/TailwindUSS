@@ -244,7 +244,7 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 
 ### Typography
 
-Text case utilities are intentionally excluded because Unity USS has no text-transform property.
+Text case utilities are intentionally excluded because Unity USS has no text-transform property, and no other USS property can replace it. Supporting them would require mutating the underlying text or value content.
 
 - `text-xs`
 - `text-sm`

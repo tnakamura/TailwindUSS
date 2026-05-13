@@ -154,7 +154,7 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".text-xl {\n    font-size: 20px;\n}"));
             Assert.That(output, Does.Contain(".truncate {\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n}"));
             Assert.That(output, Does.Not.Contain(".uppercase {"));
-            Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Unsupported utility token 'uppercase': Unity USS does not support text-transform.")), Is.True);
+            Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Unsupported utility token 'uppercase': Unity USS does not support text-transform; reproducing it requires changing the source text in text/value, not styling.")), Is.True);
         }
 
         /// <summary>

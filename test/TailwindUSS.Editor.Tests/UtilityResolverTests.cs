@@ -434,7 +434,7 @@ namespace TailwindUSS.Editor.Tests
 
             Assert.That(status, Is.EqualTo(ResolveStatus.Unsupported));
             Assert.That(utility, Is.Null);
-            Assert.That(errorMessage, Is.EqualTo("Unity USS does not support text-transform."));
+            Assert.That(errorMessage, Is.EqualTo("Unity USS does not support text-transform; reproducing it requires changing the source text in text/value, not styling."));
         }
     }
 }
