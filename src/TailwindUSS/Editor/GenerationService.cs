@@ -93,7 +93,7 @@ namespace TailwindUSS.Editor
                         scanResult.Diagnostics.Add(new TailwindUssDiagnostic(
                             DiagnosticSeverity.Warning,
                             TokenIssueKind.Unsupported,
-                            string.Format("Unsupported utility token '{0}'.", occurrence.OriginalToken),
+                            FormatUnsupportedUtilityTokenMessage(occurrence.OriginalToken, resolveError),
                             occurrence.RelativeFilePath,
                             occurrence.LineNumber,
                             occurrence.ElementName,
@@ -194,6 +194,16 @@ namespace TailwindUSS.Editor
             }
 
             Debug.LogWarning(message, context);
+        }
+
+        internal static string FormatUnsupportedUtilityTokenMessage(string token, string resolveError)
+        {
+            if (string.IsNullOrEmpty(resolveError))
+            {
+                return string.Format("Unsupported utility token '{0}'.", token);
+            }
+
+            return string.Format("Unsupported utility token '{0}': {1}", token, resolveError);
         }
 
         private static string GetAbsoluteOutputPath(string projectRoot, string configuredOutputPath)

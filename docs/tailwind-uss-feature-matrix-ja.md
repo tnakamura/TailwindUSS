@@ -29,7 +29,7 @@
 | サイズ | `w-*`, `h-*`, `min-w-*`, `min-h-*`, `max-w-*`, `max-h-*`, `size-*`, `basis-*`, `order-*` | `width`, `height`, `min-*`, `max-*`, `flex-basis`, `order` |
 | 色 | `bg-*`, `bg-transparent`, `bg-current`, `text-*`, `border-*`, `border-t-*`, `border-r-*`, `border-b-*`, `border-l-*` | `background-color`, `color`, `border-*-color` |
 | 背景 | `bg-cover`, `bg-contain`, `bg-center`, `bg-top`, `bg-bottom`, `bg-left`, `bg-right`, `bg-repeat`, `bg-no-repeat`, `bg-repeat-x`, `bg-repeat-y`, `bg-none`, `bg-*` (設定済み background image alias) | `background-size`, `background-position`, `background-repeat`, `background-image` |
-| タイポグラフィ | `text-xs`〜`text-9xl`, `font-thin`〜`font-black`, `font-*` (設定済み font alias), `italic`, `not-italic`, `text-left`, `text-center`, `text-right`, `text-justify`, `whitespace-*`, `uppercase`, `lowercase`, `capitalize`, `normal-case`, `tracking-*`, `leading-*`, `truncate`, `text-ellipsis`, `text-clip`, `break-normal`, `break-all`, `underline`, `line-through`, `no-underline` | `font-size`, `font-weight`, `-unity-font`, `-unity-font-style`, `-unity-text-align`, `white-space`, `text-transform`, `letter-spacing`, `line-height`, `text-overflow`, `word-break`, `overflow`, `text-decoration` |
+| タイポグラフィ | `text-xs`〜`text-9xl`, `font-thin`〜`font-black`, `font-*` (設定済み font alias), `italic`, `not-italic`, `text-left`, `text-center`, `text-right`, `text-justify`, `whitespace-*`, `tracking-*`, `leading-*`, `truncate`, `text-ellipsis`, `text-clip`, `break-normal`, `break-all`, `underline`, `line-through`, `no-underline` | `font-size`, `font-weight`, `-unity-font`, `-unity-font-style`, `-unity-text-align`, `white-space`, `letter-spacing`, `line-height`, `text-overflow`, `word-break`, `overflow`, `text-decoration` |
 | ボーダー | `border`, `border-0`, `border-2`, `border-4`, `border-8`, `border-solid`, `border-t`, `border-r`, `border-b`, `border-l` | `border-*-width` |
 | 角丸 | `rounded-none`, `rounded-sm`, `rounded`, `rounded-md`, `rounded-lg`, `rounded-full`, `rounded-t*`, `rounded-r*`, `rounded-b*`, `rounded-l*`, `rounded-tl*`, `rounded-tr*`, `rounded-br*`, `rounded-bl*` | `border-*-radius` |
 | 変形 | `scale-*`, `rotate-*`, `translate-x-*`, `translate-y-*`, `origin-*` | `scale`, `rotate`, `translate`, `transform-origin` |
@@ -111,7 +111,7 @@
 | `leading-*` | ✅ | ✅ | 初期実装は `leading-3`〜`leading-10` に対応 |
 | `whitespace-normal`, `whitespace-nowrap` | ✅ | ✅ | `white-space` に対応 |
 | `truncate`, `text-ellipsis`, `text-clip` | ✅ | ✅ | `text-overflow` と `overflow` の組み合わせを実装済み |
-| `uppercase`, `lowercase`, `capitalize`, `normal-case` | ✅ | ✅ | `text-transform` に対応 |
+| `uppercase`, `lowercase`, `capitalize`, `normal-case` | ❌ | ❌ | Unity USS に `text-transform` がないため未対応 |
 | `break-normal`, `break-all` | ✅ | ✅ | `word-break` に対応 |
 | `font-*` configured aliases | ✅ | ✅ | `theme.fonts` で alias を定義すると `-unity-font` を生成 |
 | `underline`, `line-through`, `no-underline` | ⚪ | ✅ | `text-decoration` の基本値に対応 |

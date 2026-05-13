@@ -84,7 +84,7 @@ namespace TailwindUSS.Editor
                         scanResult.Diagnostics.Add(new TailwindUssDiagnostic(
                             DiagnosticSeverity.Warning,
                             TokenIssueKind.Unsupported,
-                            string.Format("Unsupported utility token '{0}'.", occurrence.OriginalToken),
+                            GenerationService.FormatUnsupportedUtilityTokenMessage(occurrence.OriginalToken, resolveError),
                             occurrence.RelativeFilePath,
                             occurrence.LineNumber,
                             occurrence.ElementName,

@@ -244,6 +244,8 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 
 ### Typography
 
+Text case utilities are intentionally excluded because Unity USS has no text-transform property.
+
 - `text-xs`
 - `text-sm`
 - `text-base`
@@ -275,10 +277,6 @@ For the broader Unity USS compatibility matrix and the roadmap for still-unimple
 - `not-italic`
 - `whitespace-normal`
 - `whitespace-nowrap`
-- `uppercase`
-- `lowercase`
-- `capitalize`
-- `normal-case`
 - `tracking-tighter`
 - `tracking-tight`
 - `tracking-normal`

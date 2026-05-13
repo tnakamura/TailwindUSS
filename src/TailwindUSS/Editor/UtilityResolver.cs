@@ -8,6 +8,8 @@ namespace TailwindUSS.Editor
     /// </summary>
     internal sealed class UtilityResolver
     {
+        private const string UnsupportedTextTransformMessage = "Unity USS does not support text-transform.";
+
         private delegate bool UtilityHandler(string token, out ResolvedUtility utility, out string errorMessage);
         private readonly IDictionary<string, string> spacingScale;
         private readonly IDictionary<string, string> fontSizes;
@@ -288,10 +290,6 @@ namespace TailwindUSS.Editor
                 { "text-justify", token => Create(token, new StyleDeclaration("-unity-text-align", "middle-left")) },
                 { "whitespace-normal", token => Create(token, new StyleDeclaration("white-space", "normal")) },
                 { "whitespace-nowrap", token => Create(token, new StyleDeclaration("white-space", "nowrap")) },
-                { "uppercase", token => Create(token, new StyleDeclaration("text-transform", "uppercase")) },
-                { "lowercase", token => Create(token, new StyleDeclaration("text-transform", "lowercase")) },
-                { "capitalize", token => Create(token, new StyleDeclaration("text-transform", "capitalize")) },
-                { "normal-case", token => Create(token, new StyleDeclaration("text-transform", "none")) },
                 { "truncate", token => Create(token, new[]
                     {
                         new StyleDeclaration("overflow", "hidden"),
@@ -341,6 +339,14 @@ namespace TailwindUSS.Editor
                 { "bg-repeat-y", token => Create(token, new StyleDeclaration("background-repeat", "repeat-y")) },
                 { "bg-none", token => Create(token, new StyleDeclaration("background-image", "none")) }
             };
+
+        private static readonly IDictionary<string, string> UnsupportedFixedUtilities = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            { "uppercase", UnsupportedTextTransformMessage },
+            { "lowercase", UnsupportedTextTransformMessage },
+            { "capitalize", UnsupportedTextTransformMessage },
+            { "normal-case", UnsupportedTextTransformMessage }
+        };
 
         private static readonly KeyValuePair<string, string[]>[] SpacingDefinitions =
         {
@@ -458,6 +464,13 @@ namespace TailwindUSS.Editor
             {
                 utility = fixedFactory(token);
                 return ResolveStatus.Supported;
+            }
+
+            string unsupportedMessage;
+            if (UnsupportedFixedUtilities.TryGetValue(token, out unsupportedMessage))
+            {
+                errorMessage = unsupportedMessage;
+                return ResolveStatus.Unsupported;
             }
 
             if (TryResolveFontSize(token, out utility, out errorMessage)

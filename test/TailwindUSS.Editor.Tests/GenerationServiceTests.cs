@@ -139,8 +139,8 @@ namespace TailwindUSS.Editor.Tests
 
             var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
 
-            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(13));
-            Assert.That(result.WarningCount, Is.EqualTo(0));
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(12));
+            Assert.That(result.WarningCount, Is.EqualTo(1));
             Assert.That(output, Does.Contain(".basis-4 {\n    flex-basis: 16px;\n}"));
             Assert.That(output, Does.Contain(".break-all {\n    word-break: break-all;\n}"));
             Assert.That(output, Does.Contain(".flex-wrap {\n    flex-wrap: wrap;\n}"));
@@ -153,7 +153,8 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".tracking-wide {\n    letter-spacing: 0.4px;\n}"));
             Assert.That(output, Does.Contain(".text-xl {\n    font-size: 20px;\n}"));
             Assert.That(output, Does.Contain(".truncate {\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n}"));
-            Assert.That(output, Does.Contain(".uppercase {\n    text-transform: uppercase;\n}"));
+            Assert.That(output, Does.Not.Contain(".uppercase {"));
+            Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Unsupported utility token 'uppercase': Unity USS does not support text-transform.")), Is.True);
         }
 
         /// <summary>

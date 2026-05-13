@@ -45,10 +45,6 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("text-justify", "-unity-text-align", "middle-left")]
         [TestCase("whitespace-normal", "white-space", "normal")]
         [TestCase("whitespace-nowrap", "white-space", "nowrap")]
-        [TestCase("uppercase", "text-transform", "uppercase")]
-        [TestCase("lowercase", "text-transform", "lowercase")]
-        [TestCase("capitalize", "text-transform", "capitalize")]
-        [TestCase("normal-case", "text-transform", "none")]
         [TestCase("tracking-tight", "letter-spacing", "-0.4px")]
         [TestCase("tracking-wide", "letter-spacing", "0.4px")]
         [TestCase("tracking-widest", "letter-spacing", "1.6px")]
@@ -421,6 +417,24 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(status, Is.EqualTo(ResolveStatus.Unsupported));
             Assert.That(utility, Is.Null);
             Assert.That(errorMessage, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that try resolve returns unsupported for known utilities that Unity USS cannot represent.
+        /// </summary>
+        [TestCase("uppercase")]
+        [TestCase("lowercase")]
+        [TestCase("capitalize")]
+        [TestCase("normal-case")]
+        public void TryResolve_ReturnsUnsupportedForKnownUnityUnsupportedToken(string token)
+        {
+            var resolver = new UtilityResolver();
+
+            var status = resolver.TryResolve(token, out var utility, out var errorMessage);
+
+            Assert.That(status, Is.EqualTo(ResolveStatus.Unsupported));
+            Assert.That(utility, Is.Null);
+            Assert.That(errorMessage, Is.EqualTo("Unity USS does not support text-transform."));
         }
     }
 }
