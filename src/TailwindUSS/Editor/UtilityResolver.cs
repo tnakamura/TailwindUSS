@@ -100,14 +100,16 @@ namespace TailwindUSS.Editor
             { "12", "12" }
         };
 
+        // Unity USS length values support px and %, so Tailwind's em-based tracking
+        // scale is approximated against the default 16px base font size.
         private static readonly IDictionary<string, string> TrackingScale = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            { "tighter", "-0.05em" },
-            { "tight", "-0.025em" },
-            { "normal", "0em" },
-            { "wide", "0.025em" },
-            { "wider", "0.05em" },
-            { "widest", "0.1em" }
+            { "tighter", "-0.8px" },
+            { "tight", "-0.4px" },
+            { "normal", "0" },
+            { "wide", "0.4px" },
+            { "wider", "0.8px" },
+            { "widest", "1.6px" }
         };
 
         private static readonly IDictionary<string, string> FontWeightValues = new Dictionary<string, string>(StringComparer.Ordinal)

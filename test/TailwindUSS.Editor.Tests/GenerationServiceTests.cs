@@ -150,7 +150,7 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".mt-3 {\n    margin-top: 12px;\n}"));
             Assert.That(output, Does.Contain(".order-2 {\n    order: 2;\n}"));
             Assert.That(output, Does.Contain(".self-center {\n    align-self: center;\n}"));
-            Assert.That(output, Does.Contain(".tracking-wide {\n    letter-spacing: 0.025em;\n}"));
+            Assert.That(output, Does.Contain(".tracking-wide {\n    letter-spacing: 0.4px;\n}"));
             Assert.That(output, Does.Contain(".text-xl {\n    font-size: 20px;\n}"));
             Assert.That(output, Does.Contain(".truncate {\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n}"));
             Assert.That(output, Does.Contain(".uppercase {\n    text-transform: uppercase;\n}"));

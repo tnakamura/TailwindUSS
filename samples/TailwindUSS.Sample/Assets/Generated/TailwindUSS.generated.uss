@@ -222,7 +222,7 @@
 }
 
 .tracking-wide {
-    letter-spacing: 0.025em;
+    letter-spacing: 0.4px;
 }
 
 .transition {
