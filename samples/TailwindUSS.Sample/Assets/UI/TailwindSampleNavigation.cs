@@ -22,18 +22,18 @@ public sealed class TailwindSampleNavigation : MonoBehaviour
 
     private static readonly string[] Titles =
     {
-        "ホーム",
-        "レッスン",
-        "ショップ",
-        "メニュー"
+        "Home",
+        "Lessons",
+        "Shop",
+        "Menu"
     };
 
     private static readonly string[] Subtitles =
     {
-        "今日のおすすめをチェック",
-        "進行中のコースを再開",
-        "便利なアイテムを見つけよう",
-        "設定やサポートにアクセス"
+        "Check today's highlights",
+        "Resume your active courses",
+        "Find useful items",
+        "Access settings and support"
     };
 
     private VisualElement[] screens;
