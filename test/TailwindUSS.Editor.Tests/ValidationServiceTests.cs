@@ -64,6 +64,24 @@ namespace TailwindUSS.Editor.Tests
         }
 
         /// <summary>
+        /// Tests that validate reports leading utilities as unsupported.
+        /// </summary>
+        [Test]
+        public void Validate_ReportsLeadingUtilitiesAsUnsupported()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteAssetFile("UI/Main.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:Label class=\"leading-5 leading-6\" /></ui:UXML>");
+
+            var result = new ValidationService().Validate();
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(0));
+            Assert.That(result.WarningCount, Is.EqualTo(2));
+            Assert.That(result.ErrorCount, Is.EqualTo(0));
+            Assert.That(Debug.Entries.Any(entry => entry.Message.Contains("Unsupported utility token 'leading-5': Unity USS does not support line-height; paragraph spacing only affects paragraph breaks and cannot reproduce leading utilities.")), Is.True);
+            Assert.That(Debug.Entries.Any(entry => entry.Message.Contains("Unsupported utility token 'leading-6': Unity USS does not support line-height; paragraph spacing only affects paragraph breaks and cannot reproduce leading utilities.")), Is.True);
+        }
+
+        /// <summary>
         /// Tests that validate reports duplicate and invalid filter utilities.
         /// </summary>
         [Test]

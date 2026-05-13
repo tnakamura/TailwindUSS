@@ -15,6 +15,7 @@ namespace TailwindUSS.Editor
         private readonly UssEmitter emitter = new UssEmitter();
         private readonly UxmlStyleReferenceUpdater styleReferenceUpdater = new UxmlStyleReferenceUpdater();
         private readonly FilterUtilityComposer filterUtilityComposer = new FilterUtilityComposer();
+        private readonly FontStyleUtilityComposer fontStyleUtilityComposer = new FontStyleUtilityComposer();
 
         /// <summary>
         /// Generates USS output from utility tokens found in UXML files.
@@ -50,6 +51,7 @@ namespace TailwindUSS.Editor
             var resolver = new UtilityResolver(config.theme);
             var utilities = new Dictionary<string, ResolvedUtility>(StringComparer.Ordinal);
             var filterOccurrences = new List<ResolvedTokenOccurrence>();
+            var fontStyleOccurrences = new List<ResolvedTokenOccurrence>();
 
             foreach (var occurrence in scanResult.Occurrences)
             {
@@ -62,6 +64,15 @@ namespace TailwindUSS.Editor
                         if (utility.IsFilterUtility)
                         {
                             filterOccurrences.Add(new ResolvedTokenOccurrence(occurrence, utility));
+                        }
+                        else if (IsFontStyleUtility(utility))
+                        {
+                            fontStyleOccurrences.Add(new ResolvedTokenOccurrence(occurrence, utility));
+
+                            if (!utilities.ContainsKey(occurrence.OriginalToken))
+                            {
+                                utilities.Add(occurrence.OriginalToken, utility);
+                            }
                         }
                         else if (!utilities.ContainsKey(occurrence.OriginalToken))
                         {
@@ -105,8 +116,10 @@ namespace TailwindUSS.Editor
             try
             {
                 var compositeFilterUtilities = filterUtilityComposer.Compose(filterOccurrences, scanResult.Diagnostics);
+                var compositeFontStyleUtilities = fontStyleUtilityComposer.Compose(fontStyleOccurrences);
                 var emittedUtilities = new List<ResolvedUtility>(utilities.Values);
                 emittedUtilities.AddRange(compositeFilterUtilities);
+                emittedUtilities.AddRange(compositeFontStyleUtilities);
                 var outputAbsolutePath = GetAbsoluteOutputPath(projectRoot, config.outputUssPath);
                 var outputDirectory = Path.GetDirectoryName(outputAbsolutePath);
                 if (!string.IsNullOrEmpty(outputDirectory))
@@ -239,6 +252,12 @@ namespace TailwindUSS.Editor
             }
 
             return count;
+        }
+
+        private static bool IsFontStyleUtility(ResolvedUtility utility)
+        {
+            return utility.Declarations.Count == 1
+                && utility.Declarations[0].PropertyName == "-unity-font-style";
         }
     }
 }

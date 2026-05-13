@@ -10,6 +10,7 @@ namespace TailwindUSS.Editor
     {
         private const string UnsupportedTextTransformMessage = "Unity USS does not support text-transform; reproducing it requires changing the source text in text/value, not styling.";
         private const string UnsupportedGapMessage = "Unity USS does not support gap, row-gap, or column-gap; exact reproduction would require structural selectors that UI Toolkit USS lacks.";
+        private const string UnsupportedLeadingMessage = "Unity USS does not support line-height; paragraph spacing only affects paragraph breaks and cannot reproduce leading utilities.";
 
         private delegate bool UtilityHandler(string token, out ResolvedUtility utility, out string errorMessage);
         private readonly IDictionary<string, string> spacingScale;
@@ -244,10 +245,10 @@ namespace TailwindUSS.Editor
 
         private static readonly IDictionary<string, string> CursorValues = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            { "default", "default" },
-            { "pointer", "pointer" },
+            { "default", "arrow" },
+            { "pointer", "link" },
             { "text", "text" },
-            { "move", "move" },
+            { "move", "move-arrow" },
             { "not-allowed", "not-allowed" }
         };
 
@@ -480,6 +481,16 @@ namespace TailwindUSS.Editor
                 return ResolveStatus.Unsupported;
             }
 
+            if (token.StartsWith("leading-", StringComparison.Ordinal))
+            {
+                var leadingKey = token.Substring("leading-".Length);
+                if (LeadingScale.ContainsKey(leadingKey))
+                {
+                    errorMessage = UnsupportedLeadingMessage;
+                    return ResolveStatus.Unsupported;
+                }
+            }
+
             if (TryResolveFontSize(token, out utility, out errorMessage)
                 || TryResolveFontWeight(token, out utility, out errorMessage)
                 || TryResolveFontFamily(token, out utility, out errorMessage)
@@ -603,7 +614,7 @@ namespace TailwindUSS.Editor
                 return false;
             }
 
-            utility = Create(token, new StyleDeclaration("font-weight", value));
+            utility = Create(token, new StyleDeclaration("-unity-font-style", value));
             return true;
         }
 

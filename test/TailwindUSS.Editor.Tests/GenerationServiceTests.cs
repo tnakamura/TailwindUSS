@@ -139,12 +139,12 @@ namespace TailwindUSS.Editor.Tests
 
             var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
 
-            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(10));
-            Assert.That(result.WarningCount, Is.EqualTo(1));
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(9));
+            Assert.That(result.WarningCount, Is.EqualTo(2));
             Assert.That(output, Does.Contain(".basis-4 {\n    flex-basis: 16px;\n}"));
             Assert.That(output, Does.Contain(".break-all {\n    word-break: break-all;\n}"));
             Assert.That(output, Does.Contain(".flex-wrap {\n    flex-wrap: wrap;\n}"));
-            Assert.That(output, Does.Contain(".leading-6 {\n    line-height: 24px;\n}"));
+            Assert.That(output, Does.Not.Contain(".leading-6 {"));
             Assert.That(output, Does.Contain(".mt-3 {\n    margin-top: 12px;\n}"));
             Assert.That(output, Does.Contain(".order-2 {\n    order: 2;\n}"));
             Assert.That(output, Does.Contain(".self-center {\n    align-self: center;\n}"));
@@ -153,6 +153,7 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".truncate {\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n}"));
             Assert.That(output, Does.Not.Contain(".uppercase {"));
             Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Unsupported utility token 'uppercase': Unity USS does not support text-transform; reproducing it requires changing the source text in text/value, not styling.")), Is.True);
+            Assert.That(Debug.Entries.Any(entry => entry.Level == "Warning" && entry.Message.Contains("Unsupported utility token 'leading-6': Unity USS does not support line-height; paragraph spacing only affects paragraph breaks and cannot reproduce leading utilities.")), Is.True);
         }
 
         /// <summary>
@@ -244,7 +245,7 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(result.GeneratedUtilityCount, Is.EqualTo(9));
             Assert.That(result.WarningCount, Is.EqualTo(0));
             Assert.That(result.ErrorCount, Is.EqualTo(0));
-            Assert.That(output, Does.Contain(".cursor-pointer {\n    cursor: pointer;\n}"));
+            Assert.That(output, Does.Contain(".cursor-pointer {\n    cursor: link;\n}"));
             Assert.That(output, Does.Contain(".delay-75 {\n    transition-delay: 75ms;\n}"));
             Assert.That(output, Does.Contain(".duration-150 {\n    transition-duration: 150ms;\n}"));
             Assert.That(output, Does.Contain(".ease-out {\n    transition-timing-function: ease-out;\n}"));
@@ -253,6 +254,29 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(output, Does.Contain(".rotate-45 {\n    rotate: 45deg;\n}"));
             Assert.That(output, Does.Contain(".transition {\n    transition-property: all;\n}"));
             Assert.That(output, Does.Contain(".translate-x-4 {\n    translate: 16px 0;\n}"));
+        }
+
+        /// <summary>
+        /// Tests that generate composes font weight and italic utilities for Unity font styles.
+        /// </summary>
+        [Test]
+        public void Generate_ComposesFontWeightAndItalicUtilities()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
+            scope.WriteAssetFile("UI/Text.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:Label class=\"font-bold italic hover:not-italic\" /></ui:UXML>");
+
+            var result = new GenerationService().Generate();
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(5));
+            Assert.That(result.WarningCount, Is.EqualTo(0));
+            Assert.That(output, Does.Contain(".font-bold {\n    -unity-font-style: bold;\n}"));
+            Assert.That(output, Does.Contain(".italic {\n    -unity-font-style: italic;\n}"));
+            Assert.That(output, Does.Contain(".font-bold.italic {\n    -unity-font-style: bold-and-italic;\n}"));
+            Assert.That(output, Does.Contain(".hover\\:not-italic:hover {\n    -unity-font-style: normal;\n}"));
+            Assert.That(output, Does.Contain(".font-bold.hover\\:not-italic:hover {\n    -unity-font-style: bold;\n}"));
         }
 
         /// <summary>
@@ -359,7 +383,7 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(result.ErrorCount, Is.EqualTo(0));
             Assert.That(output, Does.Contain(".basis-full {\n    flex-basis: 100%;\n}"));
             Assert.That(output, Does.Contain(".border-solid {\n}"));
-            Assert.That(output, Does.Contain(".font-semibold {\n    font-weight: bold;\n}"));
+            Assert.That(output, Does.Contain(".font-semibold {\n    -unity-font-style: bold;\n}"));
             Assert.That(output, Does.Contain(".h-auto {\n    height: auto;\n}"));
             Assert.That(output, Does.Contain(".line-through {\n    text-decoration: line-through;\n}"));
             Assert.That(output, Does.Contain(".max-w-none {\n    max-width: none;\n}"));

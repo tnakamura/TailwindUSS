@@ -11,6 +11,7 @@ namespace TailwindUSS.Editor
     {
         private readonly UxmlScanner scanner = new UxmlScanner();
         private readonly FilterUtilityComposer filterUtilityComposer = new FilterUtilityComposer();
+        private readonly FontStyleUtilityComposer fontStyleUtilityComposer = new FontStyleUtilityComposer();
 
         /// <summary>
         /// Validates utility tokens found in UXML files and reports diagnostics.
@@ -45,6 +46,7 @@ namespace TailwindUSS.Editor
             var resolver = new UtilityResolver(config.theme);
             var supportedCount = 0;
             var filterOccurrences = new List<ResolvedTokenOccurrence>();
+            var fontStyleOccurrences = new List<ResolvedTokenOccurrence>();
 
             foreach (var occurrence in scanResult.Occurrences)
             {
@@ -58,6 +60,10 @@ namespace TailwindUSS.Editor
                         if (utility.IsFilterUtility)
                         {
                             filterOccurrences.Add(new ResolvedTokenOccurrence(occurrence, utility));
+                        }
+                        else if (IsFontStyleUtility(utility))
+                        {
+                            fontStyleOccurrences.Add(new ResolvedTokenOccurrence(occurrence, utility));
                         }
                         break;
                     case ResolveStatus.UnsupportedVariant:
@@ -94,6 +100,7 @@ namespace TailwindUSS.Editor
             }
 
             filterUtilityComposer.Compose(filterOccurrences, scanResult.Diagnostics);
+            fontStyleUtilityComposer.Compose(fontStyleOccurrences);
 
             foreach (var diagnostic in scanResult.Diagnostics)
             {
@@ -125,6 +132,12 @@ namespace TailwindUSS.Editor
             }
 
             return count;
+        }
+
+        private static bool IsFontStyleUtility(ResolvedUtility utility)
+        {
+            return utility.Declarations.Count == 1
+                && utility.Declarations[0].PropertyName == "-unity-font-style";
         }
     }
 }

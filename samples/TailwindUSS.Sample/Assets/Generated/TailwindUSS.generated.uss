@@ -39,7 +39,7 @@
 }
 
 .cursor-pointer {
-    cursor: pointer;
+    cursor: link;
 }
 
 .duration-150 {
@@ -59,11 +59,11 @@
 }
 
 .font-bold {
-    font-weight: bold;
+    -unity-font-style: bold;
 }
 
 .font-semibold {
-    font-weight: bold;
+    -unity-font-style: bold;
 }
 
 .grow {
@@ -88,10 +88,6 @@
 
 .justify-between {
     justify-content: space-between;
-}
-
-.leading-5 {
-    line-height: 20px;
 }
 
 .ml-2 {

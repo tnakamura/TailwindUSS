@@ -27,10 +27,10 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("justify-between", "justify-content", "space-between")]
         [TestCase("justify-around", "justify-content", "space-around")]
         [TestCase("justify-evenly", "justify-content", "space-evenly")]
-        [TestCase("font-thin", "font-weight", "normal")]
-        [TestCase("font-normal", "font-weight", "normal")]
-        [TestCase("font-semibold", "font-weight", "bold")]
-        [TestCase("font-bold", "font-weight", "bold")]
+        [TestCase("font-thin", "-unity-font-style", "normal")]
+        [TestCase("font-normal", "-unity-font-style", "normal")]
+        [TestCase("font-semibold", "-unity-font-style", "bold")]
+        [TestCase("font-bold", "-unity-font-style", "bold")]
         [TestCase("italic", "-unity-font-style", "italic")]
         [TestCase("not-italic", "-unity-font-style", "normal")]
         [TestCase("underline", "text-decoration", "underline")]
@@ -48,7 +48,6 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("tracking-tight", "letter-spacing", "-0.4px")]
         [TestCase("tracking-wide", "letter-spacing", "0.4px")]
         [TestCase("tracking-widest", "letter-spacing", "1.6px")]
-        [TestCase("leading-6", "line-height", "24px")]
         [TestCase("scale-105", "scale", "1.05")]
         [TestCase("rotate-45", "rotate", "45deg")]
         [TestCase("translate-x-4", "translate", "16px 0")]
@@ -61,7 +60,9 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("duration-150", "transition-duration", "150ms")]
         [TestCase("delay-75", "transition-delay", "75ms")]
         [TestCase("ease-out", "transition-timing-function", "ease-out")]
-        [TestCase("cursor-pointer", "cursor", "pointer")]
+        [TestCase("cursor-pointer", "cursor", "link")]
+        [TestCase("cursor-default", "cursor", "arrow")]
+        [TestCase("cursor-move", "cursor", "move-arrow")]
         [TestCase("visible", "visibility", "visible")]
         [TestCase("invisible", "visibility", "hidden")]
         [TestCase("w-10", "width", "40px")]
@@ -426,6 +427,7 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("gap-x-2")]
         [TestCase("gap-y-3")]
         [TestCase("gap-7")]
+        [TestCase("leading-6")]
         public void TryResolve_ReturnsUnsupportedForKnownUnityUnsupportedToken(string token)
         {
             var resolver = new UtilityResolver();
@@ -437,7 +439,9 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(errorMessage, Is.EqualTo(
                 token.StartsWith("gap-", System.StringComparison.Ordinal)
                     ? "Unity USS does not support gap, row-gap, or column-gap; exact reproduction would require structural selectors that UI Toolkit USS lacks."
-                    : "Unity USS does not support text-transform; reproducing it requires changing the source text in text/value, not styling."));
+                    : token.StartsWith("leading-", System.StringComparison.Ordinal)
+                        ? "Unity USS does not support line-height; paragraph spacing only affects paragraph breaks and cannot reproduce leading utilities."
+                        : "Unity USS does not support text-transform; reproducing it requires changing the source text in text/value, not styling."));
         }
     }
 }

@@ -245,6 +245,8 @@ Gap utilities are excluded because Unity USS has no gap, row-gap, or column-gap 
 
 Text case utilities are intentionally excluded because Unity USS has no text-transform property, and no other USS property can replace it. Supporting them would require mutating the underlying text or value content.
 
+Leading utilities are intentionally excluded because Unity USS has no `line-height` property. `-unity-paragraph-spacing` only affects paragraph breaks and can't reproduce Tailwind's per-line leading.
+
 - `text-xs`
 - `text-sm`
 - `text-base`
@@ -282,14 +284,6 @@ Text case utilities are intentionally excluded because Unity USS has no text-tra
 - `tracking-wide`
 - `tracking-wider`
 - `tracking-widest`
-- `leading-3`
-- `leading-4`
-- `leading-5`
-- `leading-6`
-- `leading-7`
-- `leading-8`
-- `leading-9`
-- `leading-10`
 - `truncate`
 - `text-ellipsis`
 - `text-clip`
@@ -370,6 +364,8 @@ Text case utilities are intentionally excluded because Unity USS has no text-tra
 
 ### Interaction
 
+Unity cursor keywords differ from CSS: `cursor-default` maps to `arrow`, `cursor-pointer` to `link`, and `cursor-move` to `move-arrow`.
+
 - `cursor-default`
 - `cursor-pointer`
 - `cursor-text`
@@ -438,13 +434,12 @@ Supported palette steps for `gray`, `slate`, `zinc`, `neutral`, `stone`, `emeral
 - `size-*`, `w-*`, `h-*`, `basis-*`: spacing scale plus `auto`, `1/2`, and `full`
 - `min-w-*`, `min-h-*`: spacing scale plus `1/2` and `full`
 - `max-w-*`, `max-h-*`: spacing scale plus `1/2`, `full`, and `none`
-- `font-*` weights: `thin`, `extralight`, `light`, `normal`, `medium` -> `font-weight: normal`; `semibold`, `bold`, `extrabold`, `black` -> `font-weight: bold`
+- `font-*` weights: `thin`, `extralight`, `light`, `normal`, `medium` -> `-unity-font-style: normal`; `semibold`, `bold`, `extrabold`, `black` -> `-unity-font-style: bold`, and combine with `italic` as `bold-and-italic`
 - `text-decoration`: `underline`, `line-through`, `no-underline`
 - `opacity-*`: `0`, `5`, `10`, `20`, `25`, `30`, `40`, `50`, `60`, `70`, `75`, `80`, `90`, `95`, `100`
 - `z-*`: `0`, `10`, `20`, `30`, `40`, `50`, `auto`
 - `order-*`: `0` through `12`
 - `tracking-*`: `tighter`, `tight`, `normal`, `wide`, `wider`, `widest`
-- `leading-*`: `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`
 - `border-*` widths: `0`, `2`, `4`, `8` plus the fixed `border` shorthand for `1px`
 - Radius values: `none`, `sm`, default, `md`, `lg`, `full`
 - `scale-*`: `0`, `50`, `75`, `90`, `95`, `100`, `105`, `110`, `125`, `150`

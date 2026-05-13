@@ -29,7 +29,7 @@
 | サイズ | `w-*`, `h-*`, `min-w-*`, `min-h-*`, `max-w-*`, `max-h-*`, `size-*`, `basis-*`, `order-*` | `width`, `height`, `min-*`, `max-*`, `flex-basis`, `order` |
 | 色 | `bg-*`, `bg-transparent`, `bg-current`, `text-*`, `border-*`, `border-t-*`, `border-r-*`, `border-b-*`, `border-l-*` | `background-color`, `color`, `border-*-color` |
 | 背景 | `bg-cover`, `bg-contain`, `bg-center`, `bg-top`, `bg-bottom`, `bg-left`, `bg-right`, `bg-repeat`, `bg-no-repeat`, `bg-repeat-x`, `bg-repeat-y`, `bg-none`, `bg-*` (設定済み background image alias) | `background-size`, `background-position`, `background-repeat`, `background-image` |
-| タイポグラフィ | `text-xs`〜`text-9xl`, `font-thin`〜`font-black`, `font-*` (設定済み font alias), `italic`, `not-italic`, `text-left`, `text-center`, `text-right`, `text-justify`, `whitespace-*`, `tracking-*`, `leading-*`, `truncate`, `text-ellipsis`, `text-clip`, `break-normal`, `break-all`, `underline`, `line-through`, `no-underline` | `font-size`, `font-weight`, `-unity-font`, `-unity-font-style`, `-unity-text-align`, `white-space`, `letter-spacing`, `line-height`, `text-overflow`, `word-break`, `overflow`, `text-decoration` |
+| タイポグラフィ | `text-xs`〜`text-9xl`, `font-thin`〜`font-black`, `font-*` (設定済み font alias), `italic`, `not-italic`, `text-left`, `text-center`, `text-right`, `text-justify`, `whitespace-*`, `tracking-*`, `truncate`, `text-ellipsis`, `text-clip`, `break-normal`, `break-all`, `underline`, `line-through`, `no-underline` | `font-size`, `-unity-font`, `-unity-font-style`, `-unity-text-align`, `white-space`, `letter-spacing`, `text-overflow`, `word-break`, `overflow`, `text-decoration` |
 | ボーダー | `border`, `border-0`, `border-2`, `border-4`, `border-8`, `border-solid`, `border-t`, `border-r`, `border-b`, `border-l` | `border-*-width` |
 | 角丸 | `rounded-none`, `rounded-sm`, `rounded`, `rounded-md`, `rounded-lg`, `rounded-full`, `rounded-t*`, `rounded-r*`, `rounded-b*`, `rounded-l*`, `rounded-tl*`, `rounded-tr*`, `rounded-br*`, `rounded-bl*` | `border-*-radius` |
 | 変形 | `scale-*`, `rotate-*`, `translate-x-*`, `translate-y-*`, `origin-*` | `scale`, `rotate`, `translate`, `transform-origin` |
@@ -108,7 +108,7 @@
 | `italic`, `not-italic` | ✅ | ✅ | `-unity-font-style` に変換 |
 | `text-left`, `text-center`, `text-right`, `text-justify` | ✅ | ✅ | `-unity-text-align` に変換 |
 | `tracking-*` | ✅ | ✅ | 初期実装は Tailwind 既定の named scale に対応 |
-| `leading-*` | ✅ | ✅ | 初期実装は `leading-3`〜`leading-10` に対応 |
+| `leading-*` | ❌ | ❌ | Unity USS に `line-height` がなく、`-unity-paragraph-spacing` も段落区切りしか制御できないため代替できない |
 | `whitespace-normal`, `whitespace-nowrap` | ✅ | ✅ | `white-space` に対応 |
 | `truncate`, `text-ellipsis`, `text-clip` | ✅ | ✅ | `text-overflow` と `overflow` の組み合わせを実装済み |
 | `uppercase`, `lowercase`, `capitalize`, `normal-case` | ❌ | ❌ | Unity USS に `text-transform` がなく、他の USS プロパティでも代替できない。必要なら `text` / `value` の書き換えが必要 |
@@ -158,7 +158,7 @@
 
 | Tailwind 機能 | USS での実現性 | TailwindUSS | 補足 |
 | --- | --- | --- | --- |
-| `cursor-pointer`, `cursor-default`, `cursor-text` など | ✅ | ✅ | `cursor-default`, `cursor-pointer`, `cursor-text`, `cursor-move`, `cursor-not-allowed` を実装済み |
+| `cursor-pointer`, `cursor-default`, `cursor-text` など | ✅ | ✅ | Unity keyword に寄せて実装。`default -> arrow`, `pointer -> link`, `move -> move-arrow` |
 | `select-none`, `select-text` | ❌ | ❌ | `user-select` が USS にない |
 | `pointer-events-none`, `pointer-events-auto` | ❌ | ❌ | USS ではなく C# の `pickingMode` 管理が必要 |
 | `accent-*`, `appearance-*`, `resize`, `scroll-*`, `touch-*`, `will-change` | ❌ | ❌ | Unity USS の責務外、または未対応 |
