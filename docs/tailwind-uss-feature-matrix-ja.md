@@ -25,7 +25,7 @@
 | --- | --- | --- |
 | レイアウト | `flex`, `hidden`, `visible`, `invisible`, `flex-row`, `flex-col`, `grow`, `shrink`, `overflow-*`, `relative`, `absolute`, `top-*`, `right-*`, `bottom-*`, `left-*`, `inset-*`, `inset-x-*`, `inset-y-*`, `z-*`, `opacity-*` | `display`, `visibility`, `flex-direction`, `flex-grow`, `flex-shrink`, `overflow`, `position`, `top/right/bottom/left`, `z-index`, `opacity` |
 | 配置 | `items-start`, `items-center`, `items-end`, `items-stretch`, `justify-start`, `justify-center`, `justify-end`, `justify-between`, `justify-around`, `justify-evenly`, `self-*` | `align-items`, `justify-content`, `align-self` |
-| 余白 | `p-*`, `px-*`, `py-*`, `pt-*`, `pr-*`, `pb-*`, `pl-*`, `m-*`, `mx-*`, `my-*`, `mt-*`, `mr-*`, `mb-*`, `ml-*`, `gap-*`, `gap-x-*`, `gap-y-*` | `padding-*`, `margin-*`, `gap`, `column-gap`, `row-gap` |
+| 余白 | `p-*`, `px-*`, `py-*`, `pt-*`, `pr-*`, `pb-*`, `pl-*`, `m-*`, `mx-*`, `my-*`, `mt-*`, `mr-*`, `mb-*`, `ml-*`, `gap-*`, `gap-x-*`, `gap-y-*` | `padding-*`, `margin-*`, `column-gap`, `row-gap` |
 | サイズ | `w-*`, `h-*`, `min-w-*`, `min-h-*`, `max-w-*`, `max-h-*`, `size-*`, `basis-*`, `order-*` | `width`, `height`, `min-*`, `max-*`, `flex-basis`, `order` |
 | 色 | `bg-*`, `bg-transparent`, `bg-current`, `text-*`, `border-*`, `border-t-*`, `border-r-*`, `border-b-*`, `border-l-*` | `background-color`, `color`, `border-*-color` |
 | 背景 | `bg-cover`, `bg-contain`, `bg-center`, `bg-top`, `bg-bottom`, `bg-left`, `bg-right`, `bg-repeat`, `bg-no-repeat`, `bg-repeat-x`, `bg-repeat-y`, `bg-none`, `bg-*` (設定済み background image alias) | `background-size`, `background-position`, `background-repeat`, `background-image` |
@@ -83,7 +83,7 @@
 | `self-*` | ✅ | ✅ | `align-self` へ変換 |
 | `basis-*` | ✅ | ✅ | `flex-basis` へ変換 |
 | `order-*` | ✅ | ✅ | 初期実装は数値 scale (`0`〜`12`) に対応 |
-| `gap-*`, `gap-x-*`, `gap-y-*` | ✅ | ✅ | `gap` / `row-gap` / `column-gap` を使う |
+| `gap-*`, `gap-x-*`, `gap-y-*` | ✅ | ✅ | `gap-*` は `column-gap` と `row-gap` を同時出力し、`gap-x-*` / `gap-y-*` は個別に変換 |
 | `space-x-*`, `space-y-*` | ❌ | ❌ | 子要素 combinator が必要で USS では実装しづらい |
 
 ### 3. 余白・サイズ

@@ -728,7 +728,29 @@ namespace TailwindUSS.Editor
                 return true;
             }
 
-            return TryResolveMappedSingleProperty(token, "gap-", "gap", spacingScale, "Unsupported spacing scale value.", out utility, out errorMessage);
+            if (!token.StartsWith("gap-", StringComparison.Ordinal))
+            {
+                utility = null;
+                errorMessage = null;
+                return false;
+            }
+
+            var key = token.Substring("gap-".Length);
+            string value;
+            if (!spacingScale.TryGetValue(key, out value))
+            {
+                utility = null;
+                errorMessage = "Unsupported spacing scale value.";
+                return true;
+            }
+
+            utility = Create(token, new[]
+            {
+                new StyleDeclaration("column-gap", value),
+                new StyleDeclaration("row-gap", value)
+            });
+            errorMessage = null;
+            return true;
         }
 
         private static bool TryResolveTracking(string token, out ResolvedUtility utility, out string errorMessage)

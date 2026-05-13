@@ -78,7 +78,6 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("basis-auto", "flex-basis", "auto")]
         [TestCase("basis-full", "flex-basis", "100%")]
         [TestCase("order-4", "order", "4")]
-        [TestCase("gap-4", "gap", "16px")]
         [TestCase("gap-x-2", "column-gap", "8px")]
         [TestCase("gap-y-3", "row-gap", "12px")]
         [TestCase("overflow-hidden", "overflow", "hidden")]
@@ -196,6 +195,7 @@ namespace TailwindUSS.Editor.Tests
         [TestCase("border-slate-500", new[] { "border-top-color", "border-right-color", "border-bottom-color", "border-left-color" }, "#64748B")]
         [TestCase("rounded-t-lg", new[] { "border-top-left-radius", "border-top-right-radius" }, "8px")]
         [TestCase("rounded-r-md", new[] { "border-top-right-radius", "border-bottom-right-radius" }, "6px")]
+        [TestCase("gap-4", new[] { "column-gap", "row-gap" }, "16px")]
         [TestCase("size-4", new[] { "width", "height" }, "16px")]
         [TestCase("size-full", new[] { "width", "height" }, "100%")]
         public void TryResolve_ResolvesMultiDeclarationUtilities(string token, string[] properties, string value)

@@ -158,6 +158,26 @@ namespace TailwindUSS.Editor.Tests
         }
 
         /// <summary>
+        /// Tests that generate expands gap utilities to row-gap and column-gap declarations.
+        /// </summary>
+        [Test]
+        public void Generate_WritesGapUtilityAsRowAndColumnGap()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
+            scope.WriteAssetFile("UI/Gap.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"gap-4\" /></ui:UXML>");
+
+            var result = new GenerationService().Generate();
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(1));
+            Assert.That(result.WarningCount, Is.EqualTo(0));
+            Assert.That(output, Does.Contain(".gap-4 {\n    column-gap: 16px;\n    row-gap: 16px;\n}"));
+            Assert.That(output, Does.Not.Contain(".gap-4 {\n    gap: 16px;\n}"));
+        }
+
+        /// <summary>
         /// Tests that generate writes phase two border and background utilities.
         /// </summary>
         [Test]
