@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+﻿<?xml version="1.0" encoding="utf-8"?><ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False"><ui:Style src="project://database/Assets/Generated/TailwindUSS.generated.uss" />
     <ui:VisualElement name="HomeScreen" class="flex flex-col">
         <ui:VisualElement class="flex flex-col p-4 bg-white rounded-lg border border-slate-300">
             <ui:Label class="text-sm font-semibold text-brand tracking-wide" text="Home" />

@@ -1,39 +1,37 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="LessonScreen" class="hidden flex flex-col">
+    <Style src="project://database/Assets/Generated/TailwindUSS.generated.uss?fileID=7433441132597879392&amp;guid=4808d589be8848bb96c2821e3a09c0d9&amp;type=3#TailwindUSS.generated"/>
+    <ui:VisualElement name="LessonScreen" class="flex flex-col">
         <ui:VisualElement class="flex flex-col">
-            <ui:Label class="text-lg font-bold text-slate-900" text="Lessons" />
-            <ui:Label class="mt-2 text-sm text-slate-500" text="Courses you are working on right now" />
+            <ui:Label text="Lessons" class="text-lg font-bold text-slate-900"/>
+            <ui:Label text="Courses you are working on right now" class="mt-2 text-sm text-slate-500"/>
         </ui:VisualElement>
-
         <ui:VisualElement class="mt-4 flex flex-col">
             <ui:VisualElement class="flex flex-col p-4 bg-white rounded-lg border border-slate-300">
                 <ui:VisualElement class="flex flex-row items-center justify-between">
-                    <ui:Label class="text-base font-semibold text-slate-900" text="Getting Started with TailwindUSS" />
+                    <ui:Label text="Getting Started with TailwindUSS" class="text-base font-semibold text-slate-900"/>
                     <ui:VisualElement class="px-3 py-1 bg-slate-100 rounded-full">
-                        <ui:Label class="text-xs font-semibold text-brand" text="In progress" />
+                        <ui:Label text="In progress" class="text-xs font-semibold text-brand"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:Label class="mt-2 text-sm text-slate-500" text="A four lesson course covering utility class basics and the generation workflow." />
+                <ui:Label text="A four lesson course covering utility class basics and the generation workflow." class="mt-2 text-sm text-slate-500"/>
             </ui:VisualElement>
-
             <ui:VisualElement class="mt-3 flex flex-col p-4 bg-white rounded-lg border border-slate-300">
                 <ui:VisualElement class="flex flex-row items-center justify-between">
-                    <ui:Label class="text-base font-semibold text-slate-900" text="UI Toolkit Component Design" />
+                    <ui:Label text="UI Toolkit Component Design" class="text-base font-semibold text-slate-900"/>
                     <ui:VisualElement class="px-3 py-1 bg-slate-100 rounded-full">
-                        <ui:Label class="text-xs font-semibold text-brand" text="New" />
+                        <ui:Label text="New" class="text-xs font-semibold text-brand"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:Label class="mt-2 text-sm text-slate-500" text="Learn reusable screen layouts and practical ideas for navigation flows." />
+                <ui:Label text="Learn reusable screen layouts and practical ideas for navigation flows." class="mt-2 text-sm text-slate-500"/>
             </ui:VisualElement>
-
             <ui:VisualElement class="mt-3 flex flex-col p-4 bg-white rounded-lg border border-slate-300">
                 <ui:VisualElement class="flex flex-row items-center justify-between">
-                    <ui:Label class="text-base font-semibold text-slate-900" text="Animation and Interaction" />
+                    <ui:Label text="Animation and Interaction" class="text-base font-semibold text-slate-900"/>
                     <ui:VisualElement class="px-3 py-1 bg-slate-100 rounded-full">
-                        <ui:Label class="text-xs font-semibold text-brand" text="Popular" />
+                        <ui:Label text="Popular" class="text-xs font-semibold text-brand"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:Label class="mt-2 text-sm text-slate-500" text="Build responsive UI interactions with hover states and transitions." />
+                <ui:Label text="Build responsive UI interactions with hover states and transitions." class="mt-2 text-sm text-slate-500"/>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

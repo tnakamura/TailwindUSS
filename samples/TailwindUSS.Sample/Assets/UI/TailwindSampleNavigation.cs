@@ -6,10 +6,10 @@ public sealed class TailwindSampleNavigation : MonoBehaviour
 {
     private static readonly string[] ScreenNames =
     {
-        "HomeScreen",
-        "LessonScreen",
-        "ShopScreen",
-        "MenuScreen"
+        "HomeScreenContainer",
+        "LessonScreenContainer",
+        "ShopScreenContainer",
+        "MenuScreenContainer"
     };
 
     private static readonly string[] TabButtonNames =

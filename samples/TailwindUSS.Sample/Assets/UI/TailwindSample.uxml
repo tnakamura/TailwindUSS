@@ -17,10 +17,18 @@
             </ui:VisualElement>
 
             <ui:VisualElement class="grow p-4 overflow-scroll">
-                <ui:Instance template="HomeScreenTemplate" />
-                <ui:Instance template="LessonScreenTemplate" />
-                <ui:Instance template="ShopScreenTemplate" />
-                <ui:Instance template="MenuScreenTemplate" />
+                <ui:VisualElement name="HomeScreenContainer" class="flex flex-col">
+                    <ui:Instance template="HomeScreenTemplate" />
+                </ui:VisualElement>
+                <ui:VisualElement name="LessonScreenContainer" class="hidden flex flex-col">
+                    <ui:Instance template="LessonScreenTemplate" />
+                </ui:VisualElement>
+                <ui:VisualElement name="ShopScreenContainer" class="hidden flex flex-col">
+                    <ui:Instance template="ShopScreenTemplate" />
+                </ui:VisualElement>
+                <ui:VisualElement name="MenuScreenContainer" class="hidden flex flex-col">
+                    <ui:Instance template="MenuScreenTemplate" />
+                </ui:VisualElement>
             </ui:VisualElement>
 
             <ui:VisualElement class="flex flex-row px-3 py-3 bg-white border-t border-slate-300">

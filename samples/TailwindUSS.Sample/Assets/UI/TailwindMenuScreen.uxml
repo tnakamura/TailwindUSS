@@ -1,5 +1,5 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="MenuScreen" class="hidden flex flex-col">
+﻿<?xml version="1.0" encoding="utf-8"?><ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False"><ui:Style src="project://database/Assets/Generated/TailwindUSS.generated.uss" />
+    <ui:VisualElement name="MenuScreen" class="flex flex-col">
         <ui:VisualElement class="flex flex-col">
             <ui:Label class="text-lg font-bold text-slate-900" text="Menu" />
             <ui:Label class="mt-2 text-sm text-slate-500" text="Quick access to settings and support" />
