@@ -113,5 +113,4 @@ InitTestScene*.unity*
 .idea/
 
 # Unity
-/src/**/*.meta
 /src/**/*.csproj
