@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="MenuScreen" class="hidden flex flex-col">
+        <ui:VisualElement class="flex flex-col">
+            <ui:Label class="text-lg font-bold text-slate-900" text="Menu" />
+            <ui:Label class="mt-2 text-sm text-slate-500" text="Quick access to settings and support" />
+        </ui:VisualElement>
+
+        <ui:VisualElement class="mt-4 flex flex-col">
+            <ui:VisualElement class="flex flex-row items-center justify-between p-4 bg-white rounded-lg border border-slate-300">
+                <ui:Label class="text-base font-semibold text-slate-900" text="Account" />
+                <ui:Label class="text-sm text-brand" text="Review" />
+            </ui:VisualElement>
+            <ui:VisualElement class="mt-3 flex flex-row items-center justify-between p-4 bg-white rounded-lg border border-slate-300">
+                <ui:Label class="text-base font-semibold text-slate-900" text="Notifications" />
+                <ui:Label class="text-sm text-brand" text="On" />
+            </ui:VisualElement>
+            <ui:VisualElement class="mt-3 flex flex-row items-center justify-between p-4 bg-white rounded-lg border border-slate-300">
+                <ui:Label class="text-base font-semibold text-slate-900" text="Help" />
+                <ui:Label class="text-sm text-brand" text="View" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

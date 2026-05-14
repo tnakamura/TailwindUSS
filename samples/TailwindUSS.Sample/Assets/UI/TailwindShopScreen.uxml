@@ -1,0 +1,28 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="ShopScreen" class="hidden flex flex-col">
+        <ui:VisualElement class="flex flex-col">
+            <ui:Label class="text-lg font-bold text-slate-900" text="Shop" />
+            <ui:Label class="mt-2 text-sm text-slate-500" text="Recommended items to support your learning" />
+        </ui:VisualElement>
+
+        <ui:VisualElement class="mt-4 flex flex-col">
+            <ui:VisualElement class="flex flex-col p-4 bg-white rounded-lg border border-slate-300">
+                <ui:Label class="text-base font-semibold text-slate-900" text="Premium Theme Pack" />
+                <ui:Label class="mt-3 text-sm text-slate-500" text="A color set and component presets that make the sample look even more polished." />
+                <ui:VisualElement class="mt-3 flex flex-row items-center justify-between">
+                    <ui:Label class="text-lg font-bold text-brand" text="¥480" />
+                    <ui:Button class="px-4 py-2 bg-brand text-white rounded cursor-pointer hover:bg-blue-500 transition duration-150" text="Buy" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement class="mt-3 flex flex-col p-4 bg-white rounded-lg border border-slate-300">
+                <ui:Label class="text-base font-semibold text-slate-900" text="Study Note Templates" />
+                <ui:Label class="mt-3 text-sm text-slate-500" text="A template pack for organizing lesson notes and UI design ideas." />
+                <ui:VisualElement class="mt-3 flex flex-row items-center justify-between">
+                    <ui:Label class="text-lg font-bold text-brand" text="¥240" />
+                    <ui:Button class="px-4 py-2 bg-brand text-white rounded cursor-pointer hover:bg-blue-500 transition duration-150" text="Buy" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
