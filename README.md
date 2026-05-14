@@ -28,7 +28,7 @@ Add it to your project's `Packages/manifest.json`:
 ```json
 {
   "dependencies": {
-    "com.tnakamura.tailwinduss": "https://github.com/tnakamura/TailwindUSS.git?path=/src/TailwindUSS"
+    "com.github-tnakamura.tailwinduss": "https://github.com/tnakamura/TailwindUSS.git?path=/src/TailwindUSS"
   }
 }
 ```
