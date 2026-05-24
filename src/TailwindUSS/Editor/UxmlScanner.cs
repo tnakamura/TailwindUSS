@@ -32,50 +32,71 @@ namespace TailwindUSS.Editor
                 }
 
                 result.MatchedFiles.Add(relativeFilePath);
+                classAttributeId = AppendFileScanResult(result, ScanMatchedFile(projectRoot, relativeFilePath), classAttributeId);
+            }
 
-                try
+            return result;
+        }
+
+        /// <summary>
+        /// Determines whether the relative path matches the configured input globs.
+        /// </summary>
+        public bool MatchesInputGlobs(string relativeFilePath, IEnumerable<string> inputGlobs)
+        {
+            return MatchesAny(NormalizePath(relativeFilePath), BuildRegexes(inputGlobs));
+        }
+
+        /// <summary>
+        /// Scans a single matched UXML file.
+        /// </summary>
+        public UxmlFileScanResult ScanMatchedFile(string projectRoot, string relativeFilePath)
+        {
+            var result = new UxmlFileScanResult(NormalizePath(relativeFilePath));
+            var classAttributeId = 1;
+            var absolutePath = Path.Combine(projectRoot, relativeFilePath.Replace('/', Path.DirectorySeparatorChar));
+
+            try
+            {
+                var document = XDocument.Load(absolutePath, LoadOptions.SetLineInfo);
+                if (document.Root == null)
                 {
-                    var document = XDocument.Load(filePath, LoadOptions.SetLineInfo);
-                    if (document.Root == null)
+                    return result;
+                }
+
+                foreach (var element in document.Root.DescendantsAndSelf())
+                {
+                    var classAttribute = element.Attribute("class");
+                    if (classAttribute == null || string.IsNullOrWhiteSpace(classAttribute.Value))
                     {
                         continue;
                     }
 
-                    foreach (var element in document.Root.DescendantsAndSelf())
+                    var lineInfo = (IXmlLineInfo)element;
+                    var lineNumber = lineInfo.HasLineInfo() ? lineInfo.LineNumber : 0;
+                    var tokens = classTokenParser.Parse(
+                        classAttribute.Value,
+                        result.RelativeFilePath,
+                        lineNumber,
+                        element.Name.LocalName,
+                        result.Diagnostics,
+                        classAttributeId++);
+
+                    foreach (var token in tokens)
                     {
-                        var classAttribute = element.Attribute("class");
-                        if (classAttribute == null || string.IsNullOrWhiteSpace(classAttribute.Value))
-                        {
-                            continue;
-                        }
-
-                        var lineInfo = (IXmlLineInfo)element;
-                        var lineNumber = lineInfo.HasLineInfo() ? lineInfo.LineNumber : 0;
-                        var tokens = classTokenParser.Parse(
-                            classAttribute.Value,
-                            relativeFilePath,
-                            lineNumber,
-                            element.Name.LocalName,
-                            result.Diagnostics,
-                            classAttributeId++);
-
-                        foreach (var token in tokens)
-                        {
-                            result.Occurrences.Add(token);
-                        }
+                        result.Occurrences.Add(token);
                     }
                 }
-                catch (Exception exception)
-                {
-                    result.Diagnostics.Add(new TailwindUssDiagnostic(
-                        DiagnosticSeverity.Error,
-                        null,
-                        string.Format("Failed to parse UXML: {0}", exception.Message),
-                        relativeFilePath,
-                        0,
-                        string.Empty,
-                        string.Empty));
-                }
+            }
+            catch (Exception exception)
+            {
+                result.Diagnostics.Add(new TailwindUssDiagnostic(
+                    DiagnosticSeverity.Error,
+                    null,
+                    string.Format("Failed to parse UXML: {0}", exception.Message),
+                    result.RelativeFilePath,
+                    0,
+                    string.Empty,
+                    string.Empty));
             }
 
             return result;
@@ -120,6 +141,36 @@ namespace TailwindUSS.Editor
         {
             var relativePath = filePath.Substring(projectRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             return NormalizePath(relativePath);
+        }
+
+        private static int AppendFileScanResult(UxmlScanResult scanResult, UxmlFileScanResult fileResult, int nextClassAttributeId)
+        {
+            var classAttributeIdMap = new Dictionary<int, int>();
+
+            foreach (var diagnostic in fileResult.Diagnostics)
+            {
+                scanResult.Diagnostics.Add(diagnostic);
+            }
+
+            foreach (var occurrence in fileResult.Occurrences)
+            {
+                if (!classAttributeIdMap.TryGetValue(occurrence.ClassAttributeId, out var remappedClassAttributeId))
+                {
+                    remappedClassAttributeId = nextClassAttributeId++;
+                    classAttributeIdMap.Add(occurrence.ClassAttributeId, remappedClassAttributeId);
+                }
+
+                scanResult.Occurrences.Add(new UxmlTokenOccurrence(
+                    occurrence.RelativeFilePath,
+                    occurrence.LineNumber,
+                    occurrence.ElementName,
+                    occurrence.OriginalToken,
+                    occurrence.VariantChain,
+                    occurrence.BaseToken,
+                    remappedClassAttributeId));
+            }
+
+            return nextClassAttributeId;
         }
 
         private static string NormalizePath(string path)

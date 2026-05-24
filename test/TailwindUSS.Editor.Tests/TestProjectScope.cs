@@ -29,6 +29,7 @@ namespace TailwindUSS.Editor.Tests
             GUILayout.Reset();
             SettingsService.Reset();
             Debug.Reset();
+            IncrementalGenerationCache.Shared.Reset();
         }
 
         /// <summary>

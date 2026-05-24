@@ -23,6 +23,7 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(usedDefaultConfig, Is.True);
             Assert.That(config.inputGlobs, Is.EqualTo(new[] { "Assets/**/*.uxml" }));
             Assert.That(config.outputUssPath, Is.EqualTo("Assets/Generated/TailwindUSS.generated.uss"));
+            Assert.That(config.autoGenerateOnUxmlSave, Is.False);
             Assert.That(config.theme.colors["blue-500"], Is.EqualTo("#3B82F6"));
             Assert.That(config.theme.spacing["4"], Is.EqualTo("16px"));
             Assert.That(config.theme.fontSizes["xl"], Is.EqualTo("20px"));
@@ -175,6 +176,7 @@ namespace TailwindUSS.Editor.Tests
                 inputGlobs = new[] { "Assets/UI/**/*.uxml" },
                 outputUssPath = "Assets/Generated/Custom.uss",
                 autoAttachGeneratedUss = true,
+                autoGenerateOnUxmlSave = true,
                 theme = new TailwindUssTheme
                 {
                     colors = new Dictionary<string, string> { { "brand", "#112233" } }
@@ -186,6 +188,7 @@ namespace TailwindUSS.Editor.Tests
             Assert.That(writtenJson, Does.Contain("\"brand\": \"#112233\""));
             Assert.That(writtenJson, Does.Not.Contain("\"blue-500\""));
             Assert.That(writtenJson, Does.Contain("\"autoAttachGeneratedUss\": true"));
+            Assert.That(writtenJson, Does.Contain("\"autoGenerateOnUxmlSave\": true"));
         }
     }
 }

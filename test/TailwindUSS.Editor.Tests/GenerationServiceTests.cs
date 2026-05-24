@@ -68,6 +68,63 @@ namespace TailwindUSS.Editor.Tests
         }
 
         /// <summary>
+        /// Tests that incremental generation updates only changed UXML inputs while preserving cached results.
+        /// </summary>
+        [Test]
+        public void GenerateIncremental_UpdatesChangedFilesWhileReusingCachedFiles()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
+            scope.WriteAssetFile("UI/Main.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"flex\" /></ui:UXML>");
+            scope.WriteAssetFile("UI/Secondary.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"bg-blue-500\" /></ui:UXML>");
+
+            var service = new GenerationService();
+            service.Generate();
+            scope.WriteAssetFile("UI/Main.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"text-white\" /></ui:UXML>");
+
+            var result = service.GenerateIncremental(
+                new[] { "Assets/UI/Main.uxml" },
+                System.Array.Empty<string>(),
+                System.Array.Empty<string>(),
+                System.Array.Empty<string>());
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(2));
+            Assert.That(output, Does.Contain(".bg-blue-500 {\n    background-color: #3B82F6;\n}"));
+            Assert.That(output, Does.Contain(".text-white {\n    color: #FFFFFF;\n}"));
+            Assert.That(output, Does.Not.Contain(".flex {\n    display: flex;\n}"));
+        }
+
+        /// <summary>
+        /// Tests that incremental generation removes deleted UXML inputs from the generated USS.
+        /// </summary>
+        [Test]
+        public void GenerateIncremental_RemovesDeletedFilesFromGeneratedOutput()
+        {
+            using var scope = new TestProjectScope();
+            scope.WriteProjectFile(ConfigLoader.FileName, "{\"inputGlobs\":[\"Assets/UI/**/*.uxml\"],\"outputUssPath\":\"Assets/Generated/TailwindUSS.generated.uss\",\"autoAttachGeneratedUss\":false}");
+            scope.WriteAssetFile("UI/Main.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"flex\" /></ui:UXML>");
+            var secondaryPath = scope.WriteAssetFile("UI/Secondary.uxml", "<ui:UXML xmlns:ui=\"UnityEngine.UIElements\"><ui:VisualElement class=\"bg-blue-500\" /></ui:UXML>");
+
+            var service = new GenerationService();
+            service.Generate();
+            File.Delete(secondaryPath);
+
+            var result = service.GenerateIncremental(
+                System.Array.Empty<string>(),
+                System.Array.Empty<string>(),
+                System.Array.Empty<string>(),
+                new[] { "Assets/UI/Secondary.uxml" });
+
+            var output = File.ReadAllText(scope.GetAssetPath("Generated", "TailwindUSS.generated.uss")).Replace("\r\n", "\n");
+
+            Assert.That(result.GeneratedUtilityCount, Is.EqualTo(1));
+            Assert.That(output, Does.Contain(".flex {\n    display: flex;\n}"));
+            Assert.That(output, Does.Not.Contain(".bg-blue-500 {\n    background-color: #3B82F6;\n}"));
+        }
+
+        /// <summary>
         /// Tests that generate rewrites legacy auto attached style reference.
         /// </summary>
         [Test]

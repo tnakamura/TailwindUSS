@@ -229,6 +229,7 @@ namespace TailwindUSS.Editor
                 inputGlobs = config.inputGlobs ?? Array.Empty<string>(),
                 outputUssPath = config.outputUssPath ?? string.Empty,
                 autoAttachGeneratedUss = config.autoAttachGeneratedUss,
+                autoGenerateOnUxmlSave = config.autoGenerateOnUxmlSave,
                 theme = CreateSerializableTheme(config.theme)
             };
         }

@@ -21,6 +21,7 @@ namespace TailwindUSS.Editor
         private bool isDirty;
         private string outputUssPath = string.Empty;
         private bool autoAttachGeneratedUss;
+        private bool autoGenerateOnUxmlSave;
         private string statusMessage;
         private MessageType statusMessageType = MessageType.Info;
 
@@ -112,6 +113,7 @@ namespace TailwindUSS.Editor
             DrawInputGlobsSection();
             outputUssPath = UpdateValue(outputUssPath, EditorGUILayout.TextField("Output USS Path", outputUssPath));
             autoAttachGeneratedUss = UpdateValue(autoAttachGeneratedUss, EditorGUILayout.Toggle("Auto Attach Generated USS", autoAttachGeneratedUss));
+            autoGenerateOnUxmlSave = UpdateValue(autoGenerateOnUxmlSave, EditorGUILayout.Toggle("Auto Generate On UXML Save", autoGenerateOnUxmlSave));
             EditorGUILayout.Space();
             DrawThemeSection("Theme Colors", colorEntries, "Add Color");
             DrawThemeSection("Theme Spacing", spacingEntries, "Add Spacing Entry");
@@ -169,6 +171,7 @@ namespace TailwindUSS.Editor
 
             outputUssPath = config.outputUssPath ?? string.Empty;
             autoAttachGeneratedUss = config.autoAttachGeneratedUss;
+            autoGenerateOnUxmlSave = config.autoGenerateOnUxmlSave;
 
             LoadEntries(colorEntries, config.theme == null ? null : config.theme.colors);
             LoadEntries(spacingEntries, config.theme == null ? null : config.theme.spacing);
@@ -257,6 +260,7 @@ namespace TailwindUSS.Editor
                 inputGlobs = inputGlobs.ToArray(),
                 outputUssPath = outputUssPath,
                 autoAttachGeneratedUss = autoAttachGeneratedUss,
+                autoGenerateOnUxmlSave = autoGenerateOnUxmlSave,
                 theme = BuildTheme()
             };
         }
