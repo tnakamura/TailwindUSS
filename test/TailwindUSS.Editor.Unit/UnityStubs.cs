@@ -176,6 +176,13 @@ namespace UnityEditor
     }
 
     /// <summary>
+    /// Represents the asset postprocessor base type.
+    /// </summary>
+    public class AssetPostprocessor
+    {
+    }
+
+    /// <summary>
     /// Provides the asset database functionality.
     /// </summary>
     public static class AssetDatabase

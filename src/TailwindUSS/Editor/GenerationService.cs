@@ -11,6 +11,7 @@ namespace TailwindUSS.Editor
     /// </summary>
     internal sealed class GenerationService
     {
+        private static readonly IncrementalGenerationCache IncrementalCache = IncrementalGenerationCache.Shared;
         private readonly UxmlScanner scanner = new UxmlScanner();
         private readonly UssEmitter emitter = new UssEmitter();
         private readonly UxmlStyleReferenceUpdater styleReferenceUpdater = new UxmlStyleReferenceUpdater();
@@ -22,8 +23,143 @@ namespace TailwindUSS.Editor
         /// </summary>
         public CommandResult Generate()
         {
-            var result = new CommandResult();
-            TailwindUssConfig config;
+            if (!TryLoadConfig(out var config, out var result, out var projectRoot))
+            {
+                return result;
+            }
+
+            var scanResult = scanner.Scan(projectRoot, config.inputGlobs);
+            IncrementalCache.UpdateFromFullScan(projectRoot, config, scanResult);
+            return GenerateFromScan(projectRoot, config, scanResult);
+        }
+
+        internal CommandResult GenerateIncremental(
+            string[] importedAssets,
+            string[] deletedAssets,
+            string[] movedAssets,
+            string[] movedFromAssetPaths)
+        {
+            if (!TryLoadConfig(out var config, out var result, out var projectRoot))
+            {
+                return result;
+            }
+
+            var changedAssetPaths = new List<string>();
+            var deletedAssetPaths = new List<string>();
+            AppendAssetPaths(changedAssetPaths, importedAssets);
+            AppendAssetPaths(changedAssetPaths, movedAssets);
+            AppendAssetPaths(deletedAssetPaths, deletedAssets);
+            AppendAssetPaths(deletedAssetPaths, movedFromAssetPaths);
+
+            var scanResult = IncrementalCache.UpdateAndBuildScan(projectRoot, config, changedAssetPaths, deletedAssetPaths);
+            return GenerateFromScan(projectRoot, config, scanResult);
+        }
+
+        /// <summary>
+        /// Logs a diagnostic message to Unity's console with context information when available.
+        /// </summary>
+        internal static void LogDiagnostic(TailwindUssDiagnostic diagnostic)
+        {
+            var location = string.Empty;
+            if (!string.IsNullOrEmpty(diagnostic.RelativeFilePath))
+            {
+                location = diagnostic.LineNumber > 0
+                    ? string.Format("{0}:{1}", diagnostic.RelativeFilePath, diagnostic.LineNumber)
+                    : diagnostic.RelativeFilePath;
+
+                if (!string.IsNullOrEmpty(diagnostic.ElementName))
+                {
+                    location = string.Format("{0}, {1}", location, diagnostic.ElementName);
+                }
+            }
+
+            var message = string.IsNullOrEmpty(location)
+                ? diagnostic.Message
+                : string.Format("{0} ({1})", diagnostic.Message, location);
+
+            UnityEngine.Object context = null;
+            if (!string.IsNullOrEmpty(diagnostic.RelativeFilePath) && diagnostic.RelativeFilePath.StartsWith("Assets/", StringComparison.Ordinal))
+            {
+                context = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(diagnostic.RelativeFilePath);
+            }
+
+            if (diagnostic.Severity == DiagnosticSeverity.Error)
+            {
+                Debug.LogError(message, context);
+                return;
+            }
+
+            Debug.LogWarning(message, context);
+        }
+
+        internal static string FormatUnsupportedUtilityTokenMessage(string token, string resolveError)
+        {
+            if (string.IsNullOrEmpty(resolveError))
+            {
+                return string.Format("Unsupported utility token '{0}'.", token);
+            }
+
+            return string.Format("Unsupported utility token '{0}': {1}", token, resolveError);
+        }
+
+        private static string GetAbsoluteOutputPath(string projectRoot, string configuredOutputPath)
+        {
+            if (Path.IsPathRooted(configuredOutputPath))
+            {
+                return configuredOutputPath;
+            }
+
+            return Path.GetFullPath(Path.Combine(projectRoot, configuredOutputPath));
+        }
+
+        private static string NormalizeAssetPath(string projectRoot, string absolutePath)
+        {
+            if (!absolutePath.StartsWith(projectRoot, StringComparison.Ordinal))
+            {
+                return absolutePath.Replace('\\', '/');
+            }
+
+            var relativePath = absolutePath.Substring(projectRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            return relativePath.Replace('\\', '/');
+        }
+
+        private static int CountDiagnostics(IEnumerable<TailwindUssDiagnostic> diagnostics, DiagnosticSeverity severity)
+        {
+            var count = 0;
+            foreach (var diagnostic in diagnostics)
+            {
+                if (diagnostic.Severity == severity)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private static bool IsFontStyleUtility(ResolvedUtility utility)
+        {
+            return utility.Declarations.Count == 1
+                && utility.Declarations[0].PropertyName == "-unity-font-style";
+        }
+
+        private static void AppendAssetPaths(ICollection<string> target, IEnumerable<string> assetPaths)
+        {
+            if (assetPaths == null)
+            {
+                return;
+            }
+
+            foreach (var assetPath in assetPaths)
+            {
+                target.Add(assetPath);
+            }
+        }
+
+        private static bool TryLoadConfig(out TailwindUssConfig config, out CommandResult result, out string projectRoot)
+        {
+            result = new CommandResult();
+            projectRoot = null;
             string errorMessage;
             bool usedDefaultConfig;
             if (!ConfigLoader.TryLoad(out config, out errorMessage, out usedDefaultConfig))
@@ -38,7 +174,7 @@ namespace TailwindUSS.Editor
                     string.Empty));
 
                 result.ErrorCount = 1;
-                return result;
+                return false;
             }
 
             if (usedDefaultConfig)
@@ -46,8 +182,13 @@ namespace TailwindUSS.Editor
                 Debug.LogWarning(string.Format("TailwindUSS config was not found. Using in-memory defaults; create '{0}' to persist settings.", ConfigLoader.FileName));
             }
 
-            var projectRoot = ConfigLoader.GetProjectRoot();
-            var scanResult = scanner.Scan(projectRoot, config.inputGlobs);
+            projectRoot = ConfigLoader.GetProjectRoot();
+            return true;
+        }
+
+        private CommandResult GenerateFromScan(string projectRoot, TailwindUssConfig config, UxmlScanResult scanResult)
+        {
+            var result = new CommandResult();
             var resolver = new UtilityResolver(config.theme);
             var utilities = new Dictionary<string, ResolvedUtility>(StringComparer.Ordinal);
             var filterOccurrences = new List<ResolvedTokenOccurrence>();
@@ -159,6 +300,7 @@ namespace TailwindUSS.Editor
             {
                 result.GeneratedUtilityCount = utilities.Count;
             }
+
             result.WarningCount = CountDiagnostics(scanResult.Diagnostics, DiagnosticSeverity.Warning);
             result.ErrorCount = CountDiagnostics(scanResult.Diagnostics, DiagnosticSeverity.Error);
 
@@ -170,94 +312,6 @@ namespace TailwindUSS.Editor
                 result.OutputAssetPath ?? config.outputUssPath));
 
             return result;
-        }
-
-        /// <summary>
-        /// Logs a diagnostic message to Unity's console with context information when available.
-        /// </summary>
-        internal static void LogDiagnostic(TailwindUssDiagnostic diagnostic)
-        {
-            var location = string.Empty;
-            if (!string.IsNullOrEmpty(diagnostic.RelativeFilePath))
-            {
-                location = diagnostic.LineNumber > 0
-                    ? string.Format("{0}:{1}", diagnostic.RelativeFilePath, diagnostic.LineNumber)
-                    : diagnostic.RelativeFilePath;
-
-                if (!string.IsNullOrEmpty(diagnostic.ElementName))
-                {
-                    location = string.Format("{0}, {1}", location, diagnostic.ElementName);
-                }
-            }
-
-            var message = string.IsNullOrEmpty(location)
-                ? diagnostic.Message
-                : string.Format("{0} ({1})", diagnostic.Message, location);
-
-            UnityEngine.Object context = null;
-            if (!string.IsNullOrEmpty(diagnostic.RelativeFilePath) && diagnostic.RelativeFilePath.StartsWith("Assets/", StringComparison.Ordinal))
-            {
-                context = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(diagnostic.RelativeFilePath);
-            }
-
-            if (diagnostic.Severity == DiagnosticSeverity.Error)
-            {
-                Debug.LogError(message, context);
-                return;
-            }
-
-            Debug.LogWarning(message, context);
-        }
-
-        internal static string FormatUnsupportedUtilityTokenMessage(string token, string resolveError)
-        {
-            if (string.IsNullOrEmpty(resolveError))
-            {
-                return string.Format("Unsupported utility token '{0}'.", token);
-            }
-
-            return string.Format("Unsupported utility token '{0}': {1}", token, resolveError);
-        }
-
-        private static string GetAbsoluteOutputPath(string projectRoot, string configuredOutputPath)
-        {
-            if (Path.IsPathRooted(configuredOutputPath))
-            {
-                return configuredOutputPath;
-            }
-
-            return Path.GetFullPath(Path.Combine(projectRoot, configuredOutputPath));
-        }
-
-        private static string NormalizeAssetPath(string projectRoot, string absolutePath)
-        {
-            if (!absolutePath.StartsWith(projectRoot, StringComparison.Ordinal))
-            {
-                return absolutePath.Replace('\\', '/');
-            }
-
-            var relativePath = absolutePath.Substring(projectRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-            return relativePath.Replace('\\', '/');
-        }
-
-        private static int CountDiagnostics(IEnumerable<TailwindUssDiagnostic> diagnostics, DiagnosticSeverity severity)
-        {
-            var count = 0;
-            foreach (var diagnostic in diagnostics)
-            {
-                if (diagnostic.Severity == severity)
-                {
-                    count++;
-                }
-            }
-
-            return count;
-        }
-
-        private static bool IsFontStyleUtility(ResolvedUtility utility)
-        {
-            return utility.Declarations.Count == 1
-                && utility.Declarations[0].PropertyName == "-unity-font-style";
         }
     }
 }

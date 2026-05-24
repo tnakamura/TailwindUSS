@@ -295,6 +295,35 @@ namespace TailwindUSS.Editor
     }
 
     /// <summary>
+    /// Represents the scan result for a single UXML file.
+    /// </summary>
+    internal sealed class UxmlFileScanResult
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UxmlFileScanResult"/> type.
+        /// </summary>
+        public UxmlFileScanResult(string relativeFilePath)
+        {
+            RelativeFilePath = relativeFilePath;
+            Occurrences = new List<UxmlTokenOccurrence>();
+            Diagnostics = new List<TailwindUssDiagnostic>();
+        }
+
+        /// <summary>
+        /// Gets the relative file path.
+        /// </summary>
+        public string RelativeFilePath { get; private set; }
+        /// <summary>
+        /// Gets the occurrences.
+        /// </summary>
+        public IList<UxmlTokenOccurrence> Occurrences { get; private set; }
+        /// <summary>
+        /// Gets the diagnostics.
+        /// </summary>
+        public IList<TailwindUssDiagnostic> Diagnostics { get; private set; }
+    }
+
+    /// <summary>
     /// Represents the command result.
     /// </summary>
     internal sealed class CommandResult

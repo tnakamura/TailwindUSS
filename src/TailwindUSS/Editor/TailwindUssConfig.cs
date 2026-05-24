@@ -22,6 +22,10 @@ namespace TailwindUSS.Editor
         /// </summary>
         public bool autoAttachGeneratedUss;
         /// <summary>
+        /// The auto generate on uxml save.
+        /// </summary>
+        public bool autoGenerateOnUxmlSave;
+        /// <summary>
         /// The theme.
         /// </summary>
         public TailwindUssTheme theme;

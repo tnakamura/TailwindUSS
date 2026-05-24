@@ -11,6 +11,7 @@ TailwindUSS is a Unity Editor extension for UI Toolkit projects. It scans `class
 - Validates unsupported utilities, unsupported variants, invalid values, and duplicate tokens
 - Supports pseudo-class variants such as `hover:` and compound variants such as `hover:focus:`
 - Can automatically insert a generated `<Style src="..." />` reference into scanned UXML files
+- Can optionally regenerate USS automatically when matching UXML files are saved
 - Lets you extend or override built-in color, spacing, and font-size scales
 - Lets you define font and background-image aliases in configuration
 
@@ -56,6 +57,7 @@ Edit settings from `Project Settings > TailwindUSS`, or create `tailwinduss.conf
   "inputGlobs": ["Assets/**/*.uxml"],
   "outputUssPath": "Assets/Generated/TailwindUSS.generated.uss",
   "autoAttachGeneratedUss": false,
+  "autoGenerateOnUxmlSave": false,
   "theme": {
     "colors": {
       "brand": "#112233"
@@ -83,6 +85,7 @@ If the file does not exist, TailwindUSS uses in-memory defaults and shows a warn
 - `inputGlobs`: UXML files to scan. If empty, the default is effectively `Assets/**/*.uxml`.
 - `outputUssPath`: Relative or absolute path of the generated USS file.
 - `autoAttachGeneratedUss`: When `true`, TailwindUSS inserts a matching `Style` element at the top of each scanned UXML file if it is not already present.
+- `autoGenerateOnUxmlSave`: When `true`, TailwindUSS regenerates the USS after matching UXML files are saved. The generator reuses cached scan results for unchanged files and only reparses changed UXML files.
 - `theme.colors`: Extends or overrides built-in colors.
 - `theme.spacing`: Extends or overrides built-in spacing and size tokens.
 - `theme.fontSizes`: Extends or overrides built-in font sizes.
