@@ -27,7 +27,6 @@ namespace TailwindUSS.Editor
 
             if (!ConfigLoader.TryLoad(out var config, out _, out _))
             {
-                new GenerationService().GenerateIncremental(importedAssets, deletedAssets, movedAssets, movedFromAssetPaths);
                 return;
             }
 

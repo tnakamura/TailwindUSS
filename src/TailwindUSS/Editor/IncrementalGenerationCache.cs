@@ -11,7 +11,7 @@ namespace TailwindUSS.Editor
     internal sealed class IncrementalGenerationCache
     {
         private readonly UxmlScanner scanner = new UxmlScanner();
-        private readonly Dictionary<string, UxmlFileScanResult> fileResults = new Dictionary<string, UxmlFileScanResult>(StringComparer.Ordinal);
+        private readonly Dictionary<string, UxmlFileScanResult> cachedFileScanResults = new Dictionary<string, UxmlFileScanResult>(StringComparer.Ordinal);
         private string projectRoot;
         private string configSignature;
 
@@ -27,7 +27,7 @@ namespace TailwindUSS.Editor
         {
             projectRoot = null;
             configSignature = null;
-            fileResults.Clear();
+            cachedFileScanResults.Clear();
         }
 
         /// <summary>
@@ -37,11 +37,11 @@ namespace TailwindUSS.Editor
         {
             projectRoot = currentProjectRoot;
             configSignature = CreateConfigSignature(config);
-            fileResults.Clear();
+            cachedFileScanResults.Clear();
 
             foreach (var matchedFile in scanResult.MatchedFiles)
             {
-                fileResults[matchedFile] = new UxmlFileScanResult(matchedFile);
+                cachedFileScanResults[matchedFile] = new UxmlFileScanResult(matchedFile);
             }
 
             foreach (var diagnostic in scanResult.Diagnostics)
@@ -51,10 +51,10 @@ namespace TailwindUSS.Editor
                     continue;
                 }
 
-                if (!fileResults.TryGetValue(diagnostic.RelativeFilePath, out var fileResult))
+                if (!cachedFileScanResults.TryGetValue(diagnostic.RelativeFilePath, out var fileResult))
                 {
                     fileResult = new UxmlFileScanResult(diagnostic.RelativeFilePath);
-                    fileResults.Add(diagnostic.RelativeFilePath, fileResult);
+                    cachedFileScanResults.Add(diagnostic.RelativeFilePath, fileResult);
                 }
 
                 fileResult.Diagnostics.Add(diagnostic);
@@ -62,10 +62,10 @@ namespace TailwindUSS.Editor
 
             foreach (var occurrence in scanResult.Occurrences)
             {
-                if (!fileResults.TryGetValue(occurrence.RelativeFilePath, out var fileResult))
+                if (!cachedFileScanResults.TryGetValue(occurrence.RelativeFilePath, out var fileResult))
                 {
                     fileResult = new UxmlFileScanResult(occurrence.RelativeFilePath);
-                    fileResults.Add(occurrence.RelativeFilePath, fileResult);
+                    cachedFileScanResults.Add(occurrence.RelativeFilePath, fileResult);
                 }
 
                 fileResult.Occurrences.Add(occurrence);
@@ -81,25 +81,25 @@ namespace TailwindUSS.Editor
 
             foreach (var assetPath in NormalizeAssetPaths(deletedAssetPaths))
             {
-                fileResults.Remove(assetPath);
+                cachedFileScanResults.Remove(assetPath);
             }
 
             foreach (var assetPath in NormalizeAssetPaths(changedAssetPaths))
             {
                 if (!scanner.MatchesInputGlobs(assetPath, config.inputGlobs))
                 {
-                    fileResults.Remove(assetPath);
+                    cachedFileScanResults.Remove(assetPath);
                     continue;
                 }
 
                 var absolutePath = Path.Combine(currentProjectRoot, assetPath.Replace('/', Path.DirectorySeparatorChar));
                 if (!File.Exists(absolutePath))
                 {
-                    fileResults.Remove(assetPath);
+                    cachedFileScanResults.Remove(assetPath);
                     continue;
                 }
 
-                fileResults[assetPath] = scanner.ScanMatchedFile(currentProjectRoot, assetPath);
+                cachedFileScanResults[assetPath] = scanner.ScanMatchedFile(currentProjectRoot, assetPath);
             }
 
             return BuildAggregatedResult();
@@ -110,7 +110,7 @@ namespace TailwindUSS.Editor
             var nextConfigSignature = CreateConfigSignature(config);
             if (string.Equals(projectRoot, currentProjectRoot, StringComparison.Ordinal) &&
                 string.Equals(configSignature, nextConfigSignature, StringComparison.Ordinal) &&
-                fileResults.Count > 0)
+                cachedFileScanResults.Count > 0)
             {
                 return;
             }
@@ -125,14 +125,14 @@ namespace TailwindUSS.Editor
         {
             var result = new UxmlScanResult();
             var nextClassAttributeId = 1;
-            var matchedFiles = new List<string>(fileResults.Keys);
+            var matchedFiles = new List<string>(cachedFileScanResults.Keys);
             matchedFiles.Sort(StringComparer.Ordinal);
 
             foreach (var matchedFile in matchedFiles)
             {
                 result.MatchedFiles.Add(matchedFile);
 
-                var fileResult = fileResults[matchedFile];
+                var fileResult = cachedFileScanResults[matchedFile];
                 foreach (var diagnostic in fileResult.Diagnostics)
                 {
                     result.Diagnostics.Add(diagnostic);
