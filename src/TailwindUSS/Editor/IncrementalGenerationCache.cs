@@ -185,3 +185,4 @@ namespace TailwindUSS.Editor
             return JsonConvert.SerializeObject(config);
         }
     }
+}

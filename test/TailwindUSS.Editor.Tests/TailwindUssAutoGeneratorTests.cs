@@ -60,3 +60,4 @@ namespace TailwindUSS.Editor.Tests
             method.Invoke(null, new object[] { importedAssets, deletedAssets, movedAssets, movedFromAssetPaths });
         }
     }
+}

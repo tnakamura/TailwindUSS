@@ -68,7 +68,7 @@ namespace TailwindUSS.Editor
 
             foreach (var assetPath in assetPaths)
             {
-                if (!string.IsNullOrWhiteSpace(assetPath) && assetPath.EndsWith(".uxml"))
+                if (!string.IsNullOrWhiteSpace(assetPath) && assetPath.EndsWith(".uxml", System.StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
@@ -77,3 +77,4 @@ namespace TailwindUSS.Editor
             return false;
         }
     }
+}
