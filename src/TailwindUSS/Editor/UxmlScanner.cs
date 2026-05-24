@@ -52,7 +52,7 @@ namespace TailwindUSS.Editor
         public UxmlFileScanResult ScanMatchedFile(string projectRoot, string relativeFilePath)
         {
             var result = new UxmlFileScanResult(NormalizePath(relativeFilePath));
-            var localClassAttributeId = 1;
+            var nextClassAttributeId = 1;
             var absolutePath = Path.Combine(projectRoot, relativeFilePath.Replace('/', Path.DirectorySeparatorChar));
 
             try
@@ -79,7 +79,7 @@ namespace TailwindUSS.Editor
                         lineNumber,
                         element.Name.LocalName,
                         result.Diagnostics,
-                        localClassAttributeId++);
+                        nextClassAttributeId++);
 
                     foreach (var token in tokens)
                     {
@@ -145,14 +145,22 @@ namespace TailwindUSS.Editor
 
         private static int AppendFileScanResult(UxmlScanResult scanResult, UxmlFileScanResult fileResult, int nextClassAttributeId)
         {
-            var classAttributeIdMap = new Dictionary<int, int>();
-
             foreach (var diagnostic in fileResult.Diagnostics)
             {
                 scanResult.Diagnostics.Add(diagnostic);
             }
 
-            foreach (var occurrence in fileResult.Occurrences)
+            return AppendOccurrencesWithRemappedClassAttributeIds(scanResult.Occurrences, fileResult.Occurrences, nextClassAttributeId);
+        }
+
+        internal static int AppendOccurrencesWithRemappedClassAttributeIds(
+            ICollection<UxmlTokenOccurrence> target,
+            IEnumerable<UxmlTokenOccurrence> occurrences,
+            int nextClassAttributeId)
+        {
+            var classAttributeIdMap = new Dictionary<int, int>();
+
+            foreach (var occurrence in occurrences)
             {
                 if (!classAttributeIdMap.TryGetValue(occurrence.ClassAttributeId, out var remappedClassAttributeId))
                 {
@@ -160,7 +168,7 @@ namespace TailwindUSS.Editor
                     classAttributeIdMap.Add(occurrence.ClassAttributeId, remappedClassAttributeId);
                 }
 
-                scanResult.Occurrences.Add(new UxmlTokenOccurrence(
+                target.Add(new UxmlTokenOccurrence(
                     occurrence.RelativeFilePath,
                     occurrence.LineNumber,
                     occurrence.ElementName,

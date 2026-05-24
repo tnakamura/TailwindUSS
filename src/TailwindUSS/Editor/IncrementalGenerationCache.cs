@@ -138,24 +138,10 @@ namespace TailwindUSS.Editor
                     result.Diagnostics.Add(diagnostic);
                 }
 
-                var classAttributeIdMap = new Dictionary<int, int>();
-                foreach (var occurrence in fileResult.Occurrences)
-                {
-                    if (!classAttributeIdMap.TryGetValue(occurrence.ClassAttributeId, out var remappedClassAttributeId))
-                    {
-                        remappedClassAttributeId = nextClassAttributeId++;
-                        classAttributeIdMap.Add(occurrence.ClassAttributeId, remappedClassAttributeId);
-                    }
-
-                    result.Occurrences.Add(new UxmlTokenOccurrence(
-                        occurrence.RelativeFilePath,
-                        occurrence.LineNumber,
-                        occurrence.ElementName,
-                        occurrence.OriginalToken,
-                        occurrence.VariantChain,
-                        occurrence.BaseToken,
-                        remappedClassAttributeId));
-                }
+                nextClassAttributeId = UxmlScanner.AppendOccurrencesWithRemappedClassAttributeIds(
+                    result.Occurrences,
+                    fileResult.Occurrences,
+                    nextClassAttributeId);
             }
 
             return result;
