@@ -21,7 +21,7 @@ namespace TailwindUSS.Editor
         {
             var result = new UxmlScanResult();
             var regexes = BuildRegexes(inputGlobs);
-            var classAttributeId = 1;
+            var nextClassAttributeId = 1;
 
             foreach (var filePath in Directory.GetFiles(projectRoot, "*.uxml", SearchOption.AllDirectories))
             {
@@ -32,7 +32,7 @@ namespace TailwindUSS.Editor
                 }
 
                 result.MatchedFiles.Add(relativeFilePath);
-                classAttributeId = AppendFileScanResult(result, ScanMatchedFile(projectRoot, relativeFilePath), classAttributeId);
+                nextClassAttributeId = AppendFileScanResult(result, ScanMatchedFile(projectRoot, relativeFilePath), nextClassAttributeId);
             }
 
             return result;
@@ -52,7 +52,7 @@ namespace TailwindUSS.Editor
         public UxmlFileScanResult ScanMatchedFile(string projectRoot, string relativeFilePath)
         {
             var result = new UxmlFileScanResult(NormalizePath(relativeFilePath));
-            var classAttributeId = 1;
+            var localClassAttributeId = 1;
             var absolutePath = Path.Combine(projectRoot, relativeFilePath.Replace('/', Path.DirectorySeparatorChar));
 
             try
@@ -79,7 +79,7 @@ namespace TailwindUSS.Editor
                         lineNumber,
                         element.Name.LocalName,
                         result.Diagnostics,
-                        classAttributeId++);
+                        localClassAttributeId++);
 
                     foreach (var token in tokens)
                     {

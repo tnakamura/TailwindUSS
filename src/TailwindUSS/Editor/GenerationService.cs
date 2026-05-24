@@ -33,7 +33,11 @@ namespace TailwindUSS.Editor
             return GenerateFromScan(projectRoot, config, scanResult);
         }
 
-        internal CommandResult GenerateIncremental(params string[][] assetPathGroups)
+        internal CommandResult GenerateIncremental(
+            string[] importedAssets,
+            string[] deletedAssets,
+            string[] movedAssets,
+            string[] movedFromAssetPaths)
         {
             if (!TryLoadConfig(out var config, out var result, out var projectRoot))
             {
@@ -42,8 +46,10 @@ namespace TailwindUSS.Editor
 
             var changedAssetPaths = new List<string>();
             var deletedAssetPaths = new List<string>();
-            AppendAssetPaths(changedAssetPaths, assetPathGroups, 0, 2);
-            AppendAssetPaths(deletedAssetPaths, assetPathGroups, 1, 3);
+            AppendAssetPaths(changedAssetPaths, importedAssets);
+            AppendAssetPaths(changedAssetPaths, movedAssets);
+            AppendAssetPaths(deletedAssetPaths, deletedAssets);
+            AppendAssetPaths(deletedAssetPaths, movedFromAssetPaths);
 
             var scanResult = IncrementalCache.UpdateAndBuildScan(projectRoot, config, changedAssetPaths, deletedAssetPaths);
             return GenerateFromScan(projectRoot, config, scanResult);
@@ -137,19 +143,16 @@ namespace TailwindUSS.Editor
                 && utility.Declarations[0].PropertyName == "-unity-font-style";
         }
 
-        private static void AppendAssetPaths(ICollection<string> target, string[][] assetPathGroups, params int[] indices)
+        private static void AppendAssetPaths(ICollection<string> target, IEnumerable<string> assetPaths)
         {
-            foreach (var index in indices)
+            if (assetPaths == null)
             {
-                if (index < 0 || index >= assetPathGroups.Length || assetPathGroups[index] == null)
-                {
-                    continue;
-                }
+                return;
+            }
 
-                foreach (var assetPath in assetPathGroups[index])
-                {
-                    target.Add(assetPath);
-                }
+            foreach (var assetPath in assetPaths)
+            {
+                target.Add(assetPath);
             }
         }
 
