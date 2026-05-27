@@ -46,13 +46,11 @@ You can also add the same Git URL from the Unity Package Manager UI.
 
 ## Agent skill
 
-If you use GitHub Copilot, Codex, Claude Code, or another coding agent in a Unity project that installs TailwindUSS, copy `docs/AGENTS.example.md` into that project as `AGENTS.md` (or merge it into the instruction file your agent already reads).
+If you use GitHub Copilot, Codex, Claude Code, or another coding agent in a Unity project that installs TailwindUSS, copy `docs/AGENTS.md` into that project as `.github/AGENTS.md` (or merge it into the instruction file your agent already reads).
 
-Also copy `docs/SKILL.example.md` as `SKILL.md` so the agent has a compact TailwindUSS knowledge base covering supported variants, utility families, token scales, and important Unity USS limitations.
+Also copy `docs/SKILL.md` as `.github/SKILL.md` so the agent has a compact TailwindUSS knowledge base covering supported variants, utility families, token scales, and important Unity USS limitations.
 
-The `AGENTS.md` example tells agents to read `tailwinduss.config.json`, prefer TailwindUSS utility classes in UXML, avoid hand-editing the generated USS, and regenerate styles with `Tools/TailwindUSS/Generate` after UI changes.
-
-The sample project includes concrete versions at `samples/TailwindUSS.Sample/AGENTS.md` and `samples/TailwindUSS.Sample/SKILL.md`.
+`docs/AGENTS.md` tells agents to read `tailwinduss.config.json`, prefer TailwindUSS utility classes in UXML, avoid hand-editing the generated USS, and regenerate styles with `Tools/TailwindUSS/Generate` after UI changes.
 
 ## Sample project
 

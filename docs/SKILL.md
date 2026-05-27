@@ -1,6 +1,6 @@
 # TailwindUSS skill
 
-Copy this file to the root of your Unity project as `SKILL.md`, or merge it into the skill file that your coding agent reads when working with TailwindUSS.
+Copy this file to `.github/SKILL.md` in your Unity project, or merge it into the skill file that your coding agent reads when working with TailwindUSS.
 
 ## Use this skill when
 
