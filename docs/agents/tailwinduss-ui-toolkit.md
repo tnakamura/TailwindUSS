@@ -1,3 +1,8 @@
+---
+name: tailwinduss-ui-toolkit
+description: Custom GitHub Copilot agent for safely editing Unity UI Toolkit projects that use TailwindUSS
+---
+
 # TailwindUSS UI Toolkit agent
 
 Copy this file to your Unity project's `.github/agents/tailwinduss-ui-toolkit.md`, or merge it into the agent instruction file that your coding agent reads. Pair it with `.github/skills/tailwinduss-ui-toolkit/SKILL.md` so the agent also has a compact list of supported features and utility classes.
