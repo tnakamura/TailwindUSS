@@ -1,10 +1,10 @@
 # TailwindUSS skill
 
-Copy this file to `.github/SKILL.md` in your Unity project, or merge it into the skill file that your coding agent reads when working with TailwindUSS.
+Copy this file to your Unity project's `.github/SKILL.md`, or merge it into the skill file that your coding agent reads when working with TailwindUSS. Some tools may instead look for a project-root `SKILL.md` or a merged instruction file, so adapt the placement to the conventions of the tool you use.
 
 ## Use this skill when
 
-- The Unity project uses TailwindUSS through `tailwinduss.config.json` or a `Packages/manifest.json` dependency on the TailwindUSS package name `com.github-tnakamura.tailwinduss` / sample-local alias `com.tnakamura.tailwinduss`.
+- The Unity project uses TailwindUSS through `tailwinduss.config.json` or a `Packages/manifest.json` dependency on TailwindUSS, such as the UPM package `com.github-tnakamura.tailwinduss` used in this repository or the sample's local alias `com.tnakamura.tailwinduss`.
 - You are editing UI Toolkit UXML, generated USS integration, or `tailwinduss.config.json`.
 
 ## TailwindUSS workflow knowledge

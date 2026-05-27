@@ -1,12 +1,12 @@
 # TailwindUSS agent instructions
 
-Copy this file to `.github/AGENTS.md` in your Unity project, or merge it into the agent instruction file that your coding agent reads. Pair it with `docs/SKILL.md` copied to `.github/SKILL.md` so the agent also has a compact list of supported TailwindUSS features and utility classes.
+Copy this file to your Unity project's `.github/AGENTS.md`, or merge it into the agent instruction file that your coding agent reads. Pair it with the TailwindUSS `SKILL.md` file so the agent also has a compact list of supported features and utility classes.
 
 ## Detect TailwindUSS
 
 - Treat the project as TailwindUSS-enabled when `tailwinduss.config.json` exists or `Packages/manifest.json` includes `com.github-tnakamura.tailwinduss` / `com.tnakamura.tailwinduss`.
 - Read `tailwinduss.config.json` before editing UXML or USS. Respect `inputGlobs`, `outputUssPath`, `autoAttachGeneratedUss`, `autoGenerateOnUxmlSave`, and `theme`.
-- If `.github/SKILL.md` is present, read it before proposing new utility classes so you stay within the supported TailwindUSS subset.
+- When the project includes the TailwindUSS skill file, whether as `.github/SKILL.md` or merged into another skill file, read it before proposing new utility classes so you stay within the supported TailwindUSS subset.
 
 ## Preferred workflow
 
