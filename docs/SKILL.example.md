@@ -4,7 +4,7 @@ Copy this file to the root of your Unity project as `SKILL.md`, or merge it into
 
 ## Use this skill when
 
-- The Unity project uses TailwindUSS through `tailwinduss.config.json` or a `Packages/manifest.json` dependency on `com.github-tnakamura.tailwinduss` / `com.tnakamura.tailwinduss`.
+- The Unity project uses TailwindUSS through `tailwinduss.config.json` or a `Packages/manifest.json` dependency on the TailwindUSS package name `com.github-tnakamura.tailwinduss` / sample-local alias `com.tnakamura.tailwinduss`.
 - You are editing UI Toolkit UXML, generated USS integration, or `tailwinduss.config.json`.
 
 ## TailwindUSS workflow knowledge
@@ -51,7 +51,7 @@ Copy this file to the root of your Unity project as `SKILL.md`, or merge it into
 - Do not use `gap-*`, `row-gap-*`, or `column-gap-*`; Unity USS does not support them. Use margin utilities on child elements instead.
 - Do not use text-case utilities such as `uppercase`; Unity USS has no `text-transform`.
 - Do not use leading / `line-height` utilities; Unity USS cannot reproduce them.
-- Unity cursor keywords differ from CSS: `cursor-default` -> `arrow`, `cursor-pointer` -> `link`, `cursor-move` -> `move-arrow`.
+- Unity cursor keywords differ from CSS: `cursor-default` maps to `arrow`, `cursor-pointer` to `link`, and `cursor-move` to `move-arrow`.
 - If a requested style is unsupported by TailwindUSS or Unity USS, fall back to plain USS or C# instead of inventing unsupported utility classes.
 
 ## References
