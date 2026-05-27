@@ -7,7 +7,9 @@ This Unity 6.3 sample project demonstrates how to use TailwindUSS from this repo
 1. Open `samples/TailwindUSS.Sample` with Unity 6.3.
 2. The sample project installs `com.tnakamura.tailwinduss` from `file:../../src/TailwindUSS`.
 3. Open `Assets/UI/TailwindSample.uxml` in UI Builder, play `Assets/Scenes/SampleScene.unity`, or run `Tools/TailwindUSS/Generate` to regenerate `Assets/Generated/TailwindUSS.generated.uss` from the shell UXML plus the split screen UXML files.
-4. If you want agent guidance for your own Unity project, copy `../../docs/agents/tailwinduss-ui-toolkit.md` and `../../docs/skills/tailwinduss-ui-toolkit/SKILL.md` into that project's `.github/agents/tailwinduss-ui-toolkit.md` and `.github/skills/tailwinduss-ui-toolkit/SKILL.md`.
+4. If you want agent guidance for your own Unity project:
+   - copy `../../docs/agents/tailwinduss-ui-toolkit.md` into `.github/agents/tailwinduss-ui-toolkit.md`
+   - copy `../../docs/skills/tailwinduss-ui-toolkit/SKILL.md` into `.github/skills/tailwinduss-ui-toolkit/SKILL.md`
 
 ### Included files
 
