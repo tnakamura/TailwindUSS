@@ -1,6 +1,6 @@
 ---
 name: tailwinduss-ui-toolkit
-description: TailwindUSS knowledge base for Unity UI Toolkit coding agents. Use this when editing UXML, generated USS integration, or tailwinduss.config.json in a TailwindUSS-enabled project.
+description: TailwindUSS knowledge base for Unity UI Toolkit coding agents working in TailwindUSS-enabled projects.
 ---
 
 # TailwindUSS UI Toolkit skill
