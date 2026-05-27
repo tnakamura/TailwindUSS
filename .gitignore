@@ -114,3 +114,7 @@ InitTestScene*.unity*
 
 # Unity
 /src/**/*.csproj
+
+# Mac
+.DS_Store
+
