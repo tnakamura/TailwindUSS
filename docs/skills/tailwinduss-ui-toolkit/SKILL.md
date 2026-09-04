@@ -62,5 +62,5 @@ Copy this file to your Unity project's `.github/skills/tailwinduss-ui-toolkit/SK
 ## References
 
 - `README.md`: supported utilities, scales, and examples
-- `docs/tailwind-uss-feature-matrix-ja.md`: wider Unity USS compatibility notes
-- `docs/tailwind-uss-implementation-plan-ja.md`: roadmap and remaining gaps
+- `tailwind-uss-feature-matrix-ja.md`: wider Unity USS compatibility notes
+- `tailwind-uss-implementation-plan-ja.md`: roadmap and remaining gaps
